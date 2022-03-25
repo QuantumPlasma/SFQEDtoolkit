@@ -1,3 +1,41 @@
+/***********************************************************************
+    Copyright (c) 2000-2021,
+    QuantumPlasma team, Max Planck Institut fur Kernphysik
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    * Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.  
+
+    * Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials provided
+        with the distribution.  
+
+    * Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products derived
+        from this software without specific prior written permission.
+
+    * The software using and/or implementing this library must include
+        a citation to [] in the official documentation.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+    FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+    COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+    INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+    HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+    STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+    OF THE POSSIBILITY OF SUCH DAMAGE.
+*************************************************************************/
+
 #ifndef USER_CONST
 #define USER_CONST
 
@@ -66,6 +104,7 @@ double lower_r_0_2,
         lower_r_600_2000;
 
 double *lu_table_lower_r_bounds[16];
+// double *lu_table_lower_r_bounds[5];
 
 double inverse_zone_r_0_2,
         inverse_zone_r_2_20,
@@ -74,6 +113,7 @@ double inverse_zone_r_0_2,
         inverse_zone_r_600_2000;
 
 double *lu_table_inverse_r_bounds[16];
+// double *lu_table_inverse_r_bounds[5];
 
 //the following represents the coefficient of the term in w
 //when taking the small w limit (w -> 0) of the function
@@ -95,6 +135,7 @@ double upper_r_0_2,
         upper_r_600_2000;
 
 double *lu_table_upper_r_bounds[16];
+// double *lu_table_upper_r_bounds[5];
 
 //this constants should represent the upper bound
 //of the emitted phtn energy, expressed as w value,
@@ -108,6 +149,7 @@ double bound_w_0_2,
         bound_w_600_2000;
 
 double *lu_table_upper_w_bounds[16];
+// double *lu_table_upper_w_bounds[5];
 
 //this function is meant to initialize every photon 
 //emission lookup table defined above
@@ -193,7 +235,36 @@ void init_phtn_mx_tables(){
             lu_table_upper_w_bounds[tmp_j] = bounds_w[i];
 
         }
-    }                    
+    }
+
+//     //lower r bounds
+//     lu_table_lower_r_bounds[0] = &lower_r_600_2000;
+//     lu_table_lower_r_bounds[1] = &lower_r_80_600;
+//     lu_table_lower_r_bounds[2] = &lower_r_20_80;
+//     lu_table_lower_r_bounds[3] = &lower_r_2_20;
+//     lu_table_lower_r_bounds[4] = &lower_r_0_2;
+
+//     //inverse r bounds
+//     lu_table_inverse_r_bounds[0] = &inverse_zone_r_600_2000;
+//     lu_table_inverse_r_bounds[1] = &inverse_zone_r_80_600;
+//     lu_table_inverse_r_bounds[2] = &inverse_zone_r_20_80;
+//     lu_table_inverse_r_bounds[3] = &inverse_zone_r_2_20;
+//     lu_table_inverse_r_bounds[4] = &inverse_zone_r_0_2;
+    
+//     //upper r bounds
+//     lu_table_upper_r_bounds[0] = &upper_r_600_2000;
+//     lu_table_upper_r_bounds[1] = &upper_r_80_600;
+//     lu_table_upper_r_bounds[2] = &upper_r_20_80;
+//     lu_table_upper_r_bounds[3] = &upper_r_2_20;
+//     lu_table_upper_r_bounds[4] = &upper_r_0_2;
+
+//     //upper w bounds
+//     lu_table_upper_w_bounds[0] = &bound_w_600_2000;
+//     lu_table_upper_w_bounds[1] = &bound_w_80_600;
+//     lu_table_upper_w_bounds[2] = &bound_w_20_80;
+//     lu_table_upper_w_bounds[3] = &bound_w_2_20;
+//     lu_table_upper_w_bounds[4] = &bound_w_0_2;
+
 }
 
 /************************************/
@@ -224,6 +295,7 @@ double pair_lower_r_001_03,
         pair_lower_r_600_2000;
 
 double *lu_table_pair_lower_r_bounds[32];
+// double *lu_table_pair_lower_r_bounds[6];
 
 double pair_upper_r_001_03,
         pair_upper_r_0_2,
@@ -233,6 +305,7 @@ double pair_upper_r_001_03,
         pair_upper_r_600_2000;
 
 double *lu_table_pair_upper_r_bounds[32];
+// double *lu_table_pair_upper_r_bounds[6];
 
 void init_pair_crtn_tables(){
 
@@ -281,7 +354,24 @@ void init_pair_crtn_tables(){
             lu_table_pair_upper_r_bounds[tmp_j] = upper_r[i];
 
         }
-    }                    
+    }
+
+//     //lower r bounds
+//     lu_table_pair_lower_r_bounds[0] = &pair_lower_r_600_2000;
+//     lu_table_pair_lower_r_bounds[1] = &pair_lower_r_80_600;
+//     lu_table_pair_lower_r_bounds[2] = &pair_lower_r_20_80;
+//     lu_table_pair_lower_r_bounds[3] = &pair_lower_r_2_20;
+//     lu_table_pair_lower_r_bounds[4] = &pair_lower_r_0_2;
+//     lu_table_pair_lower_r_bounds[5] = &pair_lower_r_001_03;
+    
+//     //upper r bounds
+//     lu_table_pair_upper_r_bounds[0] = &pair_upper_r_600_2000;
+//     lu_table_pair_upper_r_bounds[1] = &pair_upper_r_80_600;
+//     lu_table_pair_upper_r_bounds[2] = &pair_upper_r_20_80;
+//     lu_table_pair_upper_r_bounds[3] = &pair_upper_r_2_20;
+//     lu_table_pair_upper_r_bounds[4] = &pair_upper_r_0_2;
+//     lu_table_pair_upper_r_bounds[5] = &pair_upper_r_001_03;
+
 }
 
 

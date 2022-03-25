@@ -1,6 +1,6 @@
 #include "SFQED_Processes.h"
 #include "RelativisticSolver.h"
-#include "SFQED_Admin_Constants.h"
+#include "SFQED_User_Constants.h"
 
 #include <iostream>
 #include <iomanip>
@@ -62,6 +62,9 @@ int main(int argc, char** argv) {
 	////////////////////////////////////////////////
 	//simulation parameters
     ////////////////////////////////////////////////
+
+	const double PI = pi,
+			c = light_speed;
 
 	double wave_length = 0.8e-6; //[m]
 
@@ -216,7 +219,7 @@ int main(int argc, char** argv) {
 		///////////////////////////////////////////////////////////
 		// UNCOMMENT THIS TO TEST SYNCHROPHOTON EMISSION IN LCFA //
 		///////////////////////////////////////////////////////////
-        // RelativisticRungeKuttaSolver_LCFA(out_file, *particle, wave, time_step, iterations, procs_instance, &rnd_generator);
+        RelativisticRungeKuttaSolver_LCFA(out_file, *particle, wave, time_step, iterations, procs_instance, &rnd_generator);
 		///////////////////////////////////////////////////////////
 
 		////////////////////////////////////////////////////////////
@@ -226,9 +229,9 @@ int main(int argc, char** argv) {
 		///////////////////////////////////////////////////////////
 
 		///////////////////////////////////////////////////////////////////
-		// UNCOMMENT THIS TO TEST BREIT-WHEELER PAIR PRODUCTION IN BLCFA //
+		// UNCOMMENT THIS TO TEST BREIT-WHEELER PAIR PRODUCTION IN LCFA //
 		///////////////////////////////////////////////////////////////////
-		RelativisticRungeKuttaSolverPhotons(out_file, *particle, wave, time_step, iterations, procs_instance, &rnd_generator);
+		// RelativisticRungeKuttaSolverPhotons(out_file, *particle, wave, time_step, iterations, procs_instance, &rnd_generator);
 		///////////////////////////////////////////////////////////////////
 
 		delete particle;

@@ -1,7 +1,44 @@
+/***********************************************************************
+    Copyright (c) 2000-2021,
+    QuantumPlasma team, Max Planck Institut fur Kernphysik
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    * Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.  
+
+    * Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials provided
+        with the distribution.  
+
+    * Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products derived
+        from this software without specific prior written permission.
+
+    * The software using and/or implementing this library must include
+        a citation to [] in the official documentation.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+    FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+    COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+    INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+    HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+    STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+    OF THE POSSIBILITY OF SUCH DAMAGE.
+*************************************************************************/
+
 #include "SFQED_Processes.h"
 #include "SFQED_User_Constants.h"
 
-#include <cmath>
 #include <iostream>
 
 void SFQED_Processes::SFQED_set_reference_length(const double& ref_length){
@@ -76,9 +113,9 @@ void SFQED_Processes::SFQED_set_time_step(const double& dt){
     one_over_dt2 = one_over_dt * one_over_dt;
 }
 
-double dot_prod(const double v0[3], const double v1[3]){
-    return v0[0]*v1[0] + v0[1]*v1[1] + v0[2]*v1[2];
-}
+// double dot_prod(const double v0[3], const double v1[3]){
+//     return v0[0]*v1[0] + v0[1]*v1[1] + v0[2]*v1[2];
+// }
 
 //MIND THE GAUSS UNITS
 //remember that, if the momentum of the fermion p_in is given in terms of "m_e c", than
@@ -86,70 +123,70 @@ double dot_prod(const double v0[3], const double v1[3]){
 // this function should be used with p_in corresponding to the e- or e+ momentum at half-step
 // calculate the \chi parameter. Momentum and fields MUST BE in units of
 // "m_e c" and of "m_e c \omega / |e|" for EE and "m_e \omega / |e|" for BB, respectively
-double SFQED_Processes::SFQED_compute_quantum_param(double gamma, const double p_in[3], const double EE[3], const double BB[3]) {
+// double SFQED_Processes::SFQED_compute_quantum_param(double gamma, const double p_in[3], const double EE[3], const double BB[3]) {
     
-    double cross[3], ff[3];
+//     double cross[3], ff[3];
     
-    // the calculation of \chi or \kappa in this form provides
-    // the most accurate result with also very good performance
-    cross[0] = p_in[1]*BB[2] - p_in[2]*BB[1];
-    cross[1] = p_in[2]*BB[0] - p_in[0]*BB[2];
-    cross[2] = p_in[0]*BB[1] - p_in[1]*BB[0];
+//     // the calculation of \chi or \kappa in this form provides
+//     // the most accurate result with also very good performance
+//     cross[0] = p_in[1]*BB[2] - p_in[2]*BB[1];
+//     cross[1] = p_in[2]*BB[0] - p_in[0]*BB[2];
+//     cross[2] = p_in[0]*BB[1] - p_in[1]*BB[0];
     
-    ff[0] = gamma * EE[0] + cross[0];
-    ff[1] = gamma * EE[1] + cross[1];
-    ff[2] = gamma * EE[2] + cross[2];
+//     ff[0] = gamma * EE[0] + cross[0];
+//     ff[1] = gamma * EE[1] + cross[1];
+//     ff[2] = gamma * EE[2] + cross[2];
     
-    double arg = dot_prod(p_in, EE);
-    arg = dot_prod(ff, ff) - (arg*arg);
+//     double arg = dot_prod(p_in, EE);
+//     arg = dot_prod(ff, ff) - (arg*arg);
     
-    //if ff is parallel to p_in and large, then round-off errors
-    //(or an invalid input gam factor) may render arg negative
-    //=> NaN is returned instead of zero
-    //we avoid this by checking the sign of arg
-    arg = arg < 0. ? 0. : arg;
+//     //if ff is parallel to p_in and large, then round-off errors
+//     //(or an invalid input gam factor) may render arg negative
+//     //=> NaN is returned instead of zero
+//     //we avoid this by checking the sign of arg
+//     arg = arg < 0. ? 0. : arg;
     
-    //pay attention to the UNITS
-    //return twopiComptonDivLambda * sqrt(arg);
-    return ComptonDivLambda * sqrt(arg);
-}
+//     //pay attention to the UNITS
+//     //return twopiComptonDivLambda * sqrt(arg);
+//     return ComptonDivLambda * sqrt(arg);
+// }
 
-double SFQED_Processes::SFQED_compute_quantum_param(const double &gamma,
-                                                const double &p_in_x,
-                                                const double &p_in_y,
-                                                const double &p_in_z,
-                                                const double &EE_x,
-                                                const double &EE_y,
-                                                const double &EE_z,
-                                                const double &BB_x,
-                                                const double &BB_y,
-                                                const double &BB_z) {
+// double SFQED_Processes::SFQED_compute_quantum_param(const double &gamma,
+//                                                 const double &p_in_x,
+//                                                 const double &p_in_y,
+//                                                 const double &p_in_z,
+//                                                 const double &EE_x,
+//                                                 const double &EE_y,
+//                                                 const double &EE_z,
+//                                                 const double &BB_x,
+//                                                 const double &BB_y,
+//                                                 const double &BB_z) {
     
-    double cross[3], ff[3];
+//     double cross[3], ff[3];
     
-    // the calculation of \chi or \kappa in this form provides
-    // the most accurate result with also very good performance
-    cross[0] = p_in_y*BB_z - p_in_z*BB_y;
-    cross[1] = p_in_z*BB_x - p_in_x*BB_z;
-    cross[2] = p_in_x*BB_y - p_in_y*BB_x;
+//     // the calculation of \chi or \kappa in this form provides
+//     // the most accurate result with also very good performance
+//     cross[0] = p_in_y*BB_z - p_in_z*BB_y;
+//     cross[1] = p_in_z*BB_x - p_in_x*BB_z;
+//     cross[2] = p_in_x*BB_y - p_in_y*BB_x;
     
-    ff[0] = gamma * EE_x + cross[0];
-    ff[1] = gamma * EE_y + cross[1];
-    ff[2] = gamma * EE_z + cross[2];
+//     ff[0] = gamma * EE_x + cross[0];
+//     ff[1] = gamma * EE_y + cross[1];
+//     ff[2] = gamma * EE_z + cross[2];
     
-    double arg = p_in_x * EE_x + p_in_y * EE_y + p_in_z * EE_z;
-    arg = dot_prod(ff, ff) - (arg*arg);
+//     double arg = p_in_x * EE_x + p_in_y * EE_y + p_in_z * EE_z;
+//     arg = dot_prod(ff, ff) - (arg*arg);
     
-    //if ff is parallel to p_in and large, then round-off errors
-    //(or an invalid input gam factor) may render arg negative
-    //=> NaN is returned instead of zero
-    //we avoid this by checking the sign of arg
-    arg = arg < 0. ? 0. : arg;
+//     //if ff is parallel to p_in and large, then round-off errors
+//     //(or an invalid input gam factor) may render arg negative
+//     //=> NaN is returned instead of zero
+//     //we avoid this by checking the sign of arg
+//     arg = arg < 0. ? 0. : arg;
     
-    //pay attention to the UNITS
-    //return twopiComptonDivLambda * sqrt(arg);
-    return ComptonDivLambda * sqrt(arg);
-}
+//     //pay attention to the UNITS
+//     //return twopiComptonDivLambda * sqrt(arg);
+//     return ComptonDivLambda * sqrt(arg);
+// }
 
 /*****************/
 /*PHOTON EMISSION*/
@@ -217,6 +254,12 @@ void SFQED_Processes::SFQED_init_PHTN_emission(std::string path_to_coeffs){
         }
     }
 
+    // look_up_table_phtn_mx_rt[0] = &phtn_mx_rt_600_2000;
+    // look_up_table_phtn_mx_rt[1] = &phtn_mx_rt_80_600;
+    // look_up_table_phtn_mx_rt[2] = &phtn_mx_rt_20_80;
+    // look_up_table_phtn_mx_rt[3] = &phtn_mx_rt_2_20;
+    // look_up_table_phtn_mx_rt[4] = &phtn_mx_rt_0_2;
+
 
     //photon partial emission rate g(w,\chi) = \int_0^w{Wrad(\chi,w_{integrated})dw_{integrated}}
     emission_name = path_to_coeffs + "prtl_rate/phtn_partial_rate_0-2.txt";
@@ -263,6 +306,12 @@ void SFQED_Processes::SFQED_init_PHTN_emission(std::string path_to_coeffs){
             look_up_table_phtn_prtl_rt[tmp_i + j] = phtn_prtl_rates[i];
         }
     }
+
+    // look_up_table_phtn_prtl_rt[0] = &phtn_prtl_rt_600_2000;
+    // look_up_table_phtn_prtl_rt[1] = &phtn_prtl_rt_80_600;
+    // look_up_table_phtn_prtl_rt[2] = &phtn_prtl_rt_20_80;
+    // look_up_table_phtn_prtl_rt[3] = &phtn_prtl_rt_2_20;
+    // look_up_table_phtn_prtl_rt[4] = &phtn_prtl_rt_0_2;
 
 
     //photon energy in w
@@ -311,6 +360,13 @@ void SFQED_Processes::SFQED_init_PHTN_emission(std::string path_to_coeffs){
         }
     }
 
+    // look_up_table_phtn_momw[0] = &phtn_momw_600_2000;
+    // look_up_table_phtn_momw[1] = &phtn_momw_80_600,
+    // look_up_table_phtn_momw[2] = &phtn_momw_20_80,
+    // look_up_table_phtn_momw[3] = &phtn_momw_2_20,
+    // look_up_table_phtn_momw[4] = &phtn_momw_0_2;
+
+
     //photon energy in 1/w
     emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_0-2.txt";
     in_file.open(emission_name.c_str());
@@ -356,6 +412,13 @@ void SFQED_Processes::SFQED_init_PHTN_emission(std::string path_to_coeffs){
             look_up_table_1_over_w[tmp_i + j] = phtn_1_over_w[i];
         }
     }
+
+    // look_up_table_1_over_w[0] = &phtn_1_over_w_600_2000;
+    // look_up_table_1_over_w[1] = &phtn_1_over_w_80_600;
+    // look_up_table_1_over_w[2] = &phtn_1_over_w_20_80;
+    // look_up_table_1_over_w[3] = &phtn_1_over_w_2_20;
+    // look_up_table_1_over_w[4] = &phtn_1_over_w_0_2;
+
 
 
     phtn_1_over_w_proj_0_2.a = phtn_1_over_w_0_2.a;
@@ -407,6 +470,11 @@ void SFQED_Processes::SFQED_init_PHTN_emission(std::string path_to_coeffs){
         }
     }
 
+    look_up_table_phtn_1_o_w_proj[0] = &phtn_1_over_w_proj_600_2000;  
+    look_up_table_phtn_1_o_w_proj[1] = &phtn_1_over_w_proj_80_600;
+    look_up_table_phtn_1_o_w_proj[2] = &phtn_1_over_w_proj_20_80;
+    look_up_table_phtn_1_o_w_proj[3] = &phtn_1_over_w_proj_2_20;
+    look_up_table_phtn_1_o_w_proj[4] = &phtn_1_over_w_proj_0_2;
 
     //differential cross section
     emission_name = path_to_coeffs + "dP_over_dt_dw/phtn_diff_crss_sctn_0-2.txt";
@@ -459,13 +527,18 @@ void SFQED_Processes::SFQED_init_PHTN_emission(std::string path_to_coeffs){
         }
     }
 
+    // look_up_table_phtn_diff_crss_sctn[0] = &phtn_diff_crss_sctn_600_2000;   
+    // look_up_table_phtn_diff_crss_sctn[1] = &phtn_diff_crss_sctn_80_600;
+    // look_up_table_phtn_diff_crss_sctn[2] = &phtn_diff_crss_sctn_20_80;
+    // look_up_table_phtn_diff_crss_sctn[3] = &phtn_diff_crss_sctn_2_20;
+    // look_up_table_phtn_diff_crss_sctn[4] = &phtn_diff_crss_sctn_0_2;
 }
 
 //the function below returns the rate of photon emission for an electron
 //having  a certain chi and gamma (gamma is the relativistic factor of 
 //the electron, but it can also be interpreted as its energy normalized in 
 //units of m_e c^2)
-double SFQED_Processes::SFQED_PHTN_emission_rate(const double &gamma, const double &chi){
+double SFQED_Processes::SFQED_PHTN_emission_rate(const double &gamma, const double &chi) const{
     
     //coefficient for the rate of emission
     //multiply by \tilde{W_rad} to get the rate of emission
@@ -481,12 +554,13 @@ double SFQED_Processes::SFQED_PHTN_emission_rate(const double &gamma, const doub
         chi_80_600 = chi <= bound_chi_4th;
         //chi_600_2000 = chi <= 2000.;
 
+    int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+    //lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+
     //IMPORTANT: through this constructs we means
     //to default every chi > 600 case into the
     //600 < chi <= 2000 one
-    Chebyshev_User_1D *chebyshev_phtn_rate;
-
-    chebyshev_phtn_rate = (look_up_table_phtn_mx_rt[chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600]);
+    const Chebyshev_User_1D * const chebyshev_phtn_rate = (look_up_table_phtn_mx_rt[lookup_index]);
     
 
     /*********************/
@@ -537,7 +611,7 @@ double SFQED_Processes::SFQED_PHTN_emission_rate(const double &gamma, const doub
     // return coefW_rad*phtn_mx_rt_600_2000.evaluate(chi);
 }
 
-double SFQED_Processes::SFQED_LCFA_phtn_nrg_aux(const double &chi, const double &rnd, const int& lookup_index){
+double SFQED_Processes::SFQED_LCFA_phtn_nrg_aux(const double &chi, const double &rnd, const int& lookup_index) const{
 
     double v;
 
@@ -609,7 +683,7 @@ double SFQED_Processes::SFQED_LCFA_phtn_nrg_aux(const double &chi, const double 
     */
     //////////////////////////////////////
 
-    double low_r_limit = *(lu_table_lower_r_bounds[lookup_index]),
+    const double low_r_limit = *(lu_table_lower_r_bounds[lookup_index]),
             inverse_r_limit = *(lu_table_inverse_r_bounds[lookup_index]),
             high_r_limit = *(lu_table_upper_r_bounds[lookup_index]);
 
@@ -629,7 +703,7 @@ double SFQED_Processes::SFQED_LCFA_phtn_nrg_aux(const double &chi, const double 
         //quite unelegant, we expect the branch
         //prediction to always end up in the last case,
         //where this section is not needed
-        Chebyshev_User_1D *chebyshev_phtn_rate =
+        const Chebyshev_User_1D * const chebyshev_phtn_rate =
                 (look_up_table_phtn_mx_rt[lookup_index]);
 
         //std::cout << "3\n" << std::flush;
@@ -653,7 +727,7 @@ double SFQED_Processes::SFQED_LCFA_phtn_nrg_aux(const double &chi, const double 
 
         //this evaluation, inverse of g(\chi, w) - r*W_{rad}(\chi) = 0,
         //where \chi and r are fixed at this stage, will give a w value
-        Chebyshev_User_2D *chebyshev_phtn_momw =
+        const Chebyshev_User_2D * const chebyshev_phtn_momw =
                 (look_up_table_phtn_momw[lookup_index]);
 
         //std::cout << "12\n" << std::flush;
@@ -672,7 +746,7 @@ double SFQED_Processes::SFQED_LCFA_phtn_nrg_aux(const double &chi, const double 
     }
     //in case the random number corresponds to some high energy value we resort to the inverse Chebyshev approx
     else if(rnd < high_r_limit){
-        Chebyshev_User_2D *chebyshev_phtn_1_o_w =
+        const Chebyshev_User_2D * const chebyshev_phtn_1_o_w =
                 (look_up_table_1_over_w[lookup_index]);
 
         //this is w
@@ -694,7 +768,7 @@ double SFQED_Processes::SFQED_LCFA_phtn_nrg_aux(const double &chi, const double 
         //quite unelegant, we expect the branch
         //prediction to always end up in the last case,
         //where this section is not needed
-        Chebyshev_User_1D *chebyshev_phtn_rate_high =
+        const Chebyshev_User_1D * const chebyshev_phtn_rate_high =
                 (look_up_table_phtn_mx_rt[lookup_index]);
 
         //std::cout << "6\n" << std::flush;
@@ -710,7 +784,7 @@ double SFQED_Processes::SFQED_LCFA_phtn_nrg_aux(const double &chi, const double 
         //the differential probability from 0 to a certain w
         //(keep chi fixed). Please, notice we are evaluating
         //this on the upper bound of validity of the approximation
-        Chebyshev_User_2D *chebyshev_phtn_prtl_rate =
+        const Chebyshev_User_2D * const chebyshev_phtn_prtl_rate =
                 (look_up_table_phtn_prtl_rt[lookup_index]);
 
         //std::cout << "8\n" << std::flush;
@@ -722,7 +796,7 @@ double SFQED_Processes::SFQED_LCFA_phtn_nrg_aux(const double &chi, const double 
         
         //newly computed pivots/////////////////////
         //this new attempt requires us to compute w through the inverse (maybe it is too much time consuming?)
-        Chebyshev_User_1D *chebyshev_phtn_1_o_w_proj =
+        const Chebyshev_User_1D * const chebyshev_phtn_1_o_w_proj =
                 (look_up_table_phtn_1_o_w_proj[lookup_index]);
         double w0 = 1. / chebyshev_phtn_1_o_w_proj->evaluate(chi);
         double v0 = w0 * w0 * w0;
@@ -769,7 +843,7 @@ void SFQED_Processes::SFQED_collinear_momentum(const double &gamma_out, const do
 }
 
 //return the emitted photon energy (normalized in units of m_e c^2)
-double SFQED_Processes::SFQED_LCFA_emitted_photon_energy(const double &gamma, const double &chi, const double &rnd){
+double SFQED_Processes::SFQED_LCFA_emitted_photon_energy(const double &gamma, const double &chi, const double &rnd) const{
 
     //BRANCH ACCORDING TO THE VALUE OF \chi
     //-------------------------------------
@@ -779,7 +853,9 @@ double SFQED_Processes::SFQED_LCFA_emitted_photon_energy(const double &gamma, co
         chi_20_80 = chi <= bound_chi_3rd,
         chi_80_600 = chi <= bound_chi_4th;
         //chi_600_2000 = chi <= 2000.;
+
     int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+    //lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
 
     //alternative way to compute the index and use the lutables
     //int lookup_index = static_cast<int>(log2(chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600 + 1));
@@ -817,7 +893,7 @@ double SFQED_Processes::SFQED_BLCFA_emitted_photon_energy(const double& LCFA_lim
                                                             const double& gamma, 
                                                             const double& chi, 
                                                             const double& rnd, 
-                                                            const double& rnd2){
+                                                            const double& rnd2) const{
 
     // static double increment = 0.01;
 
@@ -827,7 +903,9 @@ double SFQED_Processes::SFQED_BLCFA_emitted_photon_energy(const double& LCFA_lim
         chi_20_80 = chi <= bound_chi_3rd,
         chi_80_600 = chi <= bound_chi_4th;
         //chi_600_2000 = chi <= 2000.;
+
     int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+    //lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
     
     //transform the threshold energy into a w value
     double LCFA_limit_w  = cbrt(LCFA_limit / (1.5 * chi * (gamma - LCFA_limit)));
@@ -859,7 +937,7 @@ double SFQED_Processes::SFQED_BLCFA_emitted_photon_energy(const double& LCFA_lim
     //BLCFA section (it starts with a comparison)
     if(emitted_phtn_LCFA_nrg_w < LCFA_limit_w){
 
-        Chebyshev_User_2D *phtn_diff_crss_sctn =
+        const Chebyshev_User_2D * const phtn_diff_crss_sctn =
                 (look_up_table_phtn_diff_crss_sctn[lookup_index]);
 
         //compute the threshold value
@@ -1253,7 +1331,7 @@ double BLCFA_Object::SFQED_BLCFA_find_energy_threshold(const SFQED_Processes& pr
                                                         const double* const Lorentz_F_t_der,
                                                         const double* const Lorentz_F_tt_der,
                                                         const double& part_gamma,
-                                                        const double& part_chi){
+                                                        const double& part_chi) const{
     //first of all: compute the delta (see article)
     double delta = proc.norm_Compton_time_2 * 
                         (Lorentz_F_t_der[0]*Lorentz_F_t_der[0] + Lorentz_F_t_der[1]*Lorentz_F_t_der[1] + Lorentz_F_t_der[2]*Lorentz_F_t_der[2] +
@@ -1452,6 +1530,13 @@ void SFQED_Processes::SFQED_init_PAIR_creation(std::string path_to_coeffs){
         }
     }
 
+    // look_up_table_pair_prd_rt[0] = &pair_prd_rt_600_2000;
+    // look_up_table_pair_prd_rt[1] = &pair_prd_rt_80_600;
+    // look_up_table_pair_prd_rt[2] = &pair_prd_rt_20_80;
+    // look_up_table_pair_prd_rt[3] = &pair_prd_rt_2_20;
+    // look_up_table_pair_prd_rt[4] = &pair_prd_rt_0_2;
+    // look_up_table_pair_prd_rt[5] = &pair_prd_rt_001_03;
+
     //prepare fast lookup table
     pair_rates[4] = &pair_prd_rt_001_03_fast;
 
@@ -1463,6 +1548,13 @@ void SFQED_Processes::SFQED_init_PAIR_creation(std::string path_to_coeffs){
             look_up_table_pair_prd_rt_fast[tmp_i + j] = pair_rates[i];
         }
     }
+
+    // look_up_table_pair_prd_rt_fast[0] = &pair_prd_rt_600_2000;
+    // look_up_table_pair_prd_rt_fast[1] = &pair_prd_rt_80_600;
+    // look_up_table_pair_prd_rt_fast[2] = &pair_prd_rt_20_80;
+    // look_up_table_pair_prd_rt_fast[3] = &pair_prd_rt_2_20;
+    // look_up_table_pair_prd_rt_fast[4] = &pair_prd_rt_0_2;
+    // look_up_table_pair_prd_rt_fast[5] = &pair_prd_rt_001_03_fast;
 
 //
     pair_prtl_rt_001_03.func_to_execute = &zero_2D;
@@ -1513,6 +1605,13 @@ void SFQED_Processes::SFQED_init_PAIR_creation(std::string path_to_coeffs){
             look_up_table_pair_prtl_rt[tmp_i + j] = pair_prtl_rates[i];
         }
     }
+
+    // look_up_table_pair_prtl_rt[0] = &pair_prtl_rt_600_2000;  
+    // look_up_table_pair_prtl_rt[1] = &pair_prtl_rt_80_600,
+    // look_up_table_pair_prtl_rt[2] = &pair_prtl_rt_20_80,
+    // look_up_table_pair_prtl_rt[3] = &pair_prtl_rt_2_20,
+    // look_up_table_pair_prtl_rt[4] = &pair_prtl_rt_0_2,
+    // look_up_table_pair_prtl_rt[5] = &pair_prtl_rt_001_03;
 
 
     //photon energy in v
@@ -1571,6 +1670,13 @@ void SFQED_Processes::SFQED_init_PAIR_creation(std::string path_to_coeffs){
         }
     }
 
+    // look_up_table_pair_v_nrgs[0] = &pair_v_nrgs_600_2000;  
+    // look_up_table_pair_v_nrgs[1] = &pair_v_nrgs_80_600,
+    // look_up_table_pair_v_nrgs[2] = &pair_v_nrgs_20_80,
+    // look_up_table_pair_v_nrgs[3] = &pair_v_nrgs_2_20,
+    // look_up_table_pair_v_nrgs[4] = &pair_v_nrgs_0_2,
+    // look_up_table_pair_v_nrgs[5] = &pair_v_nrgs_001_03;
+
     //photon energy in v high part
 
 //
@@ -1626,6 +1732,13 @@ void SFQED_Processes::SFQED_init_PAIR_creation(std::string path_to_coeffs){
             look_up_table_pair_v_nrgs_high[tmp_i + j] = pair_v_nrgs_rates_high[i];
         }
     }
+
+    // look_up_table_pair_v_nrgs_high[0] = &pair_v_nrgs_600_2000_high;
+    // look_up_table_pair_v_nrgs_high[1] = &pair_v_nrgs_80_600_high;
+    // look_up_table_pair_v_nrgs_high[2] = &pair_v_nrgs_20_80_high;
+    // look_up_table_pair_v_nrgs_high[3] = &pair_v_nrgs_2_20_high;
+    // look_up_table_pair_v_nrgs_high[4] = &pair_v_nrgs_0_2_high;
+    // look_up_table_pair_v_nrgs_high[5] = &pair_v_nrgs_001_03_high;
 
     //inverse 1D projection (to be fixed)
 
@@ -1688,9 +1801,15 @@ void SFQED_Processes::SFQED_init_PAIR_creation(std::string path_to_coeffs){
         }
     }
 
+    // look_up_table_pair_v_nrgs_proj[0] = &pair_v_nrg_proj_600_2000; 
+    // look_up_table_pair_v_nrgs_proj[1] = &pair_v_nrg_proj_80_600;
+    // look_up_table_pair_v_nrgs_proj[2] = &pair_v_nrg_proj_20_80;
+    // look_up_table_pair_v_nrgs_proj[3] = &pair_v_nrg_proj_2_20;
+    // look_up_table_pair_v_nrgs_proj[4] = &pair_v_nrg_proj_0_2;
+    // look_up_table_pair_v_nrgs_proj[5] = &pair_v_nrg_proj_001_03;
 }
 
-double SFQED_Processes::SFQED_PAIR_creation_rate(const double &gamma, const double &chi){
+double SFQED_Processes::SFQED_PAIR_creation_rate(const double &gamma, const double &chi) const{
     
     //coefficient for the rate of emission
     //multiply by \tilde{W_rad} to get the rate of emission
@@ -1710,14 +1829,13 @@ double SFQED_Processes::SFQED_PAIR_creation_rate(const double &gamma, const doub
     //IMPORTANT: through this constructs we mean
     //to default every chi > 600 case into the
     //600 < chi <= 2000 one
-    Chebyshev_User_1D *chebyshev_pair_rate;
-
-    chebyshev_pair_rate = (look_up_table_pair_prd_rt[chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600]);
+    const Chebyshev_User_1D * const chebyshev_pair_rate = 
+                        (look_up_table_pair_prd_rt[chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600]);
     
     return coefW_pair * chebyshev_pair_rate->evaluate(chi);//
 }
 
-double SFQED_Processes::SFQED_PAIR_creation_rate_fast(const double &gamma, const double &chi){
+double SFQED_Processes::SFQED_PAIR_creation_rate_fast(const double &gamma, const double &chi) const{
     
     //coefficient for the rate of emission
     //multiply by \tilde{W_rad} to get the rate of emission
@@ -1737,16 +1855,15 @@ double SFQED_Processes::SFQED_PAIR_creation_rate_fast(const double &gamma, const
     //IMPORTANT: through this constructs we mean
     //to default every chi > 600 case into the
     //600 < chi <= 2000 one
-    Chebyshev_User_1D *chebyshev_pair_rate;
-
-    chebyshev_pair_rate = (look_up_table_pair_prd_rt_fast[chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600]);
+    const Chebyshev_User_1D * const chebyshev_pair_rate = 
+                        (look_up_table_pair_prd_rt_fast[chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600]);
     
     return coefW_pair * chebyshev_pair_rate->evaluate(chi);//
 }
 
-double SFQED_Processes::SFQED_PAIR_emitted_electron_energy_aux(const int &lookup_index, const double &chi, const double &rescaled_rnd){
+double SFQED_Processes::SFQED_PAIR_emitted_electron_energy_aux(const int &lookup_index, const double &chi, const double &rescaled_rnd) const{
 
-    double low_r_limit = *(lu_table_pair_lower_r_bounds[lookup_index]),
+    const double low_r_limit = *(lu_table_pair_lower_r_bounds[lookup_index]),
             high_r_limit = *(lu_table_pair_upper_r_bounds[lookup_index]);
 
     // std::cout << "low limit = " << low_r_limit << " and high limit = " << high_r_limit << '\n';
@@ -1759,7 +1876,7 @@ double SFQED_Processes::SFQED_PAIR_emitted_electron_energy_aux(const int &lookup
 
         // std::cout << "3\n";
 
-        Chebyshev_User_2D *chebyshev_pair_v_nrgs_inv =
+        const Chebyshev_User_2D * const chebyshev_pair_v_nrgs_inv =
                 (look_up_table_pair_v_nrgs[lookup_index]);
 
         // std::cout << "4\n";
@@ -1772,7 +1889,7 @@ double SFQED_Processes::SFQED_PAIR_emitted_electron_energy_aux(const int &lookup
 
         // std::cout << "3\n";
 
-        Chebyshev_User_2D *chebyshev_pair_v_nrgs_inv_high =
+        const Chebyshev_User_2D * const chebyshev_pair_v_nrgs_inv_high =
                 (look_up_table_pair_v_nrgs_high[lookup_index]);
 
         // std::cout << "order in N = " << chebyshev_pair_v_nrgs_inv_high->evaluation_order_N <<
@@ -1790,7 +1907,7 @@ double SFQED_Processes::SFQED_PAIR_emitted_electron_energy_aux(const int &lookup
         // std::cout << "7\n";
 
         //retrieve the appropriate pair rate set of coefficients
-        Chebyshev_User_1D *chebyshev_pair_rate =
+        const Chebyshev_User_1D * const chebyshev_pair_rate =
                 (look_up_table_pair_prd_rt[lookup_index]);
 
         // std::cout << "8\n";
@@ -1803,7 +1920,7 @@ double SFQED_Processes::SFQED_PAIR_emitted_electron_energy_aux(const int &lookup
         // std::cout << "9\n";
         
         //compute the pivot at which the exponential approximation will be applied
-        Chebyshev_User_1D *chebyshev_pair_v_nrgs_proj =
+        const Chebyshev_User_1D * const chebyshev_pair_v_nrgs_proj =
                 (look_up_table_pair_v_nrgs_proj[lookup_index]);
 
         // std::cout << "10\n";
@@ -1815,7 +1932,7 @@ double SFQED_Processes::SFQED_PAIR_emitted_electron_energy_aux(const int &lookup
 
         //integrate the pair creation differential probability
         //from the just computed pivot up to 1
-        Chebyshev_User_2D *chebyshev_pair_prtl_rate =
+        const Chebyshev_User_2D * const chebyshev_pair_prtl_rate =
                 (look_up_table_pair_prtl_rt[lookup_index]);
 
         // std::cout << "12\n";
@@ -1837,7 +1954,7 @@ double SFQED_Processes::SFQED_PAIR_emitted_electron_energy_aux(const int &lookup
 //this method returns the nrg of the emitted electron only!
 //please consider that the relation phtn_nrg = e_nrg + p_nrg
 //holds if you are interested in the positron energy
-double SFQED_Processes::SFQED_PAIR_created_electron_energy(const double &nrg, const double &chi, const double &rnd){
+double SFQED_Processes::SFQED_PAIR_created_electron_energy(const double &nrg, const double &chi, const double &rnd) const{
 
     //lookup tables boolean selectors
     bool chi_001_03 = chi <= bound_kappa_0th, 
@@ -1848,6 +1965,7 @@ double SFQED_Processes::SFQED_PAIR_created_electron_energy(const double &nrg, co
         //chi_600_2000 = chi <= 2000.;
 
     int lookup_index = chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+    //lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
 
     double rescaled_rnd = 2. * rnd - 1.;
     double sgn = -2. * std::signbit(rescaled_rnd) + 1.;
@@ -1861,7 +1979,7 @@ double SFQED_Processes::SFQED_PAIR_created_electron_energy(const double &nrg, co
     return nrg * 0.5 * (1. + sgn * v);
 }
 
-double SFQED_Processes::SFQED_PAIR_created_electron_energy_fast(const double &nrg, const double &chi, const double &rnd){
+double SFQED_Processes::SFQED_PAIR_created_electron_energy_fast(const double &nrg, const double &chi, const double &rnd) const{
 
     //lookup tables boolean selectors
     bool chi_0_2 = chi <= bound_kappa_1st,
@@ -1871,6 +1989,7 @@ double SFQED_Processes::SFQED_PAIR_created_electron_energy_fast(const double &nr
         //chi_600_2000 = chi <= 2000.;
 
     int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+    //lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
 
     double rescaled_rnd = 2. * rnd - 1.;
     double sgn = -2. * std::signbit(rescaled_rnd) + 1.;
