@@ -239,26 +239,26 @@ void SFQED_Processes::SFQED_init_PHTN_emission(std::string path_to_coeffs){
     in_file.close();
     in_file.clear();
 
-     //prepare photon emission rate lookup table
-    Chebyshev_User_1D *phtn_mx_rates[4] = {&phtn_mx_rt_80_600,
-                                            &phtn_mx_rt_20_80,
-                                            &phtn_mx_rt_2_20,
-                                            &phtn_mx_rt_0_2};
+    //prepare photon emission rate lookup table
+    // Chebyshev_User_1D *phtn_mx_rates[4] = {&phtn_mx_rt_80_600,
+    //                                         &phtn_mx_rt_20_80,
+    //                                         &phtn_mx_rt_2_20,
+    //                                         &phtn_mx_rt_0_2};
 
-    look_up_table_phtn_mx_rt[0] = &phtn_mx_rt_600_2000;                                            
+    // look_up_table_phtn_mx_rt[0] = &phtn_mx_rt_600_2000;                                            
 
-    for(int i = 0; i < 4; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            look_up_table_phtn_mx_rt[tmp_i + j] = phtn_mx_rates[i];
-        }
-    }
+    // for(int i = 0; i < 4; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         look_up_table_phtn_mx_rt[tmp_i + j] = phtn_mx_rates[i];
+    //     }
+    // }
 
-    // look_up_table_phtn_mx_rt[0] = &phtn_mx_rt_600_2000;
-    // look_up_table_phtn_mx_rt[1] = &phtn_mx_rt_80_600;
-    // look_up_table_phtn_mx_rt[2] = &phtn_mx_rt_20_80;
-    // look_up_table_phtn_mx_rt[3] = &phtn_mx_rt_2_20;
-    // look_up_table_phtn_mx_rt[4] = &phtn_mx_rt_0_2;
+    look_up_table_phtn_mx_rt[0] = &phtn_mx_rt_600_2000;
+    look_up_table_phtn_mx_rt[1] = &phtn_mx_rt_80_600;
+    look_up_table_phtn_mx_rt[2] = &phtn_mx_rt_20_80;
+    look_up_table_phtn_mx_rt[3] = &phtn_mx_rt_2_20;
+    look_up_table_phtn_mx_rt[4] = &phtn_mx_rt_0_2;
 
 
     //photon partial emission rate g(w,\chi) = \int_0^w{Wrad(\chi,w_{integrated})dw_{integrated}}
@@ -293,25 +293,25 @@ void SFQED_Processes::SFQED_init_PHTN_emission(std::string path_to_coeffs){
     in_file.clear();
 
     //prepare photon emission rate lookup table
-    Chebyshev_User_2D *phtn_prtl_rates[4] = {&phtn_prtl_rt_80_600,
-                                            &phtn_prtl_rt_20_80,
-                                            &phtn_prtl_rt_2_20,
-                                            &phtn_prtl_rt_0_2};
+    // Chebyshev_User_2D *phtn_prtl_rates[4] = {&phtn_prtl_rt_80_600,
+    //                                         &phtn_prtl_rt_20_80,
+    //                                         &phtn_prtl_rt_2_20,
+    //                                         &phtn_prtl_rt_0_2};
 
-    look_up_table_phtn_prtl_rt[0] = &phtn_prtl_rt_600_2000;                                            
+    // look_up_table_phtn_prtl_rt[0] = &phtn_prtl_rt_600_2000;                                            
 
-    for(int i = 0; i < 4; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            look_up_table_phtn_prtl_rt[tmp_i + j] = phtn_prtl_rates[i];
-        }
-    }
+    // for(int i = 0; i < 4; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         look_up_table_phtn_prtl_rt[tmp_i + j] = phtn_prtl_rates[i];
+    //     }
+    // }
 
-    // look_up_table_phtn_prtl_rt[0] = &phtn_prtl_rt_600_2000;
-    // look_up_table_phtn_prtl_rt[1] = &phtn_prtl_rt_80_600;
-    // look_up_table_phtn_prtl_rt[2] = &phtn_prtl_rt_20_80;
-    // look_up_table_phtn_prtl_rt[3] = &phtn_prtl_rt_2_20;
-    // look_up_table_phtn_prtl_rt[4] = &phtn_prtl_rt_0_2;
+    look_up_table_phtn_prtl_rt[0] = &phtn_prtl_rt_600_2000;
+    look_up_table_phtn_prtl_rt[1] = &phtn_prtl_rt_80_600;
+    look_up_table_phtn_prtl_rt[2] = &phtn_prtl_rt_20_80;
+    look_up_table_phtn_prtl_rt[3] = &phtn_prtl_rt_2_20;
+    look_up_table_phtn_prtl_rt[4] = &phtn_prtl_rt_0_2;
 
 
     //photon energy in w
@@ -346,25 +346,25 @@ void SFQED_Processes::SFQED_init_PHTN_emission(std::string path_to_coeffs){
     in_file.clear();
 
     //prepare photon emission nrg lookup table
-    Chebyshev_User_2D *phtn_momw_rates[4] = {&phtn_momw_80_600,
-                                            &phtn_momw_20_80,
-                                            &phtn_momw_2_20,
-                                            &phtn_momw_0_2};
+    // Chebyshev_User_2D *phtn_momw_rates[4] = {&phtn_momw_80_600,
+    //                                         &phtn_momw_20_80,
+    //                                         &phtn_momw_2_20,
+    //                                         &phtn_momw_0_2};
 
-    look_up_table_phtn_momw[0] = &phtn_momw_600_2000;                                            
+    // look_up_table_phtn_momw[0] = &phtn_momw_600_2000;                                            
 
-    for(int i = 0; i < 4; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            look_up_table_phtn_momw[tmp_i + j] = phtn_momw_rates[i];
-        }
-    }
+    // for(int i = 0; i < 4; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         look_up_table_phtn_momw[tmp_i + j] = phtn_momw_rates[i];
+    //     }
+    // }
 
-    // look_up_table_phtn_momw[0] = &phtn_momw_600_2000;
-    // look_up_table_phtn_momw[1] = &phtn_momw_80_600,
-    // look_up_table_phtn_momw[2] = &phtn_momw_20_80,
-    // look_up_table_phtn_momw[3] = &phtn_momw_2_20,
-    // look_up_table_phtn_momw[4] = &phtn_momw_0_2;
+    look_up_table_phtn_momw[0] = &phtn_momw_600_2000;
+    look_up_table_phtn_momw[1] = &phtn_momw_80_600,
+    look_up_table_phtn_momw[2] = &phtn_momw_20_80,
+    look_up_table_phtn_momw[3] = &phtn_momw_2_20,
+    look_up_table_phtn_momw[4] = &phtn_momw_0_2;
 
 
     //photon energy in 1/w
@@ -399,25 +399,25 @@ void SFQED_Processes::SFQED_init_PHTN_emission(std::string path_to_coeffs){
     in_file.clear();
 
     //prepare photon emission nrg lookup table
-    Chebyshev_User_2D *phtn_1_over_w[4] = {&phtn_1_over_w_80_600,
-                                            &phtn_1_over_w_20_80,
-                                            &phtn_1_over_w_2_20,
-                                            &phtn_1_over_w_0_2};
+    // Chebyshev_User_2D *phtn_1_over_w[4] = {&phtn_1_over_w_80_600,
+    //                                         &phtn_1_over_w_20_80,
+    //                                         &phtn_1_over_w_2_20,
+    //                                         &phtn_1_over_w_0_2};
 
-    look_up_table_1_over_w[0] = &phtn_1_over_w_600_2000;                                            
+    // look_up_table_1_over_w[0] = &phtn_1_over_w_600_2000;                                            
 
-    for(int i = 0; i < 4; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            look_up_table_1_over_w[tmp_i + j] = phtn_1_over_w[i];
-        }
-    }
+    // for(int i = 0; i < 4; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         look_up_table_1_over_w[tmp_i + j] = phtn_1_over_w[i];
+    //     }
+    // }
 
-    // look_up_table_1_over_w[0] = &phtn_1_over_w_600_2000;
-    // look_up_table_1_over_w[1] = &phtn_1_over_w_80_600;
-    // look_up_table_1_over_w[2] = &phtn_1_over_w_20_80;
-    // look_up_table_1_over_w[3] = &phtn_1_over_w_2_20;
-    // look_up_table_1_over_w[4] = &phtn_1_over_w_0_2;
+    look_up_table_1_over_w[0] = &phtn_1_over_w_600_2000;
+    look_up_table_1_over_w[1] = &phtn_1_over_w_80_600;
+    look_up_table_1_over_w[2] = &phtn_1_over_w_20_80;
+    look_up_table_1_over_w[3] = &phtn_1_over_w_2_20;
+    look_up_table_1_over_w[4] = &phtn_1_over_w_0_2;
 
 
 
@@ -456,19 +456,19 @@ void SFQED_Processes::SFQED_init_PHTN_emission(std::string path_to_coeffs){
     phtn_1_over_w_proj_600_2000.evaluation_order = phtn_1_over_w_600_2000.evaluation_order_N;
     phtn_1_over_w_proj_600_2000.last_coeffs = phtn_1_over_w_600_2000.evaluate_y(heval_r_600_2000);
 
-    Chebyshev_User_1D *phtn_1_o_w_projs[4] = {&phtn_1_over_w_proj_80_600,
-                                            &phtn_1_over_w_proj_20_80,
-                                            &phtn_1_over_w_proj_2_20,
-                                            &phtn_1_over_w_proj_0_2};
+    // Chebyshev_User_1D *phtn_1_o_w_projs[4] = {&phtn_1_over_w_proj_80_600,
+    //                                         &phtn_1_over_w_proj_20_80,
+    //                                         &phtn_1_over_w_proj_2_20,
+    //                                         &phtn_1_over_w_proj_0_2};
 
-    look_up_table_phtn_1_o_w_proj[0] = &phtn_1_over_w_proj_600_2000;                                            
+    // look_up_table_phtn_1_o_w_proj[0] = &phtn_1_over_w_proj_600_2000;                                            
 
-    for(int i = 0; i < 4; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            look_up_table_phtn_1_o_w_proj[tmp_i + j] = phtn_1_o_w_projs[i];
-        }
-    }
+    // for(int i = 0; i < 4; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         look_up_table_phtn_1_o_w_proj[tmp_i + j] = phtn_1_o_w_projs[i];
+    //     }
+    // }
 
     look_up_table_phtn_1_o_w_proj[0] = &phtn_1_over_w_proj_600_2000;  
     look_up_table_phtn_1_o_w_proj[1] = &phtn_1_over_w_proj_80_600;
@@ -513,25 +513,25 @@ void SFQED_Processes::SFQED_init_PHTN_emission(std::string path_to_coeffs){
     in_file.clear();
 
     //prepare photon emission nrg lookup table
-    Chebyshev_User_2D *phtn_diff_crss_sctn[4] = {&phtn_diff_crss_sctn_80_600,
-                                            &phtn_diff_crss_sctn_20_80,
-                                            &phtn_diff_crss_sctn_2_20,
-                                            &phtn_diff_crss_sctn_0_2};
+    // Chebyshev_User_2D *phtn_diff_crss_sctn[4] = {&phtn_diff_crss_sctn_80_600,
+    //                                         &phtn_diff_crss_sctn_20_80,
+    //                                         &phtn_diff_crss_sctn_2_20,
+    //                                         &phtn_diff_crss_sctn_0_2};
 
-    look_up_table_phtn_diff_crss_sctn[0] = &phtn_diff_crss_sctn_600_2000;                                            
+    // look_up_table_phtn_diff_crss_sctn[0] = &phtn_diff_crss_sctn_600_2000;                                            
 
-    for(int i = 0; i < 4; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            look_up_table_phtn_diff_crss_sctn[tmp_i + j] = phtn_diff_crss_sctn[i];
-        }
-    }
+    // for(int i = 0; i < 4; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         look_up_table_phtn_diff_crss_sctn[tmp_i + j] = phtn_diff_crss_sctn[i];
+    //     }
+    // }
 
-    // look_up_table_phtn_diff_crss_sctn[0] = &phtn_diff_crss_sctn_600_2000;   
-    // look_up_table_phtn_diff_crss_sctn[1] = &phtn_diff_crss_sctn_80_600;
-    // look_up_table_phtn_diff_crss_sctn[2] = &phtn_diff_crss_sctn_20_80;
-    // look_up_table_phtn_diff_crss_sctn[3] = &phtn_diff_crss_sctn_2_20;
-    // look_up_table_phtn_diff_crss_sctn[4] = &phtn_diff_crss_sctn_0_2;
+    look_up_table_phtn_diff_crss_sctn[0] = &phtn_diff_crss_sctn_600_2000;   
+    look_up_table_phtn_diff_crss_sctn[1] = &phtn_diff_crss_sctn_80_600;
+    look_up_table_phtn_diff_crss_sctn[2] = &phtn_diff_crss_sctn_20_80;
+    look_up_table_phtn_diff_crss_sctn[3] = &phtn_diff_crss_sctn_2_20;
+    look_up_table_phtn_diff_crss_sctn[4] = &phtn_diff_crss_sctn_0_2;
 }
 
 //the function below returns the rate of photon emission for an electron
@@ -548,14 +548,28 @@ double SFQED_Processes::SFQED_PHTN_emission_rate(const double &gamma, const doub
     //---------------------------------------------------
     /**/
     //lookup tables boolean selectors
-    bool chi_0_2 = chi <= bound_chi_1st,
-        chi_2_20 = chi <= bound_chi_2nd,
-        chi_20_80 = chi <= bound_chi_3rd,
-        chi_80_600 = chi <= bound_chi_4th;
-        //chi_600_2000 = chi <= 2000.;
+    // bool chi_0_2 = chi <= bound_chi_1st,
+    //     chi_2_20 = chi <= bound_chi_2nd,
+    //     chi_20_80 = chi <= bound_chi_3rd,
+    //     chi_80_600 = chi <= bound_chi_4th;
+    //     //chi_600_2000 = chi <= 2000.;
 
-    int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
-    //lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+    // int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+    // lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+
+    int lookup_index;
+
+    if(chi <= bound_chi_1st){
+        lookup_index = 4;
+    }else if(chi <= bound_chi_2nd){
+        lookup_index = 3;
+    }else if(chi <= bound_chi_3rd){
+        lookup_index = 2;
+    }else if(chi <= bound_chi_4th){
+        lookup_index = 1;
+    }else{
+        lookup_index = 0;
+    }
 
     //IMPORTANT: through this constructs we means
     //to default every chi > 600 case into the
@@ -848,17 +862,28 @@ double SFQED_Processes::SFQED_LCFA_emitted_photon_energy(const double &gamma, co
     //BRANCH ACCORDING TO THE VALUE OF \chi
     //-------------------------------------
     //lookup tables boolean selectors
-    bool chi_0_2 = chi <= bound_chi_1st,
-        chi_2_20 = chi <= bound_chi_2nd,
-        chi_20_80 = chi <= bound_chi_3rd,
-        chi_80_600 = chi <= bound_chi_4th;
-        //chi_600_2000 = chi <= 2000.;
+    // bool chi_0_2 = chi <= bound_chi_1st,
+    //     chi_2_20 = chi <= bound_chi_2nd,
+    //     chi_20_80 = chi <= bound_chi_3rd,
+    //     chi_80_600 = chi <= bound_chi_4th;
+    //     //chi_600_2000 = chi <= 2000.;
 
-    int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
-    //lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+    // int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+    // lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
 
-    //alternative way to compute the index and use the lutables
-    //int lookup_index = static_cast<int>(log2(chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600 + 1));
+    int lookup_index;
+
+    if(chi <= bound_chi_1st){
+        lookup_index = 4;
+    }else if(chi <= bound_chi_2nd){
+        lookup_index = 3;
+    }else if(chi <= bound_chi_3rd){
+        lookup_index = 2;
+    }else if(chi <= bound_chi_4th){
+        lookup_index = 1;
+    }else{
+        lookup_index = 0;
+    }
 
     //IMPORTANT: through the above construct we mean
     //to default every chi > 600 case into the
@@ -898,14 +923,28 @@ double SFQED_Processes::SFQED_BLCFA_emitted_photon_energy(const double& LCFA_lim
     // static double increment = 0.01;
 
     //key generating section
-    bool chi_0_2 = chi <= bound_chi_1st,
-        chi_2_20 = chi <= bound_chi_2nd,
-        chi_20_80 = chi <= bound_chi_3rd,
-        chi_80_600 = chi <= bound_chi_4th;
-        //chi_600_2000 = chi <= 2000.;
+    // bool chi_0_2 = chi <= bound_chi_1st,
+    //     chi_2_20 = chi <= bound_chi_2nd,
+    //     chi_20_80 = chi <= bound_chi_3rd,
+    //     chi_80_600 = chi <= bound_chi_4th;
+    //     //chi_600_2000 = chi <= 2000.;
 
-    int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
-    //lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+    // int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+    // lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+
+    int lookup_index;
+
+    if(chi <= bound_chi_1st){
+        lookup_index = 4;
+    }else if(chi <= bound_chi_2nd){
+        lookup_index = 3;
+    }else if(chi <= bound_chi_3rd){
+        lookup_index = 2;
+    }else if(chi <= bound_chi_4th){
+        lookup_index = 1;
+    }else{
+        lookup_index = 0;
+    }
     
     //transform the threshold energy into a w value
     double LCFA_limit_w  = cbrt(LCFA_limit / (1.5 * chi * (gamma - LCFA_limit)));
@@ -1515,46 +1554,46 @@ void SFQED_Processes::SFQED_init_PAIR_creation(std::string path_to_coeffs){
     in_file.clear();
 
     //prepare photon emission rate lookup table
-    Chebyshev_User_1D *pair_rates[5] = {&pair_prd_rt_80_600,
-                                            &pair_prd_rt_20_80,
-                                            &pair_prd_rt_2_20,
-                                            &pair_prd_rt_0_2,
-                                            &pair_prd_rt_001_03};
+    // Chebyshev_User_1D *pair_rates[5] = {&pair_prd_rt_80_600,
+    //                                         &pair_prd_rt_20_80,
+    //                                         &pair_prd_rt_2_20,
+    //                                         &pair_prd_rt_0_2,
+    //                                         &pair_prd_rt_001_03};
 
-    look_up_table_pair_prd_rt[0] = &pair_prd_rt_600_2000;                                            
+    // look_up_table_pair_prd_rt[0] = &pair_prd_rt_600_2000;                                            
 
-    for(int i = 0; i < 5; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            look_up_table_pair_prd_rt[tmp_i + j] = pair_rates[i];
-        }
-    }
+    // for(int i = 0; i < 5; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         look_up_table_pair_prd_rt[tmp_i + j] = pair_rates[i];
+    //     }
+    // }
 
-    // look_up_table_pair_prd_rt[0] = &pair_prd_rt_600_2000;
-    // look_up_table_pair_prd_rt[1] = &pair_prd_rt_80_600;
-    // look_up_table_pair_prd_rt[2] = &pair_prd_rt_20_80;
-    // look_up_table_pair_prd_rt[3] = &pair_prd_rt_2_20;
-    // look_up_table_pair_prd_rt[4] = &pair_prd_rt_0_2;
-    // look_up_table_pair_prd_rt[5] = &pair_prd_rt_001_03;
+    look_up_table_pair_prd_rt[0] = &pair_prd_rt_600_2000;
+    look_up_table_pair_prd_rt[1] = &pair_prd_rt_80_600;
+    look_up_table_pair_prd_rt[2] = &pair_prd_rt_20_80;
+    look_up_table_pair_prd_rt[3] = &pair_prd_rt_2_20;
+    look_up_table_pair_prd_rt[4] = &pair_prd_rt_0_2;
+    look_up_table_pair_prd_rt[5] = &pair_prd_rt_001_03;
 
     //prepare fast lookup table
-    pair_rates[4] = &pair_prd_rt_001_03_fast;
+    // pair_rates[4] = &pair_prd_rt_001_03_fast;
 
-    look_up_table_pair_prd_rt_fast[0] = &pair_prd_rt_600_2000;                                            
+    // look_up_table_pair_prd_rt_fast[0] = &pair_prd_rt_600_2000;                                            
 
-    for(int i = 0; i < 5; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            look_up_table_pair_prd_rt_fast[tmp_i + j] = pair_rates[i];
-        }
-    }
+    // for(int i = 0; i < 5; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         look_up_table_pair_prd_rt_fast[tmp_i + j] = pair_rates[i];
+    //     }
+    // }
 
-    // look_up_table_pair_prd_rt_fast[0] = &pair_prd_rt_600_2000;
-    // look_up_table_pair_prd_rt_fast[1] = &pair_prd_rt_80_600;
-    // look_up_table_pair_prd_rt_fast[2] = &pair_prd_rt_20_80;
-    // look_up_table_pair_prd_rt_fast[3] = &pair_prd_rt_2_20;
-    // look_up_table_pair_prd_rt_fast[4] = &pair_prd_rt_0_2;
-    // look_up_table_pair_prd_rt_fast[5] = &pair_prd_rt_001_03_fast;
+    look_up_table_pair_prd_rt_fast[0] = &pair_prd_rt_600_2000;
+    look_up_table_pair_prd_rt_fast[1] = &pair_prd_rt_80_600;
+    look_up_table_pair_prd_rt_fast[2] = &pair_prd_rt_20_80;
+    look_up_table_pair_prd_rt_fast[3] = &pair_prd_rt_2_20;
+    look_up_table_pair_prd_rt_fast[4] = &pair_prd_rt_0_2;
+    look_up_table_pair_prd_rt_fast[5] = &pair_prd_rt_001_03_fast;
 
 //
     pair_prtl_rt_001_03.func_to_execute = &zero_2D;
@@ -1591,27 +1630,27 @@ void SFQED_Processes::SFQED_init_PAIR_creation(std::string path_to_coeffs){
     in_file.clear();
 
     //prepare photon emission rate lookup table
-    Chebyshev_User_2D *pair_prtl_rates[5] = {&pair_prtl_rt_80_600,
-                                            &pair_prtl_rt_20_80,
-                                            &pair_prtl_rt_2_20,
-                                            &pair_prtl_rt_0_2,
-                                            &pair_prtl_rt_001_03};
+    // Chebyshev_User_2D *pair_prtl_rates[5] = {&pair_prtl_rt_80_600,
+    //                                         &pair_prtl_rt_20_80,
+    //                                         &pair_prtl_rt_2_20,
+    //                                         &pair_prtl_rt_0_2,
+    //                                         &pair_prtl_rt_001_03};
 
-    look_up_table_pair_prtl_rt[0] = &pair_prtl_rt_600_2000;                                            
+    // look_up_table_pair_prtl_rt[0] = &pair_prtl_rt_600_2000;                                            
 
-    for(int i = 0; i < 5; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            look_up_table_pair_prtl_rt[tmp_i + j] = pair_prtl_rates[i];
-        }
-    }
+    // for(int i = 0; i < 5; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         look_up_table_pair_prtl_rt[tmp_i + j] = pair_prtl_rates[i];
+    //     }
+    // }
 
-    // look_up_table_pair_prtl_rt[0] = &pair_prtl_rt_600_2000;  
-    // look_up_table_pair_prtl_rt[1] = &pair_prtl_rt_80_600,
-    // look_up_table_pair_prtl_rt[2] = &pair_prtl_rt_20_80,
-    // look_up_table_pair_prtl_rt[3] = &pair_prtl_rt_2_20,
-    // look_up_table_pair_prtl_rt[4] = &pair_prtl_rt_0_2,
-    // look_up_table_pair_prtl_rt[5] = &pair_prtl_rt_001_03;
+    look_up_table_pair_prtl_rt[0] = &pair_prtl_rt_600_2000;  
+    look_up_table_pair_prtl_rt[1] = &pair_prtl_rt_80_600,
+    look_up_table_pair_prtl_rt[2] = &pair_prtl_rt_20_80,
+    look_up_table_pair_prtl_rt[3] = &pair_prtl_rt_2_20,
+    look_up_table_pair_prtl_rt[4] = &pair_prtl_rt_0_2,
+    look_up_table_pair_prtl_rt[5] = &pair_prtl_rt_001_03;
 
 
     //photon energy in v
@@ -1655,27 +1694,27 @@ void SFQED_Processes::SFQED_init_PAIR_creation(std::string path_to_coeffs){
     in_file.clear();
 
     //prepare photon emission nrg lookup table
-    Chebyshev_User_2D *pair_v_nrgs_rates[5] = {&pair_v_nrgs_80_600,
-                                            &pair_v_nrgs_20_80,
-                                            &pair_v_nrgs_2_20,
-                                            &pair_v_nrgs_0_2,
-                                            &pair_v_nrgs_001_03};
+    // Chebyshev_User_2D *pair_v_nrgs_rates[5] = {&pair_v_nrgs_80_600,
+    //                                         &pair_v_nrgs_20_80,
+    //                                         &pair_v_nrgs_2_20,
+    //                                         &pair_v_nrgs_0_2,
+    //                                         &pair_v_nrgs_001_03};
 
-    look_up_table_pair_v_nrgs[0] = &pair_v_nrgs_600_2000;                                            
+    // look_up_table_pair_v_nrgs[0] = &pair_v_nrgs_600_2000;                                            
 
-    for(int i = 0; i < 5; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            look_up_table_pair_v_nrgs[tmp_i + j] = pair_v_nrgs_rates[i];
-        }
-    }
+    // for(int i = 0; i < 5; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         look_up_table_pair_v_nrgs[tmp_i + j] = pair_v_nrgs_rates[i];
+    //     }
+    // }
 
-    // look_up_table_pair_v_nrgs[0] = &pair_v_nrgs_600_2000;  
-    // look_up_table_pair_v_nrgs[1] = &pair_v_nrgs_80_600,
-    // look_up_table_pair_v_nrgs[2] = &pair_v_nrgs_20_80,
-    // look_up_table_pair_v_nrgs[3] = &pair_v_nrgs_2_20,
-    // look_up_table_pair_v_nrgs[4] = &pair_v_nrgs_0_2,
-    // look_up_table_pair_v_nrgs[5] = &pair_v_nrgs_001_03;
+    look_up_table_pair_v_nrgs[0] = &pair_v_nrgs_600_2000;  
+    look_up_table_pair_v_nrgs[1] = &pair_v_nrgs_80_600,
+    look_up_table_pair_v_nrgs[2] = &pair_v_nrgs_20_80,
+    look_up_table_pair_v_nrgs[3] = &pair_v_nrgs_2_20,
+    look_up_table_pair_v_nrgs[4] = &pair_v_nrgs_0_2,
+    look_up_table_pair_v_nrgs[5] = &pair_v_nrgs_001_03;
 
     //photon energy in v high part
 
@@ -1718,27 +1757,27 @@ void SFQED_Processes::SFQED_init_PAIR_creation(std::string path_to_coeffs){
     in_file.clear();
 
     //prepare photon emission nrg lookup table
-    Chebyshev_User_2D *pair_v_nrgs_rates_high[5] = {&pair_v_nrgs_80_600_high,
-                                            &pair_v_nrgs_20_80_high,
-                                            &pair_v_nrgs_2_20_high,
-                                            &pair_v_nrgs_0_2_high,
-                                            &pair_v_nrgs_001_03_high};
+    // Chebyshev_User_2D *pair_v_nrgs_rates_high[5] = {&pair_v_nrgs_80_600_high,
+    //                                         &pair_v_nrgs_20_80_high,
+    //                                         &pair_v_nrgs_2_20_high,
+    //                                         &pair_v_nrgs_0_2_high,
+    //                                         &pair_v_nrgs_001_03_high};
 
-    look_up_table_pair_v_nrgs_high[0] = &pair_v_nrgs_600_2000_high;                                            
+    // look_up_table_pair_v_nrgs_high[0] = &pair_v_nrgs_600_2000_high;                                            
 
-    for(int i = 0; i < 5; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            look_up_table_pair_v_nrgs_high[tmp_i + j] = pair_v_nrgs_rates_high[i];
-        }
-    }
+    // for(int i = 0; i < 5; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         look_up_table_pair_v_nrgs_high[tmp_i + j] = pair_v_nrgs_rates_high[i];
+    //     }
+    // }
 
-    // look_up_table_pair_v_nrgs_high[0] = &pair_v_nrgs_600_2000_high;
-    // look_up_table_pair_v_nrgs_high[1] = &pair_v_nrgs_80_600_high;
-    // look_up_table_pair_v_nrgs_high[2] = &pair_v_nrgs_20_80_high;
-    // look_up_table_pair_v_nrgs_high[3] = &pair_v_nrgs_2_20_high;
-    // look_up_table_pair_v_nrgs_high[4] = &pair_v_nrgs_0_2_high;
-    // look_up_table_pair_v_nrgs_high[5] = &pair_v_nrgs_001_03_high;
+    look_up_table_pair_v_nrgs_high[0] = &pair_v_nrgs_600_2000_high;
+    look_up_table_pair_v_nrgs_high[1] = &pair_v_nrgs_80_600_high;
+    look_up_table_pair_v_nrgs_high[2] = &pair_v_nrgs_20_80_high;
+    look_up_table_pair_v_nrgs_high[3] = &pair_v_nrgs_2_20_high;
+    look_up_table_pair_v_nrgs_high[4] = &pair_v_nrgs_0_2_high;
+    look_up_table_pair_v_nrgs_high[5] = &pair_v_nrgs_001_03_high;
 
     //inverse 1D projection (to be fixed)
 
@@ -1786,27 +1825,27 @@ void SFQED_Processes::SFQED_init_PAIR_creation(std::string path_to_coeffs){
     pair_v_nrg_proj_600_2000.evaluation_order = pair_v_nrgs_600_2000_high.evaluation_order_N;
     pair_v_nrg_proj_600_2000.last_coeffs = pair_v_nrgs_600_2000_high.evaluate_y(pair_r_exp_limit_600_2000);
 
-    Chebyshev_User_1D *pair_projs[5] = {&pair_v_nrg_proj_80_600,
-                                            &pair_v_nrg_proj_20_80,
-                                            &pair_v_nrg_proj_2_20,
-                                            &pair_v_nrg_proj_0_2,
-                                            &pair_v_nrg_proj_001_03};
+    // Chebyshev_User_1D *pair_projs[5] = {&pair_v_nrg_proj_80_600,
+    //                                         &pair_v_nrg_proj_20_80,
+    //                                         &pair_v_nrg_proj_2_20,
+    //                                         &pair_v_nrg_proj_0_2,
+    //                                         &pair_v_nrg_proj_001_03};
 
-    look_up_table_pair_v_nrgs_proj[0] = &pair_v_nrg_proj_600_2000;                                            
+    // look_up_table_pair_v_nrgs_proj[0] = &pair_v_nrg_proj_600_2000;                                            
 
-    for(int i = 0; i < 5; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            look_up_table_pair_v_nrgs_proj[tmp_i + j] = pair_projs[i];
-        }
-    }
+    // for(int i = 0; i < 5; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         look_up_table_pair_v_nrgs_proj[tmp_i + j] = pair_projs[i];
+    //     }
+    // }
 
-    // look_up_table_pair_v_nrgs_proj[0] = &pair_v_nrg_proj_600_2000; 
-    // look_up_table_pair_v_nrgs_proj[1] = &pair_v_nrg_proj_80_600;
-    // look_up_table_pair_v_nrgs_proj[2] = &pair_v_nrg_proj_20_80;
-    // look_up_table_pair_v_nrgs_proj[3] = &pair_v_nrg_proj_2_20;
-    // look_up_table_pair_v_nrgs_proj[4] = &pair_v_nrg_proj_0_2;
-    // look_up_table_pair_v_nrgs_proj[5] = &pair_v_nrg_proj_001_03;
+    look_up_table_pair_v_nrgs_proj[0] = &pair_v_nrg_proj_600_2000; 
+    look_up_table_pair_v_nrgs_proj[1] = &pair_v_nrg_proj_80_600;
+    look_up_table_pair_v_nrgs_proj[2] = &pair_v_nrg_proj_20_80;
+    look_up_table_pair_v_nrgs_proj[3] = &pair_v_nrg_proj_2_20;
+    look_up_table_pair_v_nrgs_proj[4] = &pair_v_nrg_proj_0_2;
+    look_up_table_pair_v_nrgs_proj[5] = &pair_v_nrg_proj_001_03;
 }
 
 double SFQED_Processes::SFQED_PAIR_creation_rate(const double &gamma, const double &chi) const{
@@ -1819,18 +1858,38 @@ double SFQED_Processes::SFQED_PAIR_creation_rate(const double &gamma, const doub
     //---------------------------------------------------
     /**/
     //lookup tables boolean selectors
-    bool chi_001_03 = chi <= bound_kappa_0th, 
-        chi_0_2 = chi <= bound_kappa_1st,
-        chi_2_20 = chi <= bound_kappa_2nd,
-        chi_20_80 = chi <= bound_kappa_3rd,
-        chi_80_600 = chi <= bound_kappa_4th;
-        //chi_600_2000 = chi <= 2000.;
+    // bool chi_001_03 = chi <= bound_kappa_0th, 
+    //     chi_0_2 = chi <= bound_kappa_1st,
+    //     chi_2_20 = chi <= bound_kappa_2nd,
+    //     chi_20_80 = chi <= bound_kappa_3rd,
+    //     chi_80_600 = chi <= bound_kappa_4th;
+    //     //chi_600_2000 = chi <= 2000.;
+    
+    // int lookup_index = chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+    // lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+    
+
+    int lookup_index;
+
+    if(chi <= bound_kappa_0th){
+        lookup_index = 5;
+    }else if(chi <= bound_kappa_1st){
+        lookup_index = 4;
+    }else if(chi <= bound_kappa_2nd){
+        lookup_index = 3;
+    }else if(chi <= bound_kappa_3rd){
+        lookup_index = 2;
+    }else if(chi <= bound_kappa_4th){
+        lookup_index = 1;
+    }else{
+        lookup_index = 0;
+    }
 
     //IMPORTANT: through this constructs we mean
     //to default every chi > 600 case into the
     //600 < chi <= 2000 one
     const Chebyshev_User_1D * const chebyshev_pair_rate = 
-                        (look_up_table_pair_prd_rt[chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600]);
+                        (look_up_table_pair_prd_rt[lookup_index]);
     
     return coefW_pair * chebyshev_pair_rate->evaluate(chi);//
 }
@@ -1845,18 +1904,37 @@ double SFQED_Processes::SFQED_PAIR_creation_rate_fast(const double &gamma, const
     //---------------------------------------------------
     /**/
     //lookup tables boolean selectors
-    bool chi_001_03 = chi <= bound_kappa_0th, 
-        chi_0_2 = chi <= bound_kappa_1st,
-        chi_2_20 = chi <= bound_kappa_2nd,
-        chi_20_80 = chi <= bound_kappa_3rd,
-        chi_80_600 = chi <= bound_kappa_4th;
-        //chi_600_2000 = chi <= 2000.;
+    // bool chi_001_03 = chi <= bound_kappa_0th, 
+    //     chi_0_2 = chi <= bound_kappa_1st,
+    //     chi_2_20 = chi <= bound_kappa_2nd,
+    //     chi_20_80 = chi <= bound_kappa_3rd,
+    //     chi_80_600 = chi <= bound_kappa_4th;
+    //     //chi_600_2000 = chi <= 2000.;
+
+    // int lookup_index = chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+    // lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+    
+    int lookup_index;
+
+    if(chi <= bound_kappa_0th){
+        lookup_index = 5;
+    }else if(chi <= bound_kappa_1st){
+        lookup_index = 4;
+    }else if(chi <= bound_kappa_2nd){
+        lookup_index = 3;
+    }else if(chi <= bound_kappa_3rd){
+        lookup_index = 2;
+    }else if(chi <= bound_kappa_4th){
+        lookup_index = 1;
+    }else{
+        lookup_index = 0;
+    }
 
     //IMPORTANT: through this constructs we mean
     //to default every chi > 600 case into the
     //600 < chi <= 2000 one
     const Chebyshev_User_1D * const chebyshev_pair_rate = 
-                        (look_up_table_pair_prd_rt_fast[chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600]);
+                        (look_up_table_pair_prd_rt_fast[lookup_index]);
     
     return coefW_pair * chebyshev_pair_rate->evaluate(chi);//
 }
@@ -1957,15 +2035,32 @@ double SFQED_Processes::SFQED_PAIR_emitted_electron_energy_aux(const int &lookup
 double SFQED_Processes::SFQED_PAIR_created_electron_energy(const double &nrg, const double &chi, const double &rnd) const{
 
     //lookup tables boolean selectors
-    bool chi_001_03 = chi <= bound_kappa_0th, 
-        chi_0_2 = chi <= bound_kappa_1st,
-        chi_2_20 = chi <= bound_kappa_2nd,
-        chi_20_80 = chi <= bound_kappa_3rd,
-        chi_80_600 = chi <= bound_kappa_4th;
-        //chi_600_2000 = chi <= 2000.;
+    // bool chi_001_03 = chi <= bound_kappa_0th, 
+    //     chi_0_2 = chi <= bound_kappa_1st,
+    //     chi_2_20 = chi <= bound_kappa_2nd,
+    //     chi_20_80 = chi <= bound_kappa_3rd,
+    //     chi_80_600 = chi <= bound_kappa_4th;
+    //     //chi_600_2000 = chi <= 2000.;
 
-    int lookup_index = chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
-    //lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+    // int lookup_index = chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+    // lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+
+
+    int lookup_index;
+
+    if(chi <= bound_kappa_0th){
+        lookup_index = 5;
+    }else if(chi <= bound_kappa_1st){
+        lookup_index = 4;
+    }else if(chi <= bound_kappa_2nd){
+        lookup_index = 3;
+    }else if(chi <= bound_kappa_3rd){
+        lookup_index = 2;
+    }else if(chi <= bound_kappa_4th){
+        lookup_index = 1;
+    }else{
+        lookup_index = 0;
+    }
 
     double rescaled_rnd = 2. * rnd - 1.;
     double sgn = -2. * std::signbit(rescaled_rnd) + 1.;
@@ -1982,14 +2077,28 @@ double SFQED_Processes::SFQED_PAIR_created_electron_energy(const double &nrg, co
 double SFQED_Processes::SFQED_PAIR_created_electron_energy_fast(const double &nrg, const double &chi, const double &rnd) const{
 
     //lookup tables boolean selectors
-    bool chi_0_2 = chi <= bound_kappa_1st,
-        chi_2_20 = chi <= bound_kappa_2nd,
-        chi_20_80 = chi <= bound_kappa_3rd,
-        chi_80_600 = chi <= bound_kappa_4th;
-        //chi_600_2000 = chi <= 2000.;
+    // bool chi_0_2 = chi <= bound_kappa_1st,
+    //     chi_2_20 = chi <= bound_kappa_2nd,
+    //     chi_20_80 = chi <= bound_kappa_3rd,
+    //     chi_80_600 = chi <= bound_kappa_4th;
+    //     //chi_600_2000 = chi <= 2000.;
 
-    int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
-    //lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+    // int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+    // lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+
+    int lookup_index;
+
+    if(chi <= bound_kappa_1st){
+        lookup_index = 4;
+    }else if(chi <= bound_kappa_2nd){
+        lookup_index = 3;
+    }else if(chi <= bound_kappa_3rd){
+        lookup_index = 2;
+    }else if(chi <= bound_kappa_4th){
+        lookup_index = 1;
+    }else{
+        lookup_index = 0;
+    }
 
     double rescaled_rnd = 2. * rnd - 1.;
     double sgn = -2. * std::signbit(rescaled_rnd) + 1.;

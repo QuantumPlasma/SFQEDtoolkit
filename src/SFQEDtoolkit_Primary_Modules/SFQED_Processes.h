@@ -90,8 +90,8 @@ private:
         //aftermath of a branch misprediction
         //the size is due to (0+1)+1+2+4+8 = 16 = 2^(5-1)
         //notice that objects with module scope should be static by default
-        Chebyshev_User_1D *look_up_table_phtn_mx_rt[16];
-        // Chebyshev_User_1D *look_up_table_phtn_mx_rt[5];
+        // Chebyshev_User_1D *look_up_table_phtn_mx_rt[16];
+        Chebyshev_User_1D *look_up_table_phtn_mx_rt[5];
 
         Chebyshev_User_2D phtn_prtl_rt_0_2,
                         phtn_prtl_rt_2_20,
@@ -99,8 +99,8 @@ private:
                         phtn_prtl_rt_80_600,
                         phtn_prtl_rt_600_2000;
 
-        Chebyshev_User_2D *look_up_table_phtn_prtl_rt[16];
-        // Chebyshev_User_2D *look_up_table_phtn_prtl_rt[5];
+        // Chebyshev_User_2D *look_up_table_phtn_prtl_rt[16];
+        Chebyshev_User_2D *look_up_table_phtn_prtl_rt[5];
 
         Chebyshev_User_2D phtn_momw_0_2,
                         phtn_momw_2_20,
@@ -108,8 +108,8 @@ private:
                         phtn_momw_80_600,
                         phtn_momw_600_2000;
 
-        Chebyshev_User_2D *look_up_table_phtn_momw[16];
-        // Chebyshev_User_2D *look_up_table_phtn_momw[5];
+        // Chebyshev_User_2D *look_up_table_phtn_momw[16];
+        Chebyshev_User_2D *look_up_table_phtn_momw[5];
 
         Chebyshev_User_2D phtn_1_over_w_0_2,
                         phtn_1_over_w_2_20,
@@ -117,8 +117,8 @@ private:
                         phtn_1_over_w_80_600,
                         phtn_1_over_w_600_2000;
 
-        Chebyshev_User_2D *look_up_table_1_over_w[16];
-        // Chebyshev_User_2D *look_up_table_1_over_w[5];
+        // Chebyshev_User_2D *look_up_table_1_over_w[16];
+        Chebyshev_User_2D *look_up_table_1_over_w[5];
 
         Chebyshev_User_1D phtn_1_over_w_proj_0_2,
                         phtn_1_over_w_proj_2_20,
@@ -126,8 +126,8 @@ private:
                         phtn_1_over_w_proj_80_600,
                         phtn_1_over_w_proj_600_2000;
 
-        Chebyshev_User_1D *look_up_table_phtn_1_o_w_proj[16];
-        // Chebyshev_User_1D *look_up_table_phtn_1_o_w_proj[5];
+        // Chebyshev_User_1D *look_up_table_phtn_1_o_w_proj[16];
+        Chebyshev_User_1D *look_up_table_phtn_1_o_w_proj[5];
 
         //auxiliary inner function
         //it computes the w-value energy of the emitted photon
@@ -143,8 +143,8 @@ private:
                         phtn_diff_crss_sctn_80_600,
                         phtn_diff_crss_sctn_600_2000;
 
-        Chebyshev_User_2D *look_up_table_phtn_diff_crss_sctn[16];
-        // Chebyshev_User_2D *look_up_table_phtn_diff_crss_sctn[5];
+        // Chebyshev_User_2D *look_up_table_phtn_diff_crss_sctn[16];
+        Chebyshev_User_2D *look_up_table_phtn_diff_crss_sctn[5];
 
         /***************************/
         /* PAIR PRODUCTION SECTION */
@@ -159,11 +159,11 @@ private:
                         pair_prd_rt_80_600,
                         pair_prd_rt_600_2000;
 
-        Chebyshev_User_1D *look_up_table_pair_prd_rt[32];
-        // Chebyshev_User_1D *look_up_table_pair_prd_rt[6];
+        // Chebyshev_User_1D *look_up_table_pair_prd_rt[32];
+        Chebyshev_User_1D *look_up_table_pair_prd_rt[6];
 
-        Chebyshev_User_1D *look_up_table_pair_prd_rt_fast[32];
-        // Chebyshev_User_1D *look_up_table_pair_prd_rt_fast[6];
+        // Chebyshev_User_1D *look_up_table_pair_prd_rt_fast[32];
+        Chebyshev_User_1D *look_up_table_pair_prd_rt_fast[6];
 
 
         //these will store the coefficients of the inverse function W[k,v] - rW[k,0] = 0.
@@ -175,8 +175,8 @@ private:
                         pair_v_nrgs_80_600,
                         pair_v_nrgs_600_2000;
 
-        Chebyshev_User_2D *look_up_table_pair_v_nrgs[32];
-        // Chebyshev_User_2D *look_up_table_pair_v_nrgs[6];
+        // Chebyshev_User_2D *look_up_table_pair_v_nrgs[32];
+        Chebyshev_User_2D *look_up_table_pair_v_nrgs[6];
 
         Chebyshev_User_2D pair_v_nrgs_001_03_high,
                         pair_v_nrgs_0_2_high,
@@ -185,8 +185,8 @@ private:
                         pair_v_nrgs_80_600_high,
                         pair_v_nrgs_600_2000_high;
 
-        Chebyshev_User_2D *look_up_table_pair_v_nrgs_high[32];
-        // Chebyshev_User_2D *look_up_table_pair_v_nrgs_high[6];
+        // Chebyshev_User_2D *look_up_table_pair_v_nrgs_high[32];
+        Chebyshev_User_2D *look_up_table_pair_v_nrgs_high[6];
 
         //projections of the above brent inverse coeffs
         //upon the corresponding r low limit value
@@ -197,8 +197,8 @@ private:
                         pair_v_nrg_proj_80_600,
                         pair_v_nrg_proj_600_2000;
 
-        Chebyshev_User_1D *look_up_table_pair_v_nrgs_proj[32];
-        // Chebyshev_User_1D *look_up_table_pair_v_nrgs_proj[6];
+        // Chebyshev_User_1D *look_up_table_pair_v_nrgs_proj[32];
+        Chebyshev_User_1D *look_up_table_pair_v_nrgs_proj[6];
 
         //these will approximate the differential probability integrated
         //from a certain v to 1. Be careful, the v domain is not complete!
@@ -212,8 +212,8 @@ private:
                         pair_prtl_rt_80_600,
                         pair_prtl_rt_600_2000;
 
-        Chebyshev_User_2D * look_up_table_pair_prtl_rt[32];
-        // Chebyshev_User_2D * look_up_table_pair_prtl_rt[6];
+        // Chebyshev_User_2D * look_up_table_pair_prtl_rt[32];
+        Chebyshev_User_2D * look_up_table_pair_prtl_rt[6];
 
         //pair production auxiliary function
         double SFQED_PAIR_emitted_electron_energy_aux(const int &, const double &, const double &) const;

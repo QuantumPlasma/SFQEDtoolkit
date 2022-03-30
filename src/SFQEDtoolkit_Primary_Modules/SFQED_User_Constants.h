@@ -103,8 +103,8 @@ double lower_r_0_2,
         lower_r_80_600,
         lower_r_600_2000;
 
-double *lu_table_lower_r_bounds[16];
-// double *lu_table_lower_r_bounds[5];
+// double *lu_table_lower_r_bounds[16];
+double *lu_table_lower_r_bounds[5];
 
 double inverse_zone_r_0_2,
         inverse_zone_r_2_20,
@@ -112,8 +112,8 @@ double inverse_zone_r_0_2,
         inverse_zone_r_80_600,
         inverse_zone_r_600_2000;
 
-double *lu_table_inverse_r_bounds[16];
-// double *lu_table_inverse_r_bounds[5];
+// double *lu_table_inverse_r_bounds[16];
+double *lu_table_inverse_r_bounds[5];
 
 //the following represents the coefficient of the term in w
 //when taking the small w limit (w -> 0) of the function
@@ -134,8 +134,8 @@ double upper_r_0_2,
         upper_r_80_600,
         upper_r_600_2000;
 
-double *lu_table_upper_r_bounds[16];
-// double *lu_table_upper_r_bounds[5];
+// double *lu_table_upper_r_bounds[16];
+double *lu_table_upper_r_bounds[5];
 
 //this constants should represent the upper bound
 //of the emitted phtn energy, expressed as w value,
@@ -148,8 +148,8 @@ double bound_w_0_2,
         bound_w_80_600,
         bound_w_600_2000;
 
-double *lu_table_upper_w_bounds[16];
-// double *lu_table_upper_w_bounds[5];
+// double *lu_table_upper_w_bounds[16];
+double *lu_table_upper_w_bounds[5];
 
 //this function is meant to initialize every photon 
 //emission lookup table defined above
@@ -187,83 +187,86 @@ void init_phtn_mx_tables(){
     bound_w_80_600 = 0.3, //1.7,
     bound_w_600_2000 = 0.15; //1.5;
 
-    int tmp_i, tmp_j;
 
+    // //OLD INITIALIZATION
+    // int tmp_i, tmp_j;
+
+    // //lower r bounds
+    // double *lower_r[4] = {&lower_r_80_600,
+    //                         &lower_r_20_80,
+    //                         &lower_r_2_20,
+    //                         &lower_r_0_2};
+
+    // lu_table_lower_r_bounds[0] = &lower_r_600_2000;
+
+    // //inverse r bounds
+    // double *inverse_r[4] = {&inverse_zone_r_80_600,
+    //                         &inverse_zone_r_20_80,
+    //                         &inverse_zone_r_2_20,
+    //                         &inverse_zone_r_0_2};
+
+    // lu_table_inverse_r_bounds[0] = &inverse_zone_r_600_2000;
+    
+    // //upper r bounds
+    // double *upper_r[4] = {&upper_r_80_600,
+    //                             &upper_r_20_80,
+    //                             &upper_r_2_20,
+    //                             &upper_r_0_2};
+
+    // lu_table_upper_r_bounds[0] = &upper_r_600_2000;
+
+    // //upper w bounds
+    // double *bounds_w[4] = {&bound_w_80_600,
+    //                             &bound_w_20_80,
+    //                             &bound_w_2_20,
+    //                             &bound_w_0_2};
+
+    // lu_table_upper_w_bounds[0] = &bound_w_600_2000;
+    
+    // for(int i = 0; i < 4; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         tmp_j = tmp_i + j;
+
+    //         lu_table_lower_r_bounds[tmp_j] = lower_r[i];
+
+    //         lu_table_inverse_r_bounds[tmp_j] = inverse_r[i];
+
+    //         lu_table_upper_r_bounds[tmp_j] = upper_r[i];
+
+    //         lu_table_upper_w_bounds[tmp_j] = bounds_w[i];
+
+    //     }
+    // }
+
+    //  NEW INITIALIZATION
     //lower r bounds
-    double *lower_r[4] = {&lower_r_80_600,
-                            &lower_r_20_80,
-                            &lower_r_2_20,
-                            &lower_r_0_2};
-
     lu_table_lower_r_bounds[0] = &lower_r_600_2000;
+    lu_table_lower_r_bounds[1] = &lower_r_80_600;
+    lu_table_lower_r_bounds[2] = &lower_r_20_80;
+    lu_table_lower_r_bounds[3] = &lower_r_2_20;
+    lu_table_lower_r_bounds[4] = &lower_r_0_2;
 
     //inverse r bounds
-    double *inverse_r[4] = {&inverse_zone_r_80_600,
-                            &inverse_zone_r_20_80,
-                            &inverse_zone_r_2_20,
-                            &inverse_zone_r_0_2};
-
     lu_table_inverse_r_bounds[0] = &inverse_zone_r_600_2000;
+    lu_table_inverse_r_bounds[1] = &inverse_zone_r_80_600;
+    lu_table_inverse_r_bounds[2] = &inverse_zone_r_20_80;
+    lu_table_inverse_r_bounds[3] = &inverse_zone_r_2_20;
+    lu_table_inverse_r_bounds[4] = &inverse_zone_r_0_2;
     
     //upper r bounds
-    double *upper_r[4] = {&upper_r_80_600,
-                                &upper_r_20_80,
-                                &upper_r_2_20,
-                                &upper_r_0_2};
-
     lu_table_upper_r_bounds[0] = &upper_r_600_2000;
+    lu_table_upper_r_bounds[1] = &upper_r_80_600;
+    lu_table_upper_r_bounds[2] = &upper_r_20_80;
+    lu_table_upper_r_bounds[3] = &upper_r_2_20;
+    lu_table_upper_r_bounds[4] = &upper_r_0_2;
 
     //upper w bounds
-    double *bounds_w[4] = {&bound_w_80_600,
-                                &bound_w_20_80,
-                                &bound_w_2_20,
-                                &bound_w_0_2};
-
     lu_table_upper_w_bounds[0] = &bound_w_600_2000;
-    
-    for(int i = 0; i < 4; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            tmp_j = tmp_i + j;
-
-            lu_table_lower_r_bounds[tmp_j] = lower_r[i];
-
-            lu_table_inverse_r_bounds[tmp_j] = inverse_r[i];
-
-            lu_table_upper_r_bounds[tmp_j] = upper_r[i];
-
-            lu_table_upper_w_bounds[tmp_j] = bounds_w[i];
-
-        }
-    }
-
-//     //lower r bounds
-//     lu_table_lower_r_bounds[0] = &lower_r_600_2000;
-//     lu_table_lower_r_bounds[1] = &lower_r_80_600;
-//     lu_table_lower_r_bounds[2] = &lower_r_20_80;
-//     lu_table_lower_r_bounds[3] = &lower_r_2_20;
-//     lu_table_lower_r_bounds[4] = &lower_r_0_2;
-
-//     //inverse r bounds
-//     lu_table_inverse_r_bounds[0] = &inverse_zone_r_600_2000;
-//     lu_table_inverse_r_bounds[1] = &inverse_zone_r_80_600;
-//     lu_table_inverse_r_bounds[2] = &inverse_zone_r_20_80;
-//     lu_table_inverse_r_bounds[3] = &inverse_zone_r_2_20;
-//     lu_table_inverse_r_bounds[4] = &inverse_zone_r_0_2;
-    
-//     //upper r bounds
-//     lu_table_upper_r_bounds[0] = &upper_r_600_2000;
-//     lu_table_upper_r_bounds[1] = &upper_r_80_600;
-//     lu_table_upper_r_bounds[2] = &upper_r_20_80;
-//     lu_table_upper_r_bounds[3] = &upper_r_2_20;
-//     lu_table_upper_r_bounds[4] = &upper_r_0_2;
-
-//     //upper w bounds
-//     lu_table_upper_w_bounds[0] = &bound_w_600_2000;
-//     lu_table_upper_w_bounds[1] = &bound_w_80_600;
-//     lu_table_upper_w_bounds[2] = &bound_w_20_80;
-//     lu_table_upper_w_bounds[3] = &bound_w_2_20;
-//     lu_table_upper_w_bounds[4] = &bound_w_0_2;
+    lu_table_upper_w_bounds[1] = &bound_w_80_600;
+    lu_table_upper_w_bounds[2] = &bound_w_20_80;
+    lu_table_upper_w_bounds[3] = &bound_w_2_20;
+    lu_table_upper_w_bounds[4] = &bound_w_0_2;
 
 }
 
@@ -294,8 +297,8 @@ double pair_lower_r_001_03,
         pair_lower_r_80_600,
         pair_lower_r_600_2000;
 
-double *lu_table_pair_lower_r_bounds[32];
-// double *lu_table_pair_lower_r_bounds[6];
+// double *lu_table_pair_lower_r_bounds[32];
+double *lu_table_pair_lower_r_bounds[6];
 
 double pair_upper_r_001_03,
         pair_upper_r_0_2,
@@ -304,8 +307,8 @@ double pair_upper_r_001_03,
         pair_upper_r_80_600,
         pair_upper_r_600_2000;
 
-double *lu_table_pair_upper_r_bounds[32];
-// double *lu_table_pair_upper_r_bounds[6];
+// double *lu_table_pair_upper_r_bounds[32];
+double *lu_table_pair_upper_r_bounds[6];
 
 void init_pair_crtn_tables(){
 
@@ -324,53 +327,55 @@ void init_pair_crtn_tables(){
     pair_upper_r_80_600 = 0.9999;
     pair_upper_r_600_2000 = 0.9999;
 
-    int tmp_i, tmp_j;
+    // //OLD INITIALIZATION
+    // int tmp_i, tmp_j;
 
+    // //lower r bounds
+    // double *lower_r[5] = {&pair_lower_r_80_600,
+    //                         &pair_lower_r_20_80,
+    //                         &pair_lower_r_2_20,
+    //                         &pair_lower_r_0_2,
+    //                         &pair_lower_r_001_03};
+
+    // lu_table_pair_lower_r_bounds[0] = &pair_lower_r_600_2000;
+    
+    // //upper r bounds
+    // double *upper_r[5] = {&pair_upper_r_80_600,
+    //                             &pair_upper_r_20_80,
+    //                             &pair_upper_r_2_20,
+    //                             &pair_upper_r_0_2,
+    //                             &pair_upper_r_001_03};
+
+    // lu_table_pair_upper_r_bounds[0] = &pair_upper_r_600_2000;
+    
+    // for(int i = 0; i < 5; i++){
+    //     tmp_i = 1 << i;
+    //     for(int j = 0; j < tmp_i; j++){
+    //         tmp_j = tmp_i + j;
+
+    //         lu_table_pair_lower_r_bounds[tmp_j] = lower_r[i];
+
+    //         lu_table_pair_upper_r_bounds[tmp_j] = upper_r[i];
+
+    //     }
+    // }
+
+    //  NEW INITIALIZATION
     //lower r bounds
-    double *lower_r[5] = {&pair_lower_r_80_600,
-                            &pair_lower_r_20_80,
-                            &pair_lower_r_2_20,
-                            &pair_lower_r_0_2,
-                            &pair_lower_r_001_03};
-
     lu_table_pair_lower_r_bounds[0] = &pair_lower_r_600_2000;
+    lu_table_pair_lower_r_bounds[1] = &pair_lower_r_80_600;
+    lu_table_pair_lower_r_bounds[2] = &pair_lower_r_20_80;
+    lu_table_pair_lower_r_bounds[3] = &pair_lower_r_2_20;
+    lu_table_pair_lower_r_bounds[4] = &pair_lower_r_0_2;
+    lu_table_pair_lower_r_bounds[5] = &pair_lower_r_001_03;
     
     //upper r bounds
-    double *upper_r[5] = {&pair_upper_r_80_600,
-                                &pair_upper_r_20_80,
-                                &pair_upper_r_2_20,
-                                &pair_upper_r_0_2,
-                                &pair_upper_r_001_03};
-
     lu_table_pair_upper_r_bounds[0] = &pair_upper_r_600_2000;
-    
-    for(int i = 0; i < 5; i++){
-        tmp_i = 1 << i;
-        for(int j = 0; j < tmp_i; j++){
-            tmp_j = tmp_i + j;
-
-            lu_table_pair_lower_r_bounds[tmp_j] = lower_r[i];
-
-            lu_table_pair_upper_r_bounds[tmp_j] = upper_r[i];
-
-        }
-    }
-
-//     //lower r bounds
-//     lu_table_pair_lower_r_bounds[0] = &pair_lower_r_600_2000;
-//     lu_table_pair_lower_r_bounds[1] = &pair_lower_r_80_600;
-//     lu_table_pair_lower_r_bounds[2] = &pair_lower_r_20_80;
-//     lu_table_pair_lower_r_bounds[3] = &pair_lower_r_2_20;
-//     lu_table_pair_lower_r_bounds[4] = &pair_lower_r_0_2;
-//     lu_table_pair_lower_r_bounds[5] = &pair_lower_r_001_03;
-    
-//     //upper r bounds
-//     lu_table_pair_upper_r_bounds[0] = &pair_upper_r_600_2000;
-//     lu_table_pair_upper_r_bounds[1] = &pair_upper_r_80_600;
-//     lu_table_pair_upper_r_bounds[2] = &pair_upper_r_20_80;
-//     lu_table_pair_upper_r_bounds[3] = &pair_upper_r_2_20;
-//     lu_table_pair_upper_r_bounds[4] = &pair_upper_r_0_2;
-//     lu_table_pair_upper_r_bounds[5] = &pair_upper_r_001_03;
+    lu_table_pair_upper_r_bounds[1] = &pair_upper_r_80_600;
+    lu_table_pair_upper_r_bounds[2] = &pair_upper_r_20_80;
+    lu_table_pair_upper_r_bounds[3] = &pair_upper_r_2_20;
+    lu_table_pair_upper_r_bounds[4] = &pair_upper_r_0_2;
+    lu_table_pair_upper_r_bounds[5] = &pair_upper_r_001_03;
 
 }
 
