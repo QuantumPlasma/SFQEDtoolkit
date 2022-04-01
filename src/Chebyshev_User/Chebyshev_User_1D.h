@@ -82,7 +82,7 @@ public:
     //this method contains the Clenshaw recurrence formula
     //that computes the approximation at a given point x
     //laying in the domain [a,b].
-    virtual double evaluate(double) const;
+    double evaluate(double) const;
 
 	//initialize approximation object from txt file
 	static Chebyshev_User_1D init_from_txt_file(std::ifstream&);

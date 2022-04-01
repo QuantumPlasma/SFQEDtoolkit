@@ -40,15 +40,12 @@
 #ifndef SFQED_PROCS
 #define SFQED_PROCS
 
-#include "Chebyshev_User_1D_PH.h"
-//#include "Chebyshev_User_1D.h"
-#include "Chebyshev_User_2D_PH.h"
-// #include "Chebyshev_User_2D.h"
+#include "Chebyshev_User_1D.h"
+#include "Chebyshev_User_2D.h"
 #include "BLCFA_Object.h"
 
 #include <cmath>
 
-// #include "Chebyshev_Coefficients.h"
 // #include "SFQED_Functions.h"
 
 struct SFQED_Processes{
@@ -67,6 +64,7 @@ private:
                 LambdaDivCompton,
                 coef_rate_Wrad,
                 coef_rate_Wpair;
+
         double norm_Compton_time,
                 norm_Compton_time_2;
 
@@ -80,54 +78,20 @@ private:
         /*******************/
         /* LCFA subsection */
         /*******************/
-        Chebyshev_User_1D phtn_mx_rt_0_2,
-                        phtn_mx_rt_2_20,
-                        phtn_mx_rt_20_80,
-                        phtn_mx_rt_80_600,
-                        phtn_mx_rt_600_2000;
 
         //this look up table will be employed to mitigate the
         //aftermath of a branch misprediction
         //the size is due to (0+1)+1+2+4+8 = 16 = 2^(5-1)
         //notice that objects with module scope should be static by default
-        // Chebyshev_User_1D *look_up_table_phtn_mx_rt[16];
-        Chebyshev_User_1D *look_up_table_phtn_mx_rt[5];
+        Chebyshev_User_1D look_up_table_phtn_mx_rt[5];
 
-        Chebyshev_User_2D phtn_prtl_rt_0_2,
-                        phtn_prtl_rt_2_20,
-                        phtn_prtl_rt_20_80,
-                        phtn_prtl_rt_80_600,
-                        phtn_prtl_rt_600_2000;
+        Chebyshev_User_2D look_up_table_phtn_prtl_rt[5];
 
-        // Chebyshev_User_2D *look_up_table_phtn_prtl_rt[16];
-        Chebyshev_User_2D *look_up_table_phtn_prtl_rt[5];
+        Chebyshev_User_2D look_up_table_phtn_momw[5];
 
-        Chebyshev_User_2D phtn_momw_0_2,
-                        phtn_momw_2_20,
-                        phtn_momw_20_80,
-                        phtn_momw_80_600,
-                        phtn_momw_600_2000;
+        Chebyshev_User_2D look_up_table_1_over_w[5];
 
-        // Chebyshev_User_2D *look_up_table_phtn_momw[16];
-        Chebyshev_User_2D *look_up_table_phtn_momw[5];
-
-        Chebyshev_User_2D phtn_1_over_w_0_2,
-                        phtn_1_over_w_2_20,
-                        phtn_1_over_w_20_80,
-                        phtn_1_over_w_80_600,
-                        phtn_1_over_w_600_2000;
-
-        // Chebyshev_User_2D *look_up_table_1_over_w[16];
-        Chebyshev_User_2D *look_up_table_1_over_w[5];
-
-        Chebyshev_User_1D phtn_1_over_w_proj_0_2,
-                        phtn_1_over_w_proj_2_20,
-                        phtn_1_over_w_proj_20_80,
-                        phtn_1_over_w_proj_80_600,
-                        phtn_1_over_w_proj_600_2000;
-
-        // Chebyshev_User_1D *look_up_table_phtn_1_o_w_proj[16];
-        Chebyshev_User_1D *look_up_table_phtn_1_o_w_proj[5];
+        Chebyshev_User_1D look_up_table_phtn_1_o_w_proj[5];
 
         //auxiliary inner function
         //it computes the w-value energy of the emitted photon
@@ -137,92 +101,30 @@ private:
         /* BLCFA subsection */
         /********************/
 
-        Chebyshev_User_2D phtn_diff_crss_sctn_0_2,
-                        phtn_diff_crss_sctn_2_20,
-                        phtn_diff_crss_sctn_20_80,
-                        phtn_diff_crss_sctn_80_600,
-                        phtn_diff_crss_sctn_600_2000;
-
-        // Chebyshev_User_2D *look_up_table_phtn_diff_crss_sctn[16];
-        Chebyshev_User_2D *look_up_table_phtn_diff_crss_sctn[5];
+        Chebyshev_User_2D look_up_table_phtn_diff_crss_sctn[5];
 
         /***************************/
         /* PAIR PRODUCTION SECTION */
         /***************************/
-        
-        Chebyshev_User_1D_PH pair_prd_rt_001_03, pair_prd_rt_001_03_fast;
 
         //these will host the rate of pair production
-        Chebyshev_User_1D pair_prd_rt_0_2,
-                        pair_prd_rt_2_20,
-                        pair_prd_rt_20_80,
-                        pair_prd_rt_80_600,
-                        pair_prd_rt_600_2000;
-
-        // Chebyshev_User_1D *look_up_table_pair_prd_rt[32];
-        Chebyshev_User_1D *look_up_table_pair_prd_rt[6];
-
-        // Chebyshev_User_1D *look_up_table_pair_prd_rt_fast[32];
-        Chebyshev_User_1D *look_up_table_pair_prd_rt_fast[6];
-
+        Chebyshev_User_1D look_up_table_pair_prd_rt[6];
 
         //these will store the coefficients of the inverse function W[k,v] - rW[k,0] = 0.
+        Chebyshev_User_2D look_up_table_pair_v_nrgs[6];
 
-        Chebyshev_User_2D pair_v_nrgs_001_03,
-                        pair_v_nrgs_0_2,
-                        pair_v_nrgs_2_20,
-                        pair_v_nrgs_20_80,
-                        pair_v_nrgs_80_600,
-                        pair_v_nrgs_600_2000;
-
-        // Chebyshev_User_2D *look_up_table_pair_v_nrgs[32];
-        Chebyshev_User_2D *look_up_table_pair_v_nrgs[6];
-
-        Chebyshev_User_2D pair_v_nrgs_001_03_high,
-                        pair_v_nrgs_0_2_high,
-                        pair_v_nrgs_2_20_high,
-                        pair_v_nrgs_20_80_high,
-                        pair_v_nrgs_80_600_high,
-                        pair_v_nrgs_600_2000_high;
-
-        // Chebyshev_User_2D *look_up_table_pair_v_nrgs_high[32];
-        Chebyshev_User_2D *look_up_table_pair_v_nrgs_high[6];
+        Chebyshev_User_2D look_up_table_pair_v_nrgs_high[6];
 
         //projections of the above brent inverse coeffs
         //upon the corresponding r low limit value
-        Chebyshev_User_1D pair_v_nrg_proj_001_03,
-                        pair_v_nrg_proj_0_2,
-                        pair_v_nrg_proj_2_20,
-                        pair_v_nrg_proj_20_80,
-                        pair_v_nrg_proj_80_600,
-                        pair_v_nrg_proj_600_2000;
+        Chebyshev_User_1D look_up_table_pair_v_nrgs_proj[6];
 
-        // Chebyshev_User_1D *look_up_table_pair_v_nrgs_proj[32];
-        Chebyshev_User_1D *look_up_table_pair_v_nrgs_proj[6];
-
-        //these will approximate the differential probability integrated
-        //from a certain v to 1. Be careful, the v domain is not complete!
-        //it does not need to be
-
-        Chebyshev_User_2D_PH pair_prtl_rt_001_03;
-
-        Chebyshev_User_2D pair_prtl_rt_0_2,
-                        pair_prtl_rt_2_20,
-                        pair_prtl_rt_20_80,
-                        pair_prtl_rt_80_600,
-                        pair_prtl_rt_600_2000;
-
-        // Chebyshev_User_2D * look_up_table_pair_prtl_rt[32];
-        Chebyshev_User_2D * look_up_table_pair_prtl_rt[6];
+        Chebyshev_User_2D look_up_table_pair_prtl_rt[6];
 
         //pair production auxiliary function
         double SFQED_PAIR_emitted_electron_energy_aux(const int &, const double &, const double &) const;
 
 public:
-
-        //debug purposes
-        // double norm_Compton_time,
-        //         norm_Compton_time_2;
 
         SFQED_Processes(){
                 //do nothing
@@ -232,6 +134,8 @@ public:
         void SFQED_set_reference_length(const double&);
 
         void SFQED_set_reference_angular_frequency(const double&);
+
+        void SFQED_set_all_to_one();
 
         void SFQED_set_time_step(const double&);
 
@@ -253,6 +157,13 @@ public:
         // To be able to do this the compiler needs to see the definition while compiling the
         //code which calls the function this essentially means that the definition has to reside
         //in the header because the code which calls the function only has access to the header file.
+
+        //MIND THE FIELDS NORMALIZED UNITS
+        //remember that, if the momentum of the fermion p_in is given in terms of "m_e c", than
+        //gamma = sqrt(1 + |p_in|^2)
+        // this function should be used with p_in corresponding to the e- or e+ momentum at half-step
+        // calculate the \chi parameter. Momentum and fields MUST BE in units of
+        // "m_e c" and of "m_e c \omega / |e|" for EE and "m_e \omega / |e|" for BB, respectively
         inline double __attribute__((always_inline)) compute_quantum_param(const double gamma,
                                                                                 const double p_in[3],
                                                                                 const double EE[3],
@@ -330,10 +241,6 @@ public:
 
         void SFQED_finalize_PHTN_emission();
 
-        //debug no longer needed
-        // double* intdWrad_0chi2;
-        // void initialize_intdWrad(std::string);
-
         /*******************/
         /* LCFA subsection */
         /*******************/
@@ -354,15 +261,6 @@ public:
         friend double BLCFA_Object::SFQED_BLCFA_find_energy_threshold(const SFQED_Processes&, const double* const, const double* const, const double&, const double&) const;
 
         double SFQED_BLCFA_emitted_photon_energy(const double&, const double&, const double&, const double&, const double&) const;
-
-        //these are no longer used
-        // double SFQED_BLCFA_emitted_photon_energy_derivative(const double&, const double&, const double&, const double&, const double&);
-
-        // double SFQED_BLCFA_emitted_photon_energy_no_approx(const double&, const double&, const double&, const double&, const double&);
-
-        // double SFQED_BLCFA_matteo(const double&, const double&, const double&, const double&, const double&);
-
-        // double SFQED_BLCFA_DEBUG(const double&, const double&, const double&, const double&, const double&, std::ofstream&);
 
 
         /***************************/

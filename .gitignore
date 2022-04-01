@@ -21,3 +21,8 @@ spectrum_tester
 .DS_Store
 *.stats*
 *.sh
+discarded_solutions/*
+discarded_solutions/*/*
+discarded_solutions/*/*/*
+admin/*
+admin/*/*

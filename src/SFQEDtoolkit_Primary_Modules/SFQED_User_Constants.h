@@ -97,23 +97,9 @@ const double heval_r_0_2 = 0.99, // 0.9999;
         heval_r_600_2000 = 0.99984;
 
 //new lower bounds on r (much simpler and straightforward than the previous hybrid way)
-double lower_r_0_2,
-        lower_r_2_20,
-        lower_r_20_80,
-        lower_r_80_600,
-        lower_r_600_2000;
+double lu_table_lower_r_bounds[5];
 
-// double *lu_table_lower_r_bounds[16];
-double *lu_table_lower_r_bounds[5];
-
-double inverse_zone_r_0_2,
-        inverse_zone_r_2_20,
-        inverse_zone_r_20_80,
-        inverse_zone_r_80_600,
-        inverse_zone_r_600_2000;
-
-// double *lu_table_inverse_r_bounds[16];
-double *lu_table_inverse_r_bounds[5];
+double lu_table_inverse_r_bounds[5];
 
 //the following represents the coefficient of the term in w
 //when taking the small w limit (w -> 0) of the function
@@ -128,39 +114,26 @@ double *lu_table_inverse_r_bounds[5];
 double soft_ph_coef = 1.03381857436581047459e-1;
 
 //new upper bounds on r (much simpler and straightforward than the previous hybrid way)
-double upper_r_0_2,
-        upper_r_2_20,
-        upper_r_20_80,
-        upper_r_80_600,
-        upper_r_600_2000;
-
-// double *lu_table_upper_r_bounds[16];
-double *lu_table_upper_r_bounds[5];
+double lu_table_upper_r_bounds[5];
 
 //this constants should represent the upper bound
 //of the emitted phtn energy, expressed as w value,
 //above which the differential probability approximation
 //is no longer valid. When this happens the emission
 //does not occur
-double bound_w_0_2,
-        bound_w_2_20,
-        bound_w_20_80,
-        bound_w_80_600,
-        bound_w_600_2000;
-
-// double *lu_table_upper_w_bounds[16];
-double *lu_table_upper_w_bounds[5];
+double lu_table_upper_w_bounds[5];
 
 //this function is meant to initialize every photon 
 //emission lookup table defined above
 void init_phtn_mx_tables(){
 
     //new r edges init
-    lower_r_0_2 = 0.028; //0.020; //w_min = 0.017
-    lower_r_2_20 = 0.041; //0.031; //w_min = 0.0158
-    lower_r_20_80 = 0.045; //0.035; //w_min = 0.01
-    lower_r_80_600 = 0.040; //0.029; //w_min = 0.0055
-    lower_r_600_2000 = 0.050; //0.039; //w_min = 0.0038
+    lu_table_lower_r_bounds[4] = 0.028; //0.020; //w_min = 0.017
+    lu_table_lower_r_bounds[3] = 0.041; //0.031; //w_min = 0.0158
+    lu_table_lower_r_bounds[2] = 0.045; //0.035; //w_min = 0.01
+    lu_table_lower_r_bounds[1] = 0.040; //0.029; //w_min = 0.0055
+    lu_table_lower_r_bounds[0] = 0.050; //0.039; //w_min = 0.0038
+
 
     // "maybe these limits could be moved a little backwards?"
     // The answer is NO and, indeed, it is the exact opposite:
@@ -169,104 +142,24 @@ void init_phtn_mx_tables(){
     // its reciprocal (1/w), on the contrary, is regular at the ending
     // part of the domain and has issues everywhere else. If we tried to
     // extend the 1/w domain backwards, things would start going far worse. 
-    inverse_zone_r_0_2 = 0.986; //0.980905;
-    inverse_zone_r_2_20 = 0.987; //0.980905;
-    inverse_zone_r_20_80 = 0.987; //0.980605;
-    inverse_zone_r_80_600 = 0.987; //0.980705,
-    inverse_zone_r_600_2000 = 0.987; //0.980805;
- 
-    upper_r_0_2 = 0.99999;
-    upper_r_2_20 = 0.99999;
-    upper_r_20_80 = 0.99996;
-    upper_r_80_600 = 0.99997;
-    upper_r_600_2000 = 0.99998;
 
-    bound_w_0_2 = 1.6, //2.2999,
-    bound_w_2_20 = 1., //2.,
-    bound_w_20_80 = 0.47, //1.8,
-    bound_w_80_600 = 0.3, //1.7,
-    bound_w_600_2000 = 0.15; //1.5;
+    lu_table_inverse_r_bounds[4] = 0.986; //0.980905;
+    lu_table_inverse_r_bounds[3] = 0.987; //0.980905;
+    lu_table_inverse_r_bounds[2] = 0.987; //0.980605;
+    lu_table_inverse_r_bounds[1] = 0.987; //0.980705,
+    lu_table_inverse_r_bounds[0] = 0.987; //0.980805;
 
+    lu_table_upper_r_bounds[4] = 0.99999;
+    lu_table_upper_r_bounds[3] = 0.99999;
+    lu_table_upper_r_bounds[2] = 0.99996;
+    lu_table_upper_r_bounds[1] = 0.99997;
+    lu_table_upper_r_bounds[0] = 0.99998;
 
-    // //OLD INITIALIZATION
-    // int tmp_i, tmp_j;
-
-    // //lower r bounds
-    // double *lower_r[4] = {&lower_r_80_600,
-    //                         &lower_r_20_80,
-    //                         &lower_r_2_20,
-    //                         &lower_r_0_2};
-
-    // lu_table_lower_r_bounds[0] = &lower_r_600_2000;
-
-    // //inverse r bounds
-    // double *inverse_r[4] = {&inverse_zone_r_80_600,
-    //                         &inverse_zone_r_20_80,
-    //                         &inverse_zone_r_2_20,
-    //                         &inverse_zone_r_0_2};
-
-    // lu_table_inverse_r_bounds[0] = &inverse_zone_r_600_2000;
-    
-    // //upper r bounds
-    // double *upper_r[4] = {&upper_r_80_600,
-    //                             &upper_r_20_80,
-    //                             &upper_r_2_20,
-    //                             &upper_r_0_2};
-
-    // lu_table_upper_r_bounds[0] = &upper_r_600_2000;
-
-    // //upper w bounds
-    // double *bounds_w[4] = {&bound_w_80_600,
-    //                             &bound_w_20_80,
-    //                             &bound_w_2_20,
-    //                             &bound_w_0_2};
-
-    // lu_table_upper_w_bounds[0] = &bound_w_600_2000;
-    
-    // for(int i = 0; i < 4; i++){
-    //     tmp_i = 1 << i;
-    //     for(int j = 0; j < tmp_i; j++){
-    //         tmp_j = tmp_i + j;
-
-    //         lu_table_lower_r_bounds[tmp_j] = lower_r[i];
-
-    //         lu_table_inverse_r_bounds[tmp_j] = inverse_r[i];
-
-    //         lu_table_upper_r_bounds[tmp_j] = upper_r[i];
-
-    //         lu_table_upper_w_bounds[tmp_j] = bounds_w[i];
-
-    //     }
-    // }
-
-    //  NEW INITIALIZATION
-    //lower r bounds
-    lu_table_lower_r_bounds[0] = &lower_r_600_2000;
-    lu_table_lower_r_bounds[1] = &lower_r_80_600;
-    lu_table_lower_r_bounds[2] = &lower_r_20_80;
-    lu_table_lower_r_bounds[3] = &lower_r_2_20;
-    lu_table_lower_r_bounds[4] = &lower_r_0_2;
-
-    //inverse r bounds
-    lu_table_inverse_r_bounds[0] = &inverse_zone_r_600_2000;
-    lu_table_inverse_r_bounds[1] = &inverse_zone_r_80_600;
-    lu_table_inverse_r_bounds[2] = &inverse_zone_r_20_80;
-    lu_table_inverse_r_bounds[3] = &inverse_zone_r_2_20;
-    lu_table_inverse_r_bounds[4] = &inverse_zone_r_0_2;
-    
-    //upper r bounds
-    lu_table_upper_r_bounds[0] = &upper_r_600_2000;
-    lu_table_upper_r_bounds[1] = &upper_r_80_600;
-    lu_table_upper_r_bounds[2] = &upper_r_20_80;
-    lu_table_upper_r_bounds[3] = &upper_r_2_20;
-    lu_table_upper_r_bounds[4] = &upper_r_0_2;
-
-    //upper w bounds
-    lu_table_upper_w_bounds[0] = &bound_w_600_2000;
-    lu_table_upper_w_bounds[1] = &bound_w_80_600;
-    lu_table_upper_w_bounds[2] = &bound_w_20_80;
-    lu_table_upper_w_bounds[3] = &bound_w_2_20;
-    lu_table_upper_w_bounds[4] = &bound_w_0_2;
+    lu_table_upper_w_bounds[4] = 1.6, //2.2999,
+    lu_table_upper_w_bounds[3] = 1., //2.,
+    lu_table_upper_w_bounds[2] = 0.47, //1.8,
+    lu_table_upper_w_bounds[1] = 0.3, //1.7,
+    lu_table_upper_w_bounds[0] = 0.15; //1.5;
 
 }
 
@@ -290,92 +183,26 @@ const double pair_r_exp_limit_001_03 = 0.9999,
         pair_r_exp_limit_80_600 = 0.9999,
         pair_r_exp_limit_600_2000 = 0.9999;
 
-double pair_lower_r_001_03,
-        pair_lower_r_0_2,
-        pair_lower_r_2_20,
-        pair_lower_r_20_80,
-        pair_lower_r_80_600,
-        pair_lower_r_600_2000;
+double lu_table_pair_lower_r_bounds[6];
 
-// double *lu_table_pair_lower_r_bounds[32];
-double *lu_table_pair_lower_r_bounds[6];
-
-double pair_upper_r_001_03,
-        pair_upper_r_0_2,
-        pair_upper_r_2_20,
-        pair_upper_r_20_80,
-        pair_upper_r_80_600,
-        pair_upper_r_600_2000;
-
-// double *lu_table_pair_upper_r_bounds[32];
-double *lu_table_pair_upper_r_bounds[6];
+double lu_table_pair_upper_r_bounds[6];
 
 void init_pair_crtn_tables(){
 
     //new r edges init
-    pair_lower_r_001_03 = 0.899;
-    pair_lower_r_0_2 = 0.899; // 0.005;
-    pair_lower_r_2_20 = 0.899; // 0.001;
-    pair_lower_r_20_80 = 0.899; // 0.003;
-    pair_lower_r_80_600 = 0.899; 
-    pair_lower_r_600_2000 = 0.899;
+    lu_table_pair_lower_r_bounds[5] = 0.899;
+    lu_table_pair_lower_r_bounds[4] = 0.899; // 0.005;
+    lu_table_pair_lower_r_bounds[3] = 0.899; // 0.001;
+    lu_table_pair_lower_r_bounds[2] = 0.899; // 0.003;
+    lu_table_pair_lower_r_bounds[1] = 0.899; 
+    lu_table_pair_lower_r_bounds[0] = 0.899;
 
-    pair_upper_r_001_03 = 0.9999;
-    pair_upper_r_0_2 = 0.9999;
-    pair_upper_r_2_20 = 0.9999;
-    pair_upper_r_20_80 = 0.9999;
-    pair_upper_r_80_600 = 0.9999;
-    pair_upper_r_600_2000 = 0.9999;
-
-    // //OLD INITIALIZATION
-    // int tmp_i, tmp_j;
-
-    // //lower r bounds
-    // double *lower_r[5] = {&pair_lower_r_80_600,
-    //                         &pair_lower_r_20_80,
-    //                         &pair_lower_r_2_20,
-    //                         &pair_lower_r_0_2,
-    //                         &pair_lower_r_001_03};
-
-    // lu_table_pair_lower_r_bounds[0] = &pair_lower_r_600_2000;
-    
-    // //upper r bounds
-    // double *upper_r[5] = {&pair_upper_r_80_600,
-    //                             &pair_upper_r_20_80,
-    //                             &pair_upper_r_2_20,
-    //                             &pair_upper_r_0_2,
-    //                             &pair_upper_r_001_03};
-
-    // lu_table_pair_upper_r_bounds[0] = &pair_upper_r_600_2000;
-    
-    // for(int i = 0; i < 5; i++){
-    //     tmp_i = 1 << i;
-    //     for(int j = 0; j < tmp_i; j++){
-    //         tmp_j = tmp_i + j;
-
-    //         lu_table_pair_lower_r_bounds[tmp_j] = lower_r[i];
-
-    //         lu_table_pair_upper_r_bounds[tmp_j] = upper_r[i];
-
-    //     }
-    // }
-
-    //  NEW INITIALIZATION
-    //lower r bounds
-    lu_table_pair_lower_r_bounds[0] = &pair_lower_r_600_2000;
-    lu_table_pair_lower_r_bounds[1] = &pair_lower_r_80_600;
-    lu_table_pair_lower_r_bounds[2] = &pair_lower_r_20_80;
-    lu_table_pair_lower_r_bounds[3] = &pair_lower_r_2_20;
-    lu_table_pair_lower_r_bounds[4] = &pair_lower_r_0_2;
-    lu_table_pair_lower_r_bounds[5] = &pair_lower_r_001_03;
-    
-    //upper r bounds
-    lu_table_pair_upper_r_bounds[0] = &pair_upper_r_600_2000;
-    lu_table_pair_upper_r_bounds[1] = &pair_upper_r_80_600;
-    lu_table_pair_upper_r_bounds[2] = &pair_upper_r_20_80;
-    lu_table_pair_upper_r_bounds[3] = &pair_upper_r_2_20;
-    lu_table_pair_upper_r_bounds[4] = &pair_upper_r_0_2;
-    lu_table_pair_upper_r_bounds[5] = &pair_upper_r_001_03;
+    lu_table_pair_upper_r_bounds[5] = 0.9999;
+    lu_table_pair_upper_r_bounds[4] = 0.9999;
+    lu_table_pair_upper_r_bounds[3] = 0.9999;
+    lu_table_pair_upper_r_bounds[2] = 0.9999;
+    lu_table_pair_upper_r_bounds[1] = 0.9999;
+    lu_table_pair_upper_r_bounds[0] = 0.9999;
 
 }
 

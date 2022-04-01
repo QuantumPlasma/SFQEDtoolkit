@@ -12,7 +12,19 @@ If something goes wrong or it is not clear please do not hesitate to reach out t
 0. Before starting, make sure you possess the openMPI wrapper of the c++ compiler
 mpic++. If you don't, then please install openMPI and add to the PATH variable its
 folder location. The fact is that the test applications we are about to compile
-are meant to work in parallel.
+are meant to work in parallel. Moreover, for the compilation of the test files it
+is required that you export the location of the toolkit to the enironment variable
+SFQED_TOOLKIT. Therefore open the .bash_profile file in your home directory and add
+this line
+
+export SFQED_TOOLKIT=location/of/SFQEDtoolkit
+
+where location/of/SFQEDtoolkit corresponds to the folder where the SFQEDtoolkit's src
+directory is placed
+
+After that, source your .bash_profile with
+
+source .bash_profile 
 
 1. **IMPORTANT:**
 **this step is necessary only if you want to build the "accuracytester" target of point 2,**

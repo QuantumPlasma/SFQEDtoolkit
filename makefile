@@ -33,9 +33,9 @@ TARGET3 := spectrum_tester
 # This contains the main SFQEDtoolkit modules.
 #SRCS := $(shell find $(SRC_DIRS) -name *.cpp)
 
-SRCS1 := $(shell find $(SRC_DIRS) $(PUSH_DIRS) $(FUNC_DIRS) $(MAIN1) -name *.cpp)
-SRCS2 := $(shell find $(SRC_DIRS) $(PUSH_DIRS) $(FUNC_DIRS) $(MAIN2) -name *.cpp)
-SRCS3 := $(shell find $(SRC_DIRS) $(PUSH_DIRS) $(FUNC_DIRS) $(MAIN3) -name *.cpp)
+SRCS1 := $(shell find $(SRC_DIRS) $(PUSH_DIRS) $(MAIN1) -name *.cpp)
+SRCS2 := $(shell find $(SRC_DIRS) $(FUNC_DIRS) $(MAIN2) -name *.cpp)
+SRCS3 := $(shell find $(SRC_DIRS) $(MAIN3) -name *.cpp)
 
 # String substitution for every C++ file.
 # As an example, hello.cpp turns into ./build/hello.cpp.o
@@ -126,9 +126,9 @@ $(BUILD3)/%.cpp.o: %.cpp
 .PHONY: clean
 clean:
 	@echo Cleaning folder
-	@rm -r $(BUILD1)
-	@rm -r $(BUILD2)
-	@rm -r $(BUILD3)
+	@rm -r -f $(BUILD1)
+	@rm -r -f $(BUILD2)
+	@rm -r -f $(BUILD3)
 
 # Include the .d makefiles. The - at the front suppresses the errors of missing
 # Makefiles. Initially, all the .d files will be missing, and we don't want those

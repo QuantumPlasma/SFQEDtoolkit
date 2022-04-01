@@ -152,7 +152,7 @@ double RelativisticRungeKuttaSolver_LCFA(ofstream& file, Particle3D& part, Plane
 		B_actual = B * fieldFactor;
 		gamma_check = std::sqrt(1. + electron_mom*electron_mom);
 		part.gamma_alias() = gamma_check;
-		chi_check = proc.SFQED_compute_quantum_param(gamma_check, mid_step_momentum, E_actual, B_actual);
+		chi_check = proc.compute_quantum_param(gamma_check, mid_step_momentum, E_actual, B_actual);
 		part.chi_alias() = chi_check;
 		delete[] E_actual;
 		delete[] B_actual;
@@ -541,7 +541,7 @@ double RelativisticRungeKuttaSolverPhotons(ofstream& file, Particle3D& part, Pla
 		B_actual = B * fieldFactor;
 		gamma_check = std::sqrt(electron_mom*electron_mom);
 		part.gamma_alias() = gamma_check;
-		chi_check = proc.SFQED_compute_quantum_param(gamma_check, mid_step_momentum, E_actual, B_actual);
+		chi_check = proc.compute_quantum_param(gamma_check, mid_step_momentum, E_actual, B_actual);
 		part.chi_alias() = chi_check;
 		delete[] E_actual;
 		delete[] B_actual;

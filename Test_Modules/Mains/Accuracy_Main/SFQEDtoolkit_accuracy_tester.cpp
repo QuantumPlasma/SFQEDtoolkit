@@ -36,6 +36,52 @@ void write_vec_on_file(MPI_File& file, int& write_count, int& start, double *vec
 	MPI_File_write(file, vec, write_count, MPI_DOUBLE, MPI_STATUS_IGNORE);
 }
 
+void test_photon_emission_rate_accuracy(SFQED_Processes &procs_instance, int &loop_start, int &loop_end, double *diffs,
+									double &chi_min, double &chi_max, const int &N_points_chi, MPI_Comm& comm){
+	
+    double dchi = (chi_max - chi_min) / N_points_chi;
+
+	int i_x_2, index_x_2_plus_1, index;
+	double tmp_diff;
+
+	#pragma omp parallel for default(shared) private(i_x_2, index_x_2_plus_1, index, tmp_diff)
+	for (int i = loop_start; i < loop_end; i++) {
+
+		index = i - loop_start;
+
+		//new
+		i_x_2 = index * 2;
+		index_x_2_plus_1 = i_x_2 + 1;
+
+		diffs[i_x_2] = chi_min + i * dchi;
+
+		diffs[index_x_2_plus_1] = tildeWrad(diffs[i_x_2], NULL);
+
+		tmp_diff = procs_instance.SFQED_PHTN_emission_rate(1., diffs[i_x_2]);
+		tmp_diff = (diffs[i_x_2] != 0.) ? tmp_diff / diffs[i_x_2] : tmp_diff;
+
+		//NaN check
+		if(tmp_diff != tmp_diff){
+			#pragma omp critical
+			cout << "error at chi=" << diffs[i_x_2] << ". Aborting!\n";
+			MPI_Abort(comm, 666);
+		}
+
+		//relative difference
+		if(diffs[index_x_2_plus_1]  != 0.){
+			diffs[index_x_2_plus_1] = std::abs((tmp_diff - diffs[index_x_2_plus_1]) / diffs[index_x_2_plus_1]);
+		}
+		else if(tmp_diff != 0.) {
+			diffs[index_x_2_plus_1] = std::abs((tmp_diff - diffs[index_x_2_plus_1]) / tmp_diff);
+		}
+		//we arrive in this last case only if both the prevs are null
+		else {
+			diffs[index_x_2_plus_1] = 0.;
+		}
+
+	}
+	
+}
 
 void test_photon_emission_accuracy(SFQED_Processes &procs_instance, int &loop_start, int &loop_end, double *diffs,
 									double &chi_min, double &chi_max, const int &N_points_chi,
@@ -174,6 +220,7 @@ int main(int argc, char** argv) {
 	procs_instance.SFQED_init_PHTN_emission(SFQEDtoolkit_location + "/coefficients/");
 	procs_instance.SFQED_init_PAIR_creation(SFQEDtoolkit_location + "/coefficients/");
 
+	procs_instance.SFQED_set_all_to_one();
 	
 	//TOT points
 	unsigned int N_points_chi = 500;
@@ -201,37 +248,59 @@ int main(int argc, char** argv) {
 	int* counts = new int[size];
 	int* displs = new int[size];
 
-	//set the first displacement to 0 and manually set the first entry of the function counts
+	//////////////////////////////////////////////////
+	//FOR RATE ACCURACY TESTER
+
 	displs[0] = 0;
-	counts[0] = (N_tot) / size + (0 < ((N_tot) % size));
+	counts[0] = ((N_points_chi) / size + (0 < ((N_points_chi) % size))) * 2;
 
 	//the following for section cannot be parallelized,
 	//as each iteration employs the result of the one
 	//supposedly ended right before
 	for (int i = 1; i < size; i++) {
-		counts[i] = N_tot / size + (i < (N_tot % size));
+		counts[i] = ((N_points_chi) / size + (i < ((N_points_chi) % size))) * 2;
 		displs[i] = counts[i - 1] + displs[i - 1];
 	}
 
 	//range on function evals loop
-	int loop_start = displs[rank];
-	int loop_end = loop_start + counts[rank];
+	int loop_start = displs[rank] / 2;
+	int loop_end = loop_start + (counts[rank] / 2);
+
+	///////////////////////////////////////////////////
+	//FOR ENERGY ACCURACY TESTER
+
+	// //set the first displacement to 0 and manually set the first entry of the function counts
+	// displs[0] = 0;
+	// counts[0] = (N_tot) / size + (0 < ((N_tot) % size));
+
+	// //the following for section cannot be parallelized,
+	// //as each iteration employs the result of the one
+	// //supposedly ended right before
+	// for (int i = 1; i < size; i++) {
+	// 	counts[i] = N_tot / size + (i < (N_tot % size));
+	// 	displs[i] = counts[i - 1] + displs[i - 1];
+	// }
+
+	// //range on function evals loop
+	// int loop_start = displs[rank];
+	// int loop_end = loop_start + counts[rank];
+
+	//////////////////////////////////////////////////////////////////
 
 	//this pointer will store the energy values
 	double *diffs_high = new double[counts[rank]];
-	double *diffs_med = new double[counts[rank]];
 
-	//////////////////////////////////////////////////////////////////
+	/////////////////////
 	// main variables
-	///////////////////
+	/////////////////////
 
-	double chi_min = 0.0, chi_max = 2.0;
+	// double chi_min = 0.0, chi_max = 2.0;
 
 	// double chi_min = 0.01, chi_max = 0.3;
 	// double chi_min = 0.3, chi_max = 2.0;
 
 	// double chi_min = 2.0, chi_max = 20.0;
-	// double chi_min = 20.0, chi_max = 80.0;
+	double chi_min = 20.0, chi_max = 80.0;
 	// double chi_min = 80.0, chi_max = 600.0;
 	// double chi_min = 600.0, chi_max = 2000.0;
 
@@ -246,59 +315,99 @@ int main(int argc, char** argv) {
 	// std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
 
-	////////////////////////////////////////////////////////high part
-	test_photon_emission_accuracy(procs_instance, loop_start, loop_end, diffs_high,
-                        chi_min, chi_max, N_points_chi,
-						r_min, r_max, N_points_r, newcomm);
+	////////////////////////////////////////////////////////TEST RATE ACCURACY
+	test_photon_emission_rate_accuracy(procs_instance, loop_start, loop_end, diffs_high,
+										chi_min, chi_max, N_points_chi, newcomm);
+
+	////////////////////////////////////////////////////////TEST ENERGY ACCURACY
+	// test_photon_emission_accuracy(procs_instance, loop_start, loop_end, diffs_high,
+    //                     chi_min, chi_max, N_points_chi,
+	// 					r_min, r_max, N_points_r, newcomm);
 
 	// test_pair_creation_accuracy(procs_instance, loop_start, loop_end, diffs_high,
     //                     chi_min, chi_max, N_points_chi,
 	// 					r_min, r_max, N_points_r, newcomm);
 
-
-	if (rank == 0) {
-		std::cout << "Writing photon energies on file... " << std::flush;
-	}
+	
 
 	//write on file section
 	MPI_File file;
 	MPI_File_open(newcomm, "transition.dat", MPI_MODE_WRONLY | MPI_MODE_CREATE, MPI_INFO_NULL, &file);
 	MPI_File_set_errhandler(file, MPI_ERRORS_ARE_FATAL);
 
-    if (rank == 0) {
+	//////////////////////////////////////////////////////////////////
+	//WRITE ENERGY ACCURACY ON FILE
+
+	// if (rank == 0) {
+	// 	std::cout << "Writing photon energies on file... " << std::flush;
+	// }
+
+    // if (rank == 0) {
+	// 	//notice this thing could have been done by using a MPI type
+	// 	//but this should ensure the file produced to have the smallest
+	// 	//size
+	// 	MPI_File_write(file, &N_points_chi, 1, MPI_INT, MPI_STATUS_IGNORE);
+
+	// 	double* edges_tmp = new double[2] {chi_min, chi_max};
+	// 	MPI_File_write(file, edges_tmp, 2, MPI_DOUBLE, MPI_STATUS_IGNORE);
+
+	// 	delete[] edges_tmp;
+
+	// 	MPI_File_write(file, &N_points_r, 1, MPI_INT, MPI_STATUS_IGNORE);
+
+	// 	edges_tmp = new double[2] {r_min, r_max};
+	// 	MPI_File_write(file, edges_tmp, 2, MPI_DOUBLE, MPI_STATUS_IGNORE);
+
+	// 	delete[] edges_tmp;
+	// }
+
+	// write_vec_on_file(file, counts[rank], displs[rank], diffs_high);
+
+	// MPI_File_close(&file);
+
+	// if (rank == 0) {
+	// 	std::cout << " Done!\n" << std::flush;
+	// }
+
+	//////////////////////////////////////////////////////////////////
+	//WRITE RATE ACCURACY ON FILE
+
+	//first let's write the infos' obj main feature first
+	if (rank == 0) {
 		//notice this thing could have been done by using a MPI type
 		//but this should ensure the file produced to have the smallest
 		//size
-		MPI_File_write(file, &N_points_chi, 1, MPI_INT, MPI_STATUS_IGNORE);
-
-		double* edges_tmp = new double[2] {chi_min, chi_max};
-		MPI_File_write(file, edges_tmp, 2, MPI_DOUBLE, MPI_STATUS_IGNORE);
-
-		delete[] edges_tmp;
-
-		MPI_File_write(file, &N_points_r, 1, MPI_INT, MPI_STATUS_IGNORE);
-
-		edges_tmp = new double[2] {r_min, r_max};
-		MPI_File_write(file, edges_tmp, 2, MPI_DOUBLE, MPI_STATUS_IGNORE);
-
-		delete[] edges_tmp;
+		MPI_File_write(file, &(N_points_chi), 1, MPI_INT, MPI_STATUS_IGNORE);
 	}
 
-	write_vec_on_file(file, counts[rank], displs[rank], diffs_high);
+	//we already write something so a pre offset has to be built accordingly
+	int pre_offset = sizeof(unsigned int) * 1;
+
+	//start should contain the distance in (double), thus we adjust it to be a proper offset
+	MPI_Offset offset = sizeof(double) * displs[rank] + pre_offset;
+
+	//change the file view
+	MPI_File_set_view(file, offset, MPI_DOUBLE, MPI_DOUBLE, "native", MPI_INFO_NULL);
+
+	if (rank == 0) {
+		std::cout << "Writing function evaluations on file...";
+	}
+
+	//previous writing method
+	MPI_File_write(file, diffs_high, counts[rank], MPI_DOUBLE, MPI_STATUS_IGNORE);
 
 	MPI_File_close(&file);
 
 	if (rank == 0) {
-		std::cout << " Done!\n" << std::flush;
+		std::cout << " Done!\n";
 	}
+
+	//////////////////////////////////////////////////////////////////
 
 	delete[] diffs_high;
 
-	//////////////////////////////////////////////////////////////////
-
-
-	//////////////////////////////////////////////////////////////////
-
+	delete[] counts;
+	delete[] displs;
 
 	// test(fake_instance);
 
