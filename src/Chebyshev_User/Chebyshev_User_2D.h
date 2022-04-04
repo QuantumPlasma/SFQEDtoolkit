@@ -92,7 +92,7 @@ public:
     //this method contains the 2D Clenshaw recurrence formula
     //that computes the approximation at a given point (x, y)
     //laying in the domain [a,b] x [c,d].
-    inline double __attribute__((always_inline)) Chebyshev_User_2D::evaluate(double x, double y) const{
+    inline double __attribute__((always_inline)) evaluate(double x, double y) const{
         //variable conversion to -1 <= X <= +1 and -1 <= Y >= +1
 
         double X = (x - domain_middle_point_N) / domain_half_range_N;
