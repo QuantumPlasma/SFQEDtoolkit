@@ -82,7 +82,33 @@ public:
     //this method contains the Clenshaw recurrence formula
     //that computes the approximation at a given point x
     //laying in the domain [a,b].
-    double evaluate(double) const;
+    inline double __attribute__((always_inline)) evaluate(double x) const{
+        //variable conversion to -1 <= y <= +1
+        
+        double y = (x - domain_middle_point) / domain_half_range;
+
+        //Clenshaw recurrence algorithm (easy peasy)
+        //this stores the actual value that will be used in the algorithm
+        double y_alg = y * 2.;
+
+        //define the first 2 coefficients of the Clenshaw series to 0.
+        //(inside the algorithm loop we will update these two double variables,
+        //whose names should be meaningful)
+        double tmp, clensh_j_plus_1 = 0., clensh_j = 0.;
+
+        for (int j = evaluation_order - 1; j >= 0; j--) {
+            //temporary save the j-th value of the new Clenshaw coefficient
+            tmp = clensh_j;
+            clensh_j = last_coeffs[j] - clensh_j_plus_1 + y_alg * clensh_j;
+            clensh_j_plus_1 = tmp;
+        }
+
+        //notice that at the end of the loop clensh_j_plus_1 will store clensh_1
+        //while clensh_j will be equal to clensh_0
+
+        //this statement returns the actual value of the approximation at the point x
+        return clensh_j - y * clensh_j_plus_1;
+    }
 
 	//initialize approximation object from txt file
 	static Chebyshev_User_1D init_from_txt_file(std::ifstream&);
