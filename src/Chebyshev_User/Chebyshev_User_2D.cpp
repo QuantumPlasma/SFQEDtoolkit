@@ -57,6 +57,98 @@ Chebyshev_User_2D::Chebyshev_User_2D(unsigned int order_N, double a, double b, u
     this->domain_middle_point_M = (d+c)*0.5;
 }
 
+double Chebyshev_User_2D::evaluate(double x, double y) const{
+        //variable conversion to -1 <= X <= +1 and -1 <= Y >= +1
+
+        double X = (x - domain_middle_point_N) / domain_half_range_N;
+
+        double Y = (y - domain_middle_point_M) / domain_half_range_M;
+
+        //Clenshaw recurrence algorithm (easy peasy)
+        //this stores the actual value that will be used in the algorithm
+        double x_alg = X * 2.;
+        double y_alg = Y * 2.;
+
+        //define the first 2 coefficients of the Clenshaw series to be 0.
+        //(inside the algorithm loop we will update these two double variables,
+        //whose names should be meaningful)
+        double tmp, clensh_j_plus_1 = 0., clensh_j = 0.;
+
+        //Clenshaw coefficients
+        double* d_i = new double[evaluation_order_N];
+
+        /******************************/
+        /* WORKLOAD SPLITTING SESSION */
+        /******************************/
+        //notice that we are just giving the possibility to evaluate
+        //the approx by parallelizing the computation. Of course, the
+        //splitting occurs only in the row of the coefficients matrix.
+        //If you do not want to parallelize this, just set the MPI_COMM_SELF in the evalcom
+    /*
+        int rank;
+        MPI_Comm_rank(*evalcom, &rank);
+        int nProcs;
+        MPI_Comm_size(*evalcom, &nProcs);
+
+        //vectors used to store the counts and displacements informations
+        int* fcounts = new int[nProcs];
+        int* fdispls = new int[nProcs];
+        fdispls[0] = 0;
+        fcounts[0] = evaluation_order_N / nProcs + (0 < (evaluation_order_N % nProcs));
+
+        //the following for section cannot be parallelized (omp),
+        //as each iteration employs the result of the one
+        //supposedly ended right before
+        for (int i = 1; i < nProcs; i++) {
+            fcounts[i] = evaluation_order_N / nProcs + (i < (evaluation_order_N% nProcs));
+            fdispls[i] = fcounts[i - 1] + fdispls[i - 1];
+        }
+    */
+        int loop_start = 0; //fdispls[rank];
+        int loop_end = evaluation_order_N; //loop_start + fcounts[rank];
+
+        //start computation
+
+        //new coefficients determination loop (that on y)
+        #pragma omp parallel for default(shared) private(tmp) firstprivate(clensh_j_plus_1, clensh_j)
+        for (int i = loop_start; i < loop_end; i++) {
+
+            //first Clenshaw algorithm
+            for (int j = evaluation_order_M - 1; j >= 0; j--) {
+                tmp = clensh_j;
+                //don't be mistaken, you have to use approx_infos.last_computed_order_M
+                clensh_j = last_coeffs[i*last_computed_order_M + j] - clensh_j_plus_1 + y_alg * clensh_j;
+                clensh_j_plus_1 = tmp;
+            }
+
+            //assign new coefficient (remember to use Y)
+            d_i[i] = clensh_j - Y * clensh_j_plus_1;
+
+            //Reset the first 2 Clenshaw coefficient at each outer iteration
+            //this must be here in case omp is not available
+            clensh_j_plus_1 = 0.;
+            clensh_j = 0.;
+        }
+
+        //TRANSMIT d_i computation to all procs
+        //MPI_Allgatherv(MPI_IN_PLACE, fcounts[rank], MPI_DOUBLE, d_i, fcounts, fdispls, MPI_DOUBLE, *evalcom);
+
+        //second Clenshaw algorithm application (on x)
+        //ATTENTION: not parallelizable
+        for (int i = evaluation_order_N - 1; i >= 0; i--) {
+            tmp = clensh_j;
+            clensh_j = d_i[i] - clensh_j_plus_1 + x_alg * clensh_j;
+            clensh_j_plus_1 = tmp;
+        }
+
+        delete[] d_i;
+        //delete[] fcounts;
+        //delete[] fdispls;
+
+        //remember to use X
+        return clensh_j - X * clensh_j_plus_1;
+    }
+
 //comments omitted (simplified version of evaluate)
 double* Chebyshev_User_2D::evaluate_y(double y) const{
 
