@@ -40,6 +40,8 @@
 
 #include <omp.h>
 #include <iostream>
+#include <sstream>
+#include <string>
 
 Chebyshev_User_2D::Chebyshev_User_2D(unsigned int order_N, double a, double b, unsigned int order_M, double c, double d): Chebyshev_User_2D(){
     this->evaluation_order_N = order_N;
@@ -319,6 +321,83 @@ Chebyshev_User_2D Chebyshev_User_2D::init_from_txt_file(std::ifstream& in_file){
     return cheby_user_2d;
     
 }
+
+// Chebyshev_User_2D Chebyshev_User_2D::init_from_txt_file(std::ifstream& in_file){
+//     unsigned int order_N[2], order_M[2];
+	
+// 	std::string buffer;
+// 	std::getline(in_file, buffer);
+// 	std::istringstream converted_buffer(buffer);
+
+// 	while (converted_buffer.peek() == ':' || converted_buffer.peek() == ' ' || converted_buffer.peek() == ','){
+//         converted_buffer.ignore();
+//     }
+// 	for (int index = 0; index < 2 && !converted_buffer.eof(); index++) {
+        
+// 		converted_buffer >> order_N[index];
+		
+// 		order_N[1] = order_N[index];
+
+//         while (converted_buffer.peek() == ':' || converted_buffer.peek() == ' ' || converted_buffer.peek() == ','){
+//             converted_buffer.ignore();
+//         }  
+        
+//     }
+
+//     double a, b, c, d, tmp;
+
+//     in_file >> a >> b;
+
+// 	//remove the endline character following b
+// 	std::getline(in_file, buffer);
+
+// 	std::string buffer1;
+// 	std::getline(in_file, buffer1);
+// 	std::istringstream converted_buffer1(buffer1);
+
+// 	while (converted_buffer1.peek() == ':' || converted_buffer1.peek() == ' ' || converted_buffer1.peek() == ','){
+//         converted_buffer1.ignore();
+//     }
+// 	for (int index = 0; index < 2 && !converted_buffer1.eof(); index++) {
+        
+// 		converted_buffer1 >> order_M[index];
+
+// 		order_M[1] = order_M[index];
+
+//         while (converted_buffer1.peek() == ':' || converted_buffer1.peek() == ' ' || converted_buffer1.peek() == ','){
+//             converted_buffer1.ignore();
+//         }  
+        
+//     }
+			
+// 	in_file >> c >> d;
+
+//     Chebyshev_User_2D cheby_user_2d(order_N[1], a, b, order_M[1], c, d);
+
+// 	unsigned int order = order_N[1]*order_M[1];
+
+// 	cheby_user_2d.last_coeffs = new double[order];
+
+// 	for(unsigned int i = 0; i < order_N[1]; i++){
+// 		for(unsigned int j = 0; j < order_M[0]; j++){
+// 			in_file >> tmp;
+
+// 			if(j < order_M[1]){
+// 				cheby_user_2d.last_coeffs[i * order_M[1] + j] = tmp;
+// 			}
+// 		}
+// 	}
+
+// 	// std::cout << buffer << '\n';
+// 	// std::cout << order_N[1] << '\n' << a << '\n' << b << '\n';
+// 	// std::cout << order_M[1] << '\n' << c << '\n' << d << '\n';
+// 	// for(unsigned int i = 0; i < order_N[1]*order_M[1]; i++) {
+// 	// 	std::cout << cheby_user_2d.last_coeffs[i] << '\n';
+// 	// }
+
+//     return cheby_user_2d;
+    
+// }
 
 Chebyshev_User_2D Chebyshev_User_2D::init_from_bin_file(MPI_File& file, MPI_Comm& readcom){
     int rank;

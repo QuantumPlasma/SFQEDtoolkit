@@ -2,6 +2,7 @@
 #include "SFQED_Functions.h"
 
 #include <iostream>
+#include <sstream>
 #include <omp.h>
 #include <cmath>
 // #include <chrono>
@@ -59,6 +60,52 @@ void test_photon_emission_rate_accuracy(SFQED_Processes &procs_instance, int &lo
 
 		tmp_diff = procs_instance.SFQED_PHTN_emission_rate(1., diffs[i_x_2]);
 		tmp_diff = (diffs[i_x_2] != 0.) ? tmp_diff / diffs[i_x_2] : tmp_diff;
+
+		//NaN check
+		if(tmp_diff != tmp_diff){
+			#pragma omp critical
+			cout << "error at chi=" << diffs[i_x_2] << ". Aborting!\n";
+			MPI_Abort(comm, 666);
+		}
+
+		//relative difference
+		if(diffs[index_x_2_plus_1]  != 0.){
+			diffs[index_x_2_plus_1] = std::abs((tmp_diff - diffs[index_x_2_plus_1]) / diffs[index_x_2_plus_1]);
+		}
+		else if(tmp_diff != 0.) {
+			diffs[index_x_2_plus_1] = std::abs((tmp_diff - diffs[index_x_2_plus_1]) / tmp_diff);
+		}
+		//we arrive in this last case only if both the prevs are null
+		else {
+			diffs[index_x_2_plus_1] = 0.;
+		}
+
+	}
+	
+}
+
+void test_pair_production_rate_accuracy(SFQED_Processes &procs_instance, int &loop_start, int &loop_end, double *diffs,
+									double &chi_min, double &chi_max, const int &N_points_chi, MPI_Comm& comm){
+	
+    double dchi = (chi_max - chi_min) / N_points_chi;
+
+	int i_x_2, index_x_2_plus_1, index;
+	double tmp_diff;
+
+	#pragma omp parallel for default(shared) private(i_x_2, index_x_2_plus_1, index, tmp_diff)
+	for (int i = loop_start; i < loop_end; i++) {
+
+		index = i - loop_start;
+
+		//new
+		i_x_2 = index * 2;
+		index_x_2_plus_1 = i_x_2 + 1;
+
+		diffs[i_x_2] = chi_min + i * dchi;
+
+		diffs[index_x_2_plus_1] = pairProductionRate(diffs[i_x_2], NULL);
+
+		tmp_diff = procs_instance.SFQED_PAIR_creation_rate(1., diffs[i_x_2]);
 
 		//NaN check
 		if(tmp_diff != tmp_diff){
@@ -180,6 +227,38 @@ void test_pair_creation_accuracy(SFQED_Processes &procs_instance, int &loop_star
 	}
 }
 
+//testing init_from_txt_file 2d
+int main_init(int argc, char** argv){
+
+	int provided_thread_support;
+	MPI_Init_thread(&argc, &argv, MPI_THREAD_FUNNELED, &provided_thread_support);
+
+	string SFQEDtoolkit_location_var_name = "SFQED_TOOLKIT";
+	string SFQEDtoolkit_location = GetEnv(SFQEDtoolkit_location_var_name);
+
+	ifstream in_file;
+	string emission_name = SFQEDtoolkit_location + "/coefficients/prtl_rate/phtn_partial_rate_2-20.txt";
+    in_file.open(emission_name.c_str());
+    Chebyshev_User_2D instance = Chebyshev_User_2D::init_from_txt_file(in_file);
+    in_file.close();
+    in_file.clear();
+
+	ofstream out_file("read_file.txt");
+	out_file << std::setprecision(16) << std::scientific;
+	out_file << instance.evaluation_order_N << '\n' <<
+			instance.a << '\n' <<
+			instance.b << '\n' <<
+			instance.evaluation_order_M << '\n' <<
+			instance.c << '\n' <<
+			instance.d << '\n';
+	unsigned int total_order = instance.evaluation_order_N * instance.evaluation_order_M;
+	for(int i = 0; i < total_order; i++){
+		out_file << instance.last_coeffs[i] << '\n';
+	}
+	out_file.close();
+
+	MPI_Finalize();
+}
 
 //accuracy tester
 int main(int argc, char** argv) {
@@ -296,11 +375,11 @@ int main(int argc, char** argv) {
 
 	// double chi_min = 0.0, chi_max = 2.0;
 
-	// double chi_min = 0.01, chi_max = 0.3;
+	double chi_min = 0.01, chi_max = 0.3;
 	// double chi_min = 0.3, chi_max = 2.0;
 
 	// double chi_min = 2.0, chi_max = 20.0;
-	double chi_min = 20.0, chi_max = 80.0;
+	// double chi_min = 20.0, chi_max = 80.0;
 	// double chi_min = 80.0, chi_max = 600.0;
 	// double chi_min = 600.0, chi_max = 2000.0;
 
@@ -316,7 +395,10 @@ int main(int argc, char** argv) {
 
 
 	////////////////////////////////////////////////////////TEST RATE ACCURACY
-	test_photon_emission_rate_accuracy(procs_instance, loop_start, loop_end, diffs_high,
+	// test_photon_emission_rate_accuracy(procs_instance, loop_start, loop_end, diffs_high,
+	// 									chi_min, chi_max, N_points_chi, newcomm);
+
+	test_pair_production_rate_accuracy(procs_instance, loop_start, loop_end, diffs_high,
 										chi_min, chi_max, N_points_chi, newcomm);
 
 	////////////////////////////////////////////////////////TEST ENERGY ACCURACY

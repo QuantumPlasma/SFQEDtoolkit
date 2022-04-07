@@ -83,13 +83,6 @@ const double thresh_factor = 0.7;
 /*PHOTON EMISSION SPECIFIC CONSTANTS*/
 /************************************/
 
-//upper bounds of the \chi parameter in each interval
-const double bound_chi_1st = 2.0,
-        bound_chi_2nd = 20.0,
-        bound_chi_3rd = 80.0,
-        bound_chi_4th = 600.0,
-        bound_chi_5th = 2000.0;
-
 const double heval_r_0_2 = 0.99, // 0.9999;
         heval_r_2_20 = 0.9999,
         heval_r_20_80 = 0.9999, //0.99959,
@@ -166,14 +159,6 @@ void init_phtn_mx_tables(){
 /************************************/
 /*PAIR PRODUCTION SPECIFIC CONSTANTS*/
 /************************************/
-
-const double
-        bound_kappa_0th = 0.3,
-        bound_kappa_1st = 2.0,
-        bound_kappa_2nd = 20.0,
-        bound_kappa_3rd = 80.0,
-        bound_kappa_4th = 600.0,
-        bound_kappa_5th = 2000.0;
 
 //change this shit
 const double pair_r_exp_limit_001_03 = 0.9999,

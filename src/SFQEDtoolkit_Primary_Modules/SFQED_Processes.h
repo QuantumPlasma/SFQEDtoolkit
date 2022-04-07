@@ -48,6 +48,23 @@
 
 // #include "SFQED_Functions.h"
 
+//upper bounds of the \chi parameter in each interval
+const double bound_chi_1st = 2.0,
+        bound_chi_2nd = 20.0,
+        bound_chi_3rd = 80.0,
+        bound_chi_4th = 600.0,
+        bound_chi_5th = 2000.0;
+
+const double
+        bound_kappa_0th = 0.3,
+        bound_kappa_1st = 2.0,
+        bound_kappa_2nd = 20.0,
+        bound_kappa_3rd = 80.0,
+        bound_kappa_4th = 600.0,
+        bound_kappa_5th = 2000.0;
+
+const double pigreek = 3.141592653589793238462643383279503;
+
 struct SFQED_Processes{
 private:
         /*********************/
@@ -245,7 +262,52 @@ public:
         /* LCFA subsection */
         /*******************/
 
-        double SFQED_PHTN_emission_rate(const double&, const double&) const;
+        // double SFQED_PHTN_emission_rate(const double&, const double&) const;
+
+        //the function below returns the rate of photon emission for an electron
+        //having  a certain chi and gamma (gamma is the relativistic factor of 
+        //the electron, but it can also be interpreted as its energy normalized in 
+        //units of m_e c^2)
+        inline double __attribute__((always_inline)) SFQED_PHTN_emission_rate(const double &gamma, const double &chi) const {
+        
+                //coefficient for the rate of emission
+                //multiply by \tilde{W_rad} to get the rate of emission
+                double coefW_rad = coef_rate_Wrad * chi / gamma;
+                
+                //low impact Branch to calculate \tilde{W_rad} and then the rate
+                //---------------------------------------------------
+                /**/
+                //lookup tables boolean selectors
+                // bool chi_0_2 = chi <= bound_chi_1st,
+                //     chi_2_20 = chi <= bound_chi_2nd,
+                //     chi_20_80 = chi <= bound_chi_3rd,
+                //     chi_80_600 = chi <= bound_chi_4th;
+                //     //chi_600_2000 = chi <= 2000.;
+
+                // int lookup_index = chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+                // lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+
+                int lookup_index;
+
+                if(chi <= bound_chi_1st){
+                        lookup_index = 4;
+                }else if(chi <= bound_chi_2nd){
+                        lookup_index = 3;
+                }else if(chi <= bound_chi_3rd){
+                        lookup_index = 2;
+                }else if(chi <= bound_chi_4th){
+                        lookup_index = 1;
+                }else{
+                        lookup_index = 0;
+                }
+
+                //IMPORTANT: through this constructs we means
+                //to default every chi > 600 case into the
+                //600 < chi <= 2000 one
+                const Chebyshev_User_1D chebyshev_phtn_rate = (look_up_table_phtn_mx_rt[lookup_index]);
+                
+                return coefW_rad * chebyshev_phtn_rate.evaluate(chi);
+        }
 
         double SFQED_LCFA_emitted_photon_energy(const double&, const double&, const double&) const;
 
@@ -269,9 +331,102 @@ public:
 
         void SFQED_init_PAIR_creation(std::string);
 
-        double SFQED_PAIR_creation_rate(const double&, const double&) const;
+        // double SFQED_PAIR_creation_rate(const double&, const double&) const;
 
-        double SFQED_PAIR_creation_rate_fast(const double&, const double&) const;
+        // double SFQED_PAIR_creation_rate_fast(const double&, const double&) const;
+
+        inline double __attribute__((always_inline)) SFQED_PAIR_creation_rate(const double &gamma, const double &chi) const {
+    
+                //coefficient for the rate of emission
+                //multiply by \tilde{W_rad} to get the rate of emission
+                double coefW_pair = coef_rate_Wpair / gamma;
+                
+                //low impact Branch to calculate \tilde{W_rad} and then the rate
+                //---------------------------------------------------
+                /**/
+                //lookup tables boolean selectors
+                // bool chi_001_03 = chi <= bound_kappa_0th, 
+                //     chi_0_2 = chi <= bound_kappa_1st,
+                //     chi_2_20 = chi <= bound_kappa_2nd,
+                //     chi_20_80 = chi <= bound_kappa_3rd,
+                //     chi_80_600 = chi <= bound_kappa_4th;
+                //     //chi_600_2000 = chi <= 2000.;
+                
+                // int lookup_index = chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+                // lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+                
+
+                int lookup_index;
+
+                if(chi <= bound_kappa_0th){
+                        // lookup_index = 5;
+                        return coefW_pair * //asympt_pair_emission_rate_low_k(chi);
+                                        (27. * pigreek * chi)/(16. * sqrt(2.)) * exp(-(8/(3 * chi))) * (1. - 11./64.*chi + 7585./73728.*chi*chi);
+                }else if(chi <= bound_kappa_1st){
+                        lookup_index = 4;
+                }else if(chi <= bound_kappa_2nd){
+                        lookup_index = 3;
+                }else if(chi <= bound_kappa_3rd){
+                        lookup_index = 2;
+                }else if(chi <= bound_kappa_4th){
+                        lookup_index = 1;
+                }else{
+                        lookup_index = 0;
+                }
+
+                //IMPORTANT: through this constructs we mean
+                //to default every chi > 600 case into the
+                //600 < chi <= 2000 one
+                const Chebyshev_User_1D chebyshev_pair_rate = 
+                                        (look_up_table_pair_prd_rt[lookup_index]);                        
+                
+                return coefW_pair * chebyshev_pair_rate.evaluate(chi);//
+        }
+
+        inline double __attribute__((always_inline)) SFQED_PAIR_creation_rate_fast(const double &gamma, const double &chi) const {
+    
+                //coefficient for the rate of emission
+                //multiply by \tilde{W_rad} to get the rate of emission
+                double coefW_pair = coef_rate_Wpair / gamma;
+                
+                //low impact Branch to calculate \tilde{W_rad} and then the rate
+                //---------------------------------------------------
+                /**/
+                //lookup tables boolean selectors
+                // bool chi_001_03 = chi <= bound_kappa_0th, 
+                //     chi_0_2 = chi <= bound_kappa_1st,
+                //     chi_2_20 = chi <= bound_kappa_2nd,
+                //     chi_20_80 = chi <= bound_kappa_3rd,
+                //     chi_80_600 = chi <= bound_kappa_4th;
+                //     //chi_600_2000 = chi <= 2000.;
+
+                // int lookup_index = chi_001_03*16 + chi_0_2*8 + chi_2_20*4 + chi_20_80*2 + chi_80_600;
+                // lookup_index = (1 - std::signbit(lookup_index-1))*(32 - __builtin_clz(lookup_index));
+                
+                int lookup_index;
+
+                if(chi <= bound_kappa_0th){
+                        lookup_index = 5;
+                }else if(chi <= bound_kappa_1st){
+                        lookup_index = 4;
+                }else if(chi <= bound_kappa_2nd){
+                        lookup_index = 3;
+                }else if(chi <= bound_kappa_3rd){
+                        lookup_index = 2;
+                }else if(chi <= bound_kappa_4th){
+                        lookup_index = 1;
+                }else{
+                        lookup_index = 0;
+                }
+
+                //IMPORTANT: through this constructs we mean
+                //to default every chi > 600 case into the
+                //600 < chi <= 2000 one
+                const Chebyshev_User_1D chebyshev_pair_rate = 
+                                        (look_up_table_pair_prd_rt[lookup_index]);
+                
+                return coefW_pair * chebyshev_pair_rate.evaluate(chi);//
+        }
 
         double SFQED_PAIR_created_electron_energy(const double&, const double&, const double&) const;
 
