@@ -50,76 +50,19 @@ Chebyshev_User_1D::Chebyshev_User_1D(unsigned int order, double a, double b){
     this->domain_middle_point = (b+a)*0.5;
 }
 
-Chebyshev_User_1D Chebyshev_User_1D::init_from_txt_file(std::ifstream& input_file){
-    unsigned int order;
-    double a, b;
-
-    input_file >> order >> a >> b;
-
-    Chebyshev_User_1D cheby_user_1d(order, a, b);
-
-	cheby_user_1d.last_coeffs = new double[order];
-
-	for (unsigned int i = 0; i < order; i++) {
-		input_file >> cheby_user_1d.last_coeffs[i];
-	}
-
-    //by returning the obj in this way, you are requesting
-    //to COPY the cheby_user_1d object from the stack of the
-    //current function to the heap of the main program
-    //(or wherever this method is called).
-    return cheby_user_1d;
-
-    //PLEASE USE RVO OR NRVO
-    //The common idea of these two optimizations is to allow the compiler
-    //to use the memory space of this object T t, which is outside the function,
-    //to directly construct the object being initialized inside the function
-    //and that is returned from it. This effectively removes the need for copying intermediary objects.
-
-    //But for the RVO to be applied, the returned object has to be constructed on a return statement.
-    //Therefore this object does not have a name.
-    //The NRVO (Named-RVO) goes one step further: it can remove the intermediary objects
-    //even if the returned object has a name and is therefore not constructed on the return statement.
-}
-
 // Chebyshev_User_1D Chebyshev_User_1D::init_from_txt_file(std::ifstream& input_file){
-//     unsigned int order[2];
-
-// 	std::string buffer;
-// 	std::getline(input_file, buffer);
-// 	std::istringstream converted_buffer(buffer);
-
-// 	while (converted_buffer.peek() == ':' || converted_buffer.peek() == ' ' || converted_buffer.peek() == ','){
-//         converted_buffer.ignore();
-//     }
-// 	for (int index = 0; index < 2 && !converted_buffer.eof(); index++) {
-
-//         converted_buffer >> order[index];
-		
-// 		order[1] = order[index];
-
-//         while (converted_buffer.peek() == ':' || converted_buffer.peek() == ' ' || converted_buffer.peek() == ','){
-//             converted_buffer.ignore();
-//         }  
-        
-//     }
-
+//     unsigned int order;
 //     double a, b;
 
-//     input_file >> a >> b;
+//     input_file >> order >> a >> b;
 
-//     Chebyshev_User_1D cheby_user_1d(order[1], a, b);
+//     Chebyshev_User_1D cheby_user_1d(order, a, b);
 
-// 	cheby_user_1d.last_coeffs = new double[order[1]];
+// 	cheby_user_1d.last_coeffs = new double[order];
 
-// 	for (unsigned int i = 0; i < order[1]; i++) {
+// 	for (unsigned int i = 0; i < order; i++) {
 // 		input_file >> cheby_user_1d.last_coeffs[i];
 // 	}
-
-// 	// std::cout << order[1] << '\n' << a << '\n' << b << '\n';
-// 	// for(unsigned int i = 0; i < order[1]; i++) {
-// 	// 	std::cout << cheby_user_1d.last_coeffs[i] << '\n';
-// 	// }
 
 //     //by returning the obj in this way, you are requesting
 //     //to COPY the cheby_user_1d object from the stack of the
@@ -138,6 +81,63 @@ Chebyshev_User_1D Chebyshev_User_1D::init_from_txt_file(std::ifstream& input_fil
 //     //The NRVO (Named-RVO) goes one step further: it can remove the intermediary objects
 //     //even if the returned object has a name and is therefore not constructed on the return statement.
 // }
+
+Chebyshev_User_1D Chebyshev_User_1D::init_from_txt_file(std::ifstream& input_file){
+    unsigned int order[2];
+
+	std::string buffer;
+	std::getline(input_file, buffer);
+	std::istringstream converted_buffer(buffer);
+
+	while (converted_buffer.peek() == ':' || converted_buffer.peek() == ' ' || converted_buffer.peek() == ','){
+        converted_buffer.ignore();
+    }
+	for (int index = 0; index < 2 && !converted_buffer.eof(); index++) {
+
+        converted_buffer >> order[index];
+		
+		order[1] = order[index];
+
+        while (converted_buffer.peek() == ':' || converted_buffer.peek() == ' ' || converted_buffer.peek() == ','){
+            converted_buffer.ignore();
+        }  
+        
+    }
+
+    double a, b;
+
+    input_file >> a >> b;
+
+    Chebyshev_User_1D cheby_user_1d(order[1], a, b);
+
+	cheby_user_1d.last_coeffs = new double[order[1]];
+
+	for (unsigned int i = 0; i < order[1]; i++) {
+		input_file >> cheby_user_1d.last_coeffs[i];
+	}
+
+	// std::cout << order[1] << '\n' << a << '\n' << b << '\n';
+	// for(unsigned int i = 0; i < order[1]; i++) {
+	// 	std::cout << cheby_user_1d.last_coeffs[i] << '\n';
+	// }
+
+    //by returning the obj in this way, you are requesting
+    //to COPY the cheby_user_1d object from the stack of the
+    //current function to the heap of the main program
+    //(or wherever this method is called).
+    return cheby_user_1d;
+
+    //PLEASE USE RVO OR NRVO
+    //The common idea of these two optimizations is to allow the compiler
+    //to use the memory space of this object T t, which is outside the function,
+    //to directly construct the object being initialized inside the function
+    //and that is returned from it. This effectively removes the need for copying intermediary objects.
+
+    //But for the RVO to be applied, the returned object has to be constructed on a return statement.
+    //Therefore this object does not have a name.
+    //The NRVO (Named-RVO) goes one step further: it can remove the intermediary objects
+    //even if the returned object has a name and is therefore not constructed on the return statement.
+}
 
 Chebyshev_User_1D Chebyshev_User_1D::init_from_bin_file(MPI_File& file, MPI_Comm &communicator) {
 
