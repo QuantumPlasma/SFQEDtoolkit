@@ -3,7 +3,7 @@
 MPIC = mpic++
 CXX = mpic++
 
-FORTRANC = gfortran
+FORTRANC = mpif90
 
 LDFLAGS = -lstdc++ #-lgsl -lgslcblas -lm
 CPPFLAGS = -std=c++11
@@ -11,9 +11,9 @@ NOUNDERSCORE = -fno-underscoring
 
 OPENMPFLAG = -fopenmp
 
-SRC_DIRS := ../src_SFQEDtoolkit_cpp
+# SRC_DIRS := ./src_SFQEDtoolkit
 YOUR_COMPILATION_PATH := ./
-FORTRAN_DIRS := ../src_SFQEDtoolkit_fortran
+FORTRAN_DIRS := ./src_fortran_wrapper
 
 BUILD_FULL_DIR := ./build
 BUILD1 := ./build/inner_build
@@ -22,8 +22,9 @@ TARGET1 := fortran_tester
 
 # Find all the C++ files we want to compile.
 # This contains the main SFQEDtoolkit modules.
-SRCS1 := $(shell find $(SRC_DIRS) $(FORTRAN_DIRS) -name '*.cpp')
-SRCFORTRAN := $(shell find $(YOUR_COMPILATION_PATH) $(FORTRAN_DIRS) -name '*.f90')
+SRCS1 := $(shell find $(YOUR_COMPILATION_PATH) -name '*.cpp')
+#remember that FORTRAN_DIRS must precede YOUR_COMPILATION_PATH
+SRCFORTRAN := $(shell find $(FORTRAN_DIRS) $(YOUR_COMPILATION_PATH) -name '*.f90')
 
 
 # String substitution for every C++ file.
@@ -41,8 +42,8 @@ DEPS := $(OBJS:.o=.d)
 
 
 # Every folder in ./src will need to be passed to GCC so that it can find header files
-INC_DIRS := $(shell find $(SRC_DIRS) $(YOUR_COMPILATION_PATH) $(FORTRAN_DIRS) -type d)
-INC_DIRS_FORTRAN := $(shell find $(FORTRAN_DIRS) -type d)
+INC_DIRS := $(shell find $(YOUR_COMPILATION_PATH) -type d)
+# INC_DIRS_FORTRAN := $(shell find $(FORTRAN_DIRS) -type d)
 
 
 # Add a prefix to INC_DIRS. So moduleA would become -ImoduleA. GCC understands this -I flag.
@@ -50,7 +51,7 @@ INC_DIRS_FORTRAN := $(shell find $(FORTRAN_DIRS) -type d)
 # could potentially live in any treelike structure), we need to add all the subdirectories
 # within the src folder to the compile path we pass to the compiler (we'll use -I).
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
-INC_FLAGS_FORTRAN := $(addprefix -I,$(INC_DIRS_FORTRAN))
+# INC_FLAGS_FORTRAN := $(addprefix -I,$(INC_DIRS_FORTRAN))
 
 # The -MMD and -MP flags together generate Makefiles for us!
 # These files will have .d instead of .o as the output.
@@ -75,12 +76,12 @@ $(BUILD1)/%.cpp.o: %.cpp
 	@mkdir -p $(dir $@)
 	@echo Compiling $<
 #	@$(MPIC) $(CXXFLAGS) $(OPENMPFLAG) $(OTHERFLAGS) -c $< -o $@ #2
-	@$(MPIC) $(OTHERFLAGS) $(CPPFLAGS) -c $< -o $@ #2
+	@$(MPIC) $(CPPFLAGS) $(OTHERFLAGS) -c $< -o $@ #2
 
 $(BUILD1)/%.f90.o: %.f90
 	@mkdir -p $(dir $@)
 	@echo Compiling $<
-	@$(FORTRANC) $(INC_FLAGS_FORTRAN) $(NOUNDERSCORE) -c $< -o $@ #2
+	@$(FORTRANC) $(INC_FLAGS) $(NOUNDERSCORE) -c $< -o $@ #2 
 
 #######################################
 

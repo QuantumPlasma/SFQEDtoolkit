@@ -5,19 +5,21 @@ CXX = mpic++
 
 LDFLAGS = -lstdc++
 
+COMPILE_FLAGS = -std=c++11
+
 OPENMPFLAG = -fopenmp
 
-SRC_DIRS := ../src_SFQEDtoolkit_cpp
+#SRC_DIRS := ../src_SFQEDtoolkit_cpp
 YOUR_COMPILATION_PATH := ./
 
 BUILD_FULL_DIR := ./build
-BUILD1 := ./build/inner_build
+BUILD1 := ./build
 TARGET1 := cpp_tester
 
 
 # Find all the C++ files we want to compile.
 # This contains the main SFQEDtoolkit modules.
-SRCS1 := $(shell find $(SRC_DIRS) $(YOUR_COMPILATION_PATH) -name '*.cpp')
+SRCS1 := $(shell find $(YOUR_COMPILATION_PATH) -name '*.cpp')
 
 
 # String substitution for every C++ file.
@@ -34,7 +36,7 @@ DEPS := $(OBJS1:.o=.d)
 
 
 # Every folder in ./src will need to be passed to GCC so that it can find header files
-INC_DIRS := $(shell find $(SRC_DIRS) $(YOUR_COMPILATION_PATH) -type d)
+INC_DIRS := $(shell find $(YOUR_COMPILATION_PATH) -type d)
 
 
 # Add a prefix to INC_DIRS. So moduleA would become -ImoduleA. GCC understands this -I flag.
@@ -67,7 +69,7 @@ $(BUILD1)/%.cpp.o: %.cpp
 	@mkdir -p $(dir $@)
 	@echo Compiling $<
 #	@$(MPIC) $(OPENMPFLAG) $(OTHERFLAGS) -c $< -o $@ #2
-	@$(MPIC) $(OTHERFLAGS) -c $< -o $@ #2
+	@$(MPIC) $(COMPILE_FLAGS) $(OTHERFLAGS) -c $< -o $@ #2
 
 #######################################
 

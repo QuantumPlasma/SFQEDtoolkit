@@ -24,7 +24,17 @@ spectrum_tester
 *.mod
 example_cpp/build
 example_cpp/build/*
+example_cpp/coefficients
+example_cpp/coefficients/*
+example_cpp/src_SFQEDtoolkit
+example_cpp/src_SFQEDtoolkit/*
 cpp_tester
 example_fortran/build
 example_fortran/build/*
+example_fortran/coefficients
+example_fortran/coefficients/*
+example_fortran/src_SFQEDtoolkit
+example_fortran/src_SFQEDtoolkit/*
+example_fortran/src_fortran_wrapper
+example_fortran/src_fortran_wrapper/*
 fortran_tester

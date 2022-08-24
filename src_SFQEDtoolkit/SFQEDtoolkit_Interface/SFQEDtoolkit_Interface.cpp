@@ -25,16 +25,21 @@ bool SFQED_INIT_ALL_ref_len(const double& ref_len, const double& ts){
         //initialize process instance
         procs = SFQED_Processes();
 
-        //retrieve the path to coefficients
-        const char *variable_name = "SFQED_TOOLKIT_USER"; // use string literals to initialize a const pointer to char
-        const char * val = std::getenv(variable_name);
-        if ( val == nullptr ) { // invalid to assign nullptr to std::string
-                std::cout << "Environment variable " << variable_name
-                        << "not found! Not able to load the coefficients.\n";
-                return false;
-        }
-        std::string str_path = std::string(val) + std::string("/coefficients/");
-        std::cout << "Loading SFQED coefficients from " << str_path << "\n";
+        //old way with environment variable
+        // //retrieve the path to coefficients
+        // const char *variable_name = "SFQED_TOOLKIT_USER"; // use string literals to initialize a const pointer to char
+        // const char * val = std::getenv(variable_name);
+        // if ( val == nullptr ) { // invalid to assign nullptr to std::string
+        //         std::cout << "Environment variable " << variable_name
+        //                 << "not found! Not able to load the coefficients.\n";
+        //         return false;
+        // }
+        // std::string str_path = std::string(val) + std::string("/coefficients/");
+        // std::cout << "Loading SFQED coefficients from " << str_path << "\n";
+
+        //new way (copy coefficients folder to where the executable is launched)
+        std::cout << "Loading SFQED coefficients from root directory\n";
+        std::string str_path("./coefficients/");
         
         //load coefficients
         procs.SFQED_init_PHTN_emission(str_path);
@@ -52,16 +57,21 @@ bool SFQED_INIT_ALL_ref_freq(const double& ref_freq, const double& ts){
         //initialize process instance
         procs = SFQED_Processes();
         
-        //retrieve the path to coefficients
-        const char *variable_name = "SFQED_TOOLKIT_USER"; // use string literals to initialize a const pointer to char
-        const char * val = std::getenv(variable_name);
-        if ( val == nullptr ) { // invalid to assign nullptr to std::string
-                std::cout << "Environment variable " << variable_name
-                        << "not found! Not able to load the coefficients.\n";
-                return false;
-        }
-        std::string str_path = std::string(val) + std::string("/coefficients/");
-        std::cout << "Loading SFQED coefficients from " << str_path << "\n";
+        //old way with environment variable
+        // //retrieve the path to coefficients
+        // const char *variable_name = "SFQED_TOOLKIT_USER"; // use string literals to initialize a const pointer to char
+        // const char * val = std::getenv(variable_name);
+        // if ( val == nullptr ) { // invalid to assign nullptr to std::string
+        //         std::cout << "Environment variable " << variable_name
+        //                 << "not found! Not able to load the coefficients.\n";
+        //         return false;
+        // }
+        // std::string str_path = std::string(val) + std::string("/coefficients/");
+        // std::cout << "Loading SFQED coefficients from " << str_path << "\n";
+
+        //new way (copy coefficients folder to where the executable is launched)
+        std::cout << "Loading SFQED coefficients from root directory\n";
+        std::string str_path("./coefficients/");
         
         //load coefficients
         procs.SFQED_init_PHTN_emission(str_path);

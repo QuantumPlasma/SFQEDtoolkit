@@ -1,5 +1,1 @@
-In this folder you can find a demo of SFQEDtoolkit. cpp_tester.cpp is the main source file that demonstrates how the toolkit should be used.
-Run 
-```make```
-to compile and create the executable, then launch it with
-```./cpp_tester```
+In this folder you can find a demo of SFQEDtoolkit. `cpp_tester.cpp` is the main source file that demonstrates how the toolkit should be used. Follow the instructions of the `README` located in the previous folder and compile everything by running the `make` command (the `makefile` we provided doesn't need any change). At the end of the compilation the executable `cpp_tester` is produced.
