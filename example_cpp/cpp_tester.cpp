@@ -138,6 +138,7 @@ int main(int argc, char** argv) {
         std::cout << "\nLCFA SECTION:" << "\n";
 
         for(part_num = 0; part_num < 2; part_num++){
+                
                 //compute chi and gamma
                 gamma = sqrt(1. + scalar_prod(parts_momenta[part_num], parts_momenta[part_num]));
                 chi = compute_chi_with_vectors(gamma, parts_momenta[part_num], EE, BB);

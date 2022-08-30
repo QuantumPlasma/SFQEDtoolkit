@@ -6,5 +6,5 @@ In order to use SFQEDtoolkit into your Montecarlo or PIC code just follow the st
 
 3. Compile your code and SFQEDtoolkit together: (**cpp**) -> if you have a `makefile` this is easily done by adjusting it (so to include the content of the `src_SFQEDtoolkit` folder to your compilation path) and running `make`, otherwise you can always proceed in the old-fashioned way, by compiling and linking everything through the command line; (**fortran**) -> same as in the **cpp** case. Additionally, it is important to compile the content of the `src_fortran_wrapper` directory before compiling the files where the library is used.
 
-4. Give SFQEDtoolkit a try, and apply the instructions above to the examples (`example_cpp` and `example_fortran`) we provided.
+4. Give SFQEDtoolkit a try, and apply the instructions above to the examples (`example_cpp` and `example_fortran`) we provided. Actually, when dealing with the just mentioned examples, you can skip point 2 of this instructions list, as we already took care of it for you. Of course if you want to do some changes you are more than welcome to explore.
 

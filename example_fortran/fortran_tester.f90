@@ -17,20 +17,20 @@ PROGRAM test
 
    IMPLICIT NONE
 
-   REAl(numreal64), parameter :: PI = 3.141592653589793238462643383279503
-   REAl(numreal64), parameter :: c = 299792458. ![m/s]
-   REAl(numreal64), parameter :: electron_mass = 9.10938356e-31; ! (*kg*)
-   REAl(numreal64), parameter :: electron_charge = 1.60217662e-19; !(*coulombs*)
-   REAl(numreal64), parameter :: coulombConst = 8.987551792313e9;
-   REAl(numreal64), parameter :: HBar = 1.0545718e-34; ! (*m^2kg/s*)
-   REAl(numreal64), parameter :: eps_0 = 8.85418782e-12;
+   REAl(numreal64), parameter :: PI = 3.141592653589793238462643383279503_numreal64
+   REAl(numreal64), parameter :: c = 299792458._numreal64 ![m/s]
+   REAl(numreal64), parameter :: electron_mass = 9.10938356e-31_numreal64 ! (*kg*)
+   REAl(numreal64), parameter :: electron_charge = 1.60217662e-19_numreal64 !(*coulombs*)
+   REAl(numreal64), parameter :: coulombConst = 8.987551792313e9_numreal64
+   REAl(numreal64), parameter :: HBar = 1.0545718e-34_numreal64 ! (*m^2kg/s*)
+   REAl(numreal64), parameter :: eps_0 = 8.85418782e-12_numreal64;
    REAl(numreal64), parameter :: Schwinger_E_field = (electron_mass*electron_mass*c*c*c)/(HBar*electron_charge);
 
    ! this is the 'random" number we should use to ascertain whether
    ! a SFQED event occurs or not. It has been fixed to zero in such a way
    ! that the emission is forced. However, this should be a proper random number
    ! comprised between 0 and 1
-   REAL(numreal64), parameter :: rnd_zero = 0. 
+   REAL(numreal64), parameter :: rnd_zero = 0._numreal64
 
    ! wave length associated 
    REAl(numreal64) :: wave_length ![m]
@@ -80,31 +80,31 @@ PROGRAM test
    !///////////////////
 
    ! set main simualtions quantities
-   time_step = 0.1
-   rnd = 2.1432683788011112e-01
-   rnd2 = 4.6667110607838297e-01
-   wave_length = 0.8e-6
+   time_step = 0.1_numreal64
+   rnd = 2.1432683788011112e-01_numreal64
+   rnd2 = 4.6667110607838297e-01_numreal64
+   wave_length = 0.8e-6_numreal64
    reference_length = wave_length / (2. * PI)
    w_r = c / reference_length
    Enorm = electron_mass*w_r*c/electron_charge
 
    !prepare e.m. fields
-   EE(1) = 0.
-   EE(2) = 0.
-   EE(3) = 0.
+   EE(1) = 0._numreal64
+   EE(2) = 0._numreal64
+   EE(3) = 0._numreal64
 
-   BB(1) = 0.
-   BB(2) = 270.
-   BB(3) = 0.
+   BB(1) = 0._numreal64
+   BB(2) = 270._numreal64
+   BB(3) = 0._numreal64
 
    ! parts momenta
-   parts_momenta(1,1) = -1.2137280955271491e+01
-   parts_momenta(1,2) = 0.0
-   parts_momenta(1,3) = -1.9570511118175094e+04
+   parts_momenta(1,1) = -1.2137280955271491e+01_numreal64
+   parts_momenta(1,2) = 0.0_numreal64
+   parts_momenta(1,3) = -1.9570511118175094e+04_numreal64
 
-   parts_momenta(2,1) = 5.9499124858705343e+00
-   parts_momenta(2,2) = 0.0
-   parts_momenta(2,3) = -1.0000512547779021e+04
+   parts_momenta(2,1) = 5.9499124858705343e+00_numreal64
+   parts_momenta(2,2) = 0.0_numreal64
+   parts_momenta(2,3) = -1.0000512547779021e+04_numreal64
 
 
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -235,25 +235,25 @@ PROGRAM test
    !///////// STEP 1 /////////
 
    !old momentum
-   momentum(1,1) = 2.0923765116618465e+00
-   momentum(1,2) = 0.0000000000000000e+00
-   momentum(1,3) = -1.9570512944081507e+04
+   momentum(1,1) = 2.0923765116618465e+00_numreal64
+   momentum(1,2) = 0.0000000000000000e+00_numreal64
+   momentum(1,3) = -1.9570512944081507e+04_numreal64
    !new pushed momentum
-   pushed_momentum(1,1) = 5.9499124858705343e+00
-   pushed_momentum(1,2) =  0.0000000000000000e+00
-   pushed_momentum(1,3) = -1.9570512547779021e+04
+   pushed_momentum(1,1) = 5.9499124858705343e+00_numreal64
+   pushed_momentum(1,2) =  0.0000000000000000e+00_numreal64
+   pushed_momentum(1,3) = -1.9570512547779021e+04_numreal64
    !update blcfa obj
    keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(1), pushed_momentum(1,1:3), momentum(1,1:3), Lorentz_F_t_der(1,1:3), &
                               Lorentz_F_tt_der(1,1:3), gamma, chi)
 
    !old momentum
-   momentum(2,1) = -1.7718145323355337e+01
-   momentum(2,2) = 0.0000000000000000e+00
-   momentum(2,3) = -1.9570508989729224e+04
+   momentum(2,1) = -1.7718145323355337e+01_numreal64
+   momentum(2,2) = 0.0000000000000000e+00_numreal64
+   momentum(2,3) = -1.9570508989729224e+04_numreal64
    !new pushed momentum
-   pushed_momentum(2,1) = -1.6542717780968854e+01
-   pushed_momentum(2,2) =  0.0000000000000000e+00
-   pushed_momentum(2,3) = -1.9570509504165970e+04
+   pushed_momentum(2,1) = -1.6542717780968854e+01_numreal64
+   pushed_momentum(2,2) =  0.0000000000000000e+00_numreal64
+   pushed_momentum(2,3) = -1.9570509504165970e+04_numreal64
    !update blcfa obj
    keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(2), pushed_momentum(2,1:3), momentum(2,1:3), Lorentz_F_t_der(2,1:3), &
                                                    Lorentz_F_tt_der(2,1:3), gamma, chi);
@@ -261,25 +261,25 @@ PROGRAM test
    !///////// STEP 2 /////////
    
    !old momentum                           
-   momentum(1,1) = 5.9499124858705343e+00
-   momentum(1,2) =  0.0000000000000000e+00
-   momentum(1,3) = -1.9570512547779021e+04
+   momentum(1,1) = 5.9499124858705343e+00_numreal64
+   momentum(1,2) =  0.0000000000000000e+00_numreal64
+   momentum(1,3) = -1.9570512547779021e+04_numreal64
    !new pushed momentum
-   pushed_momentum(1,1) = 9.6034048452081251e+00
-   pushed_momentum(1,2) = 0.0000000000000000e+00
-   pushed_momentum(1,3) = -1.9570511821892545e+04
+   pushed_momentum(1,1) = 9.6034048452081251e+00_numreal64
+   pushed_momentum(1,2) = 0.0000000000000000e+00_numreal64
+   pushed_momentum(1,3) = -1.9570511821892545e+04_numreal64
    !update blcfa obj
    keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(1), pushed_momentum(1,1:3), momentum(1,1:3), Lorentz_F_t_der(1,1:3), &
                               Lorentz_F_tt_der(1,1:3), gamma, chi)
 
    !old momentum
-   momentum(2,1) = -1.6542717780968854e+01
-   momentum(2,2) = 0.0000000000000000e+00
-   momentum(2,3) = -1.9570509504165970e+04
+   momentum(2,1) = -1.6542717780968854e+01_numreal64
+   momentum(2,2) = 0.0000000000000000e+00_numreal64
+   momentum(2,3) = -1.9570509504165970e+04_numreal64
    !new pushed momentum
-   pushed_momentum(2,1) = -1.4660387531605418e+01
-   pushed_momentum(2,2) =  0.0000000000000000e+00
-   pushed_momentum(2,3) = -1.9570510254460005e+04
+   pushed_momentum(2,1) = -1.4660387531605418e+01_numreal64
+   pushed_momentum(2,2) =  0.0000000000000000e+00_numreal64
+   pushed_momentum(2,3) = -1.9570510254460005e+04_numreal64
    !update blcfa obj
    keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(2), pushed_momentum(2,1:3), momentum(2,1:3), Lorentz_F_t_der(2,1:3), &
                                                    Lorentz_F_tt_der(2,1:3), gamma, chi);
@@ -287,22 +287,22 @@ PROGRAM test
    !///////// STEP 3 /////////
    
    !old momentum 
-   momentum(1,1) = 9.6034048452081251e+00
-   momentum(1,2) = 0.0000000000000000e+00
-   momentum(1,3) = -1.9570511821892545e+04
+   momentum(1,1) = 9.6034048452081251e+00_numreal64
+   momentum(1,2) = 0.0000000000000000e+00_numreal64
+   momentum(1,3) = -1.9570511821892545e+04_numreal64
    !new pushed momentum
-   pushed_momentum(1,1) = 1.2895899733826127e+01
-   pushed_momentum(1,2) = 0.0000000000000000e+00
-   pushed_momentum(1,3) = -1.9570510875586107e+04
+   pushed_momentum(1,1) = 1.2895899733826127e+01_numreal64
+   pushed_momentum(1,2) = 0.0000000000000000e+00_numreal64
+   pushed_momentum(1,3) = -1.9570510875586107e+04_numreal64
 
    !old momentum
-   momentum(2,1) = -1.4660387531605418e+01;
-   momentum(2,2) =  0.0000000000000000e+00;
-   momentum(2,3) = -1.9570510254460005e+04;
+   momentum(2,1) = -1.4660387531605418e+01_numreal64
+   momentum(2,2) =  0.0000000000000000e+00_numreal64
+   momentum(2,3) = -1.9570510254460005e+04_numreal64
    !new pushed momentum
-   pushed_momentum(2,1)= -1.2137280955271491e+01;
-   pushed_momentum(2,2) =  0.0000000000000000e+00;
-   pushed_momentum(2,3) = -1.9570511118175094e+04;
+   pushed_momentum(2,1)= -1.2137280955271491e+01_numreal64
+   pushed_momentum(2,2) =  0.0000000000000000e+00_numreal64
+   pushed_momentum(2,3) = -1.9570511118175094e+04_numreal64
 
    !////////////  ACTUAL BLCFA LOOP  ////////////
    ! at this point everything should be fine and the actual blcfa section can now begin

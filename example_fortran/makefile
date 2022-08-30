@@ -89,6 +89,7 @@ $(BUILD1)/%.f90.o: %.f90
 clean:
 	@echo Cleaning folder
 	@rm -r -f $(BUILD_FULL_DIR)
+	@rm -f ./*.mod
 
 
 # Include the .d makefiles. The - at the front suppresses the errors of missing
