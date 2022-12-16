@@ -2,6 +2,7 @@
 #ifndef SFQEDtoolkit_INTERFACE
 #define SFQEDtoolkit_INTERFACE
 
+//forward class declaration
 class BLCFA_Object;
 
 extern "C" {
@@ -35,6 +36,10 @@ extern "C" {
         //useful for debug
         void SFQED_set_for_debug();
 
+        //this function initialize only the coefficients from file,
+        //all the other variables connected to the process are set to 1
+        void SFQED_INIT_ALL_debug();
+
 
         /********************************************/
         /* coefficients initializers and finalizers */
@@ -43,6 +48,11 @@ extern "C" {
         void SFQED_init_INV_COMPTON(const char* const path);
 
         void SFQED_finalize_INV_COMPTON();
+
+        /* PHOTON BLCFA */
+        void SFQED_init_INV_COMPTON_BLCFA(const char* const path);
+
+        void SFQED_finalize_INV_COMPTON_BLCFA();
 
         /* PAIRS */
         void SFQED_init_BREIT_WHEELER(const char* const path);
@@ -85,16 +95,16 @@ extern "C" {
         bool SFQED_BLCFA_OBJECT_update(BLCFA_Object* entity,
                                                         const double* const pushed_momentum,
                                                         const double* const momentum,
-                                                        double* Lorentz_F_t_der,
-                                                        double* Lorentz_F_tt_der,
+                                                        double& delta,
                                                         double& part_gamma,
                                                         double& part_chi);
 
+
         double SFQED_BLCFA_INV_COMPTON_PHOTON_threshold(const BLCFA_Object* const entity,
-                                                                const double* const Lorentz_F_t_der,
-                                                                const double* const Lorentz_F_tt_der,
+                                                                const double& delta,
                                                                 const double& part_gamma,
                                                                 const double& part_chi);
+
 
         double SFQED_BLCFA_INV_COMPTON_PHOTON_energy(const double& LCFA_limit,
                                                                 const double& gamma, 

@@ -44,9 +44,16 @@
 #include <iostream>
 
 //forward definition of SFQED_Processes
-struct SFQED_Processes;
+// struct SFQED_Processes;
 
 class BLCFA_Object{
+private:
+
+    //declaration of static member variables
+    //(remember you need to also define them outside)
+    // the definition of the static variables has been put inside the SFQED_Processes source file
+    static double one_over_dt, one_over_dt2, norm_Compton_time_2;
+
 protected:
 
     // be careful: the following pointer should store the perpendicular
@@ -110,6 +117,38 @@ public:
         return Delta_Lorentz_F_Old;
     }
 
+    //this function set both the time step related
+    // variables and the squared compton time. The 
+    // Compton time passed as second argument must be
+    // in normalized units.
+    static void SFQED_BLCFA_set_time_constants(const double& dt, const double& norm_compton_time){
+        one_over_dt = 1. / dt;
+        one_over_dt2 = one_over_dt * one_over_dt;
+        norm_Compton_time_2 = norm_compton_time * norm_compton_time;
+    }
+
+    //this method is used not only to compute and update the Lorentz_F_Old and
+    //Delta_Lorentz_F_Old variables, as the name suggests, but also to compute 
+    //the delta variable, the gamma and the chi parameter. Its return value
+    //is used to infer whether a particle can emit a photon or not. The delta is
+    //a variable needed to compute the LCFA validity threshold.
+    bool SFQED_BLCFA_update_entities_quantities(const double* const pushed_momentum,
+                                                const double* const momentum,
+                                                double& delta,
+                                                double& part_gamma,
+                                                double& part_chi);
+
+    //The main purpose of this method is to compute the energy threshold
+    //below which the LCFA ceases to be valid. It needs the 
+    double SFQED_BLCFA_find_energy_threshold(const double& delta,
+                                                const double& part_gamma, 
+                                                const double& part_chi) const;
+
+    //****************************************************************************************
+    //the following method are not really needed, as in order
+    // to update the BLCFA_Object's members one should resort to  
+    // the function SFQED_BLCFA_update_entities_quantitiesupdate
+
     void update_force(const double* const force){
         Lorentz_F_Old[0] = force[0];
         Lorentz_F_Old[1] = force[1];
@@ -121,21 +160,6 @@ public:
         Delta_Lorentz_F_Old[1] = delta_force[1];
         Delta_Lorentz_F_Old[2] = delta_force[2];
     }
-
-    //this method is used not only to compute and update the Lorentz_F_Old and
-    //Delta_Lorentz_F_Old variables, as the name suggests, but also to compute 
-    //the force derivatives, the gamma and the chi parameter. Its return value
-    //is used to infer whether a particle has just been created
-    bool SFQED_BLCFA_update_entities_quantities(const SFQED_Processes&, const double* const, const double* const, double*, double*, double&, double&);
-
-    //The main purpose of this method is to compute the energy threshold
-    //below which the LCFA ceases to be valid. It needs the 
-    double SFQED_BLCFA_find_energy_threshold(const SFQED_Processes&, const double* const, const double* const, const double&, const double&) const;
-
-    // void init_optical_depth(double);
-    // void reset_optical_depth();
-    // double increase_optical_depth(double);
-    // bool check_optical_depth_for_emission();
 
 };
 

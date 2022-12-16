@@ -143,26 +143,28 @@ MODULE SFQEDtoolkit_Interface
         type(C_PTR), INTENT(IN), VALUE :: entity
       end SUBROUTINE SFQED_FINALIZE_BLCFA_OBJECT
 
-      function SFQED_BLCFA_OBJECT_update(entity, pushed_momentum, momentum, Lorentz_F_t_der, &
-        Lorentz_F_tt_der, part_gamma, part_chi) result(goon) bind(C,name="SFQED_BLCFA_OBJECT_update")
+      function SFQED_BLCFA_OBJECT_update(entity, pushed_momentum, momentum, delta, &
+        part_gamma, part_chi) result(goon) bind(C,name="SFQED_BLCFA_OBJECT_update")
         import C_PTR, C_DOUBLE, C_BOOL
         LOGICAL(C_BOOL) :: goon
         TYPE(C_PTR), INTENT(IN), VALUE :: entity
         REAL(C_DOUBLE), DIMENSION(3), INTENT(IN) :: pushed_momentum
         REAL(C_DOUBLE), DIMENSION(3), INTENT(IN) :: momentum
-        REAL(C_DOUBLE), DIMENSION(3), INTENT(INOUT) :: Lorentz_F_t_der
-        REAL(C_DOUBLE), DIMENSION(3), INTENT(INOUT) :: Lorentz_F_tt_der
+        ! REAL(C_DOUBLE), DIMENSION(3), INTENT(INOUT) :: Lorentz_F_t_der
+        ! REAL(C_DOUBLE), DIMENSION(3), INTENT(INOUT) :: Lorentz_F_tt_der
+        REAL(C_DOUBLE), INTENT(INOUT) :: delta
         REAL(C_DOUBLE), INTENT(INOUT) :: part_gamma
         REAL(C_DOUBLE), INTENT(INOUT) :: part_chi
       end function SFQED_BLCFA_OBJECT_update
       
-      function SFQED_BLCFA_INV_COMPTON_PHOTON_threshold(entity, Lorentz_F_t_der, Lorentz_F_tt_der, &
+      function SFQED_BLCFA_INV_COMPTON_PHOTON_threshold(entity, delta, &
         part_gamma, part_chi) result(thresh) bind(C,name="SFQED_BLCFA_INV_COMPTON_PHOTON_threshold")
         import C_PTR, C_DOUBLE
         REAL(C_DOUBLE) :: thresh
         TYPE(C_PTR), INTENT(IN), VALUE :: entity
-        REAL(C_DOUBLE), DIMENSION(3), INTENT(IN) :: Lorentz_F_t_der
-        REAL(C_DOUBLE), DIMENSION(3), INTENT(IN) :: Lorentz_F_tt_der
+        ! REAL(C_DOUBLE), DIMENSION(3), INTENT(IN) :: Lorentz_F_t_der
+        ! REAL(C_DOUBLE), DIMENSION(3), INTENT(IN) :: Lorentz_F_tt_der
+        REAL(C_DOUBLE), INTENT(IN) :: delta
         REAL(C_DOUBLE), INTENT(IN) :: part_gamma
         REAL(C_DOUBLE), INTENT(IN) :: part_chi
       end function SFQED_BLCFA_INV_COMPTON_PHOTON_threshold

@@ -70,7 +70,7 @@ const double twopiCompton = twopi*compton_length;
 const double coef_W_rad = alpha/(sqrt3*pi);
 
 //coef. for the rate of pair creation W_pair
-const double coef_W_pair = alpha/(3.0*sqrt3*pi);
+const double coef_W_pair = alpha/(sqrt3*pi); //alpha/(3.0*sqrt3*pi);
 
 //constant parameter needed in the BLCFA mechanism to
 //ascertain whether the emission occurs or not
@@ -83,6 +83,15 @@ const double thresh_factor = 0.7;
 /*PHOTON EMISSION SPECIFIC CONSTANTS*/
 /************************************/
 
+//upper bounds of the \chi parameter in each interval
+const double bound_chi_1st = 2.0,
+        bound_chi_2nd = 20.0,
+        bound_chi_3rd = 80.0,
+        bound_chi_4th = 600.0,
+        bound_chi_5th = 2000.0;
+
+const double pigreek = 3.141592653589793238462643383279503;
+
 const double heval_r_0_2 = 0.99, // 0.9999;
         heval_r_2_20 = 0.9999,
         heval_r_20_80 = 0.9999, //0.99959,
@@ -90,9 +99,9 @@ const double heval_r_0_2 = 0.99, // 0.9999;
         heval_r_600_2000 = 0.99984;
 
 //new lower bounds on r (much simpler and straightforward than the previous hybrid way)
-double lu_table_lower_r_bounds[5];
+const double lu_table_lower_r_bounds[5] = {0.050, 0.040, 0.045, 0.041, 0.028};
 
-double lu_table_inverse_r_bounds[5];
+const double lu_table_inverse_r_bounds[5] = {0.987, 0.987, 0.987, 0.987, 0.986};
 
 //the following represents the coefficient of the term in w
 //when taking the small w limit (w -> 0) of the function
@@ -104,63 +113,77 @@ double lu_table_inverse_r_bounds[5];
 //with G(\chi) = \tilde{W_rad}
 //we can easily invert it to find a value for w
 //w \approx [r * G(\chi)] / [9 \Gamma(2/3) / 2^(1/3)]
-double soft_ph_coef = 1.03381857436581047459e-1;
+const double soft_ph_coef = 1.03381857436581047459e-1;
 
 //new upper bounds on r (much simpler and straightforward than the previous hybrid way)
-double lu_table_upper_r_bounds[5];
+const double lu_table_upper_r_bounds[5] = {0.99998, 0.99997, 0.99996, 0.99999, 0.99999};
 
 //this constants should represent the upper bound
 //of the emitted phtn energy, expressed as w value,
 //above which the differential probability approximation
 //is no longer valid. When this happens the emission
 //does not occur
-double lu_table_upper_w_bounds[5];
+const double lu_table_upper_w_bounds[5] = {0.15, 0.3, 0.47, 1., 1.6};
 
 //this function is meant to initialize every photon 
 //emission lookup table defined above
-void init_phtn_mx_tables(){
+// void init_phtn_mx_tables(){
 
-    //new r edges init
-    lu_table_lower_r_bounds[4] = 0.028; //0.020; //w_min = 0.017
-    lu_table_lower_r_bounds[3] = 0.041; //0.031; //w_min = 0.0158
-    lu_table_lower_r_bounds[2] = 0.045; //0.035; //w_min = 0.01
-    lu_table_lower_r_bounds[1] = 0.040; //0.029; //w_min = 0.0055
-    lu_table_lower_r_bounds[0] = 0.050; //0.039; //w_min = 0.0038
+//     //new r edges init
+//     lu_table_lower_r_bounds[4] = 0.028; //0.020; //w_min = 0.017
+//     lu_table_lower_r_bounds[3] = 0.041; //0.031; //w_min = 0.0158
+//     lu_table_lower_r_bounds[2] = 0.045; //0.035; //w_min = 0.01
+//     lu_table_lower_r_bounds[1] = 0.040; //0.029; //w_min = 0.0055
+//     lu_table_lower_r_bounds[0] = 0.050; //0.039; //w_min = 0.0038
 
 
-    // "maybe these limits could be moved a little backwards?"
-    // The answer is NO and, indeed, it is the exact opposite:
-    // while the brent inverse (w) is regular basicaclly
-    // throughout the whole domain and has problems at the very end,
-    // its reciprocal (1/w), on the contrary, is regular at the ending
-    // part of the domain and has issues everywhere else. If we tried to
-    // extend the 1/w domain backwards, things would start going far worse. 
+//     // "maybe these limits could be moved a little backwards?"
+//     // The answer is NO and, indeed, it is the exact opposite:
+//     // while the brent inverse (w) is regular basicaclly
+//     // throughout the whole domain and has problems at the very end,
+//     // its reciprocal (1/w), on the contrary, is regular at the ending
+//     // part of the domain and has issues everywhere else. If we tried to
+//     // extend the 1/w domain backwards, things would start going far worse. 
 
-    lu_table_inverse_r_bounds[4] = 0.986; //0.980905;
-    lu_table_inverse_r_bounds[3] = 0.987; //0.980905;
-    lu_table_inverse_r_bounds[2] = 0.987; //0.980605;
-    lu_table_inverse_r_bounds[1] = 0.987; //0.980705,
-    lu_table_inverse_r_bounds[0] = 0.987; //0.980805;
+//     lu_table_inverse_r_bounds[4] = 0.986; //0.980905;
+//     lu_table_inverse_r_bounds[3] = 0.987; //0.980905;
+//     lu_table_inverse_r_bounds[2] = 0.987; //0.980605;
+//     lu_table_inverse_r_bounds[1] = 0.987; //0.980705,
+//     lu_table_inverse_r_bounds[0] = 0.987; //0.980805;
 
-    lu_table_upper_r_bounds[4] = 0.99999;
-    lu_table_upper_r_bounds[3] = 0.99999;
-    lu_table_upper_r_bounds[2] = 0.99996;
-    lu_table_upper_r_bounds[1] = 0.99997;
-    lu_table_upper_r_bounds[0] = 0.99998;
+//     lu_table_upper_r_bounds[4] = 0.99999;
+//     lu_table_upper_r_bounds[3] = 0.99999;
+//     lu_table_upper_r_bounds[2] = 0.99996;
+//     lu_table_upper_r_bounds[1] = 0.99997;
+//     lu_table_upper_r_bounds[0] = 0.99998;
 
-    lu_table_upper_w_bounds[4] = 1.6, //2.2999,
-    lu_table_upper_w_bounds[3] = 1., //2.,
-    lu_table_upper_w_bounds[2] = 0.47, //1.8,
-    lu_table_upper_w_bounds[1] = 0.3, //1.7,
-    lu_table_upper_w_bounds[0] = 0.15; //1.5;
+//     lu_table_upper_w_bounds[4] = 1.6, //2.2999,
+//     lu_table_upper_w_bounds[3] = 1., //2.,
+//     lu_table_upper_w_bounds[2] = 0.47, //1.8,
+//     lu_table_upper_w_bounds[1] = 0.3, //1.7,
+//     lu_table_upper_w_bounds[0] = 0.15; //1.5;
 
-}
+// }
 
 /************************************/
 /*PAIR PRODUCTION SPECIFIC CONSTANTS*/
 /************************************/
 
-//change this shit
+const double bound_kappa_0th_rate = 0.24,
+        bound_kappa_0th_nrgs = 0.3,
+        bound_kappa_intermediate_rate = 0.4,
+        bound_kappa_1st = 2.0,
+        bound_kappa_2nd = 20.0,
+        bound_kappa_3rd = 80.0,
+        bound_kappa_4th = 600.0,
+        bound_kappa_5th = 2000.0;
+
+//Contrary to the set of variables above, which were used
+//to distinguish the ranges of validity for the rates, we do not
+//need to extend the set of variables below, as they are used
+//for the computation of the energies
+
+//notice that you can use a single variable for every range
 const double pair_r_exp_limit_001_03 = 0.9999,
         pair_r_exp_limit_0_2 = 0.9999,
         pair_r_exp_limit_2_20 = 0.9999,
@@ -168,28 +191,28 @@ const double pair_r_exp_limit_001_03 = 0.9999,
         pair_r_exp_limit_80_600 = 0.9999,
         pair_r_exp_limit_600_2000 = 0.9999;
 
-double lu_table_pair_lower_r_bounds[6];
+const double lu_table_pair_lower_r_bounds[6] = {0.899, 0.899, 0.899, 0.899, 0.899, 0.899};
 
-double lu_table_pair_upper_r_bounds[6];
+const double lu_table_pair_upper_r_bounds[6] = {0.9999, 0.9999, 0.9999, 0.9999, 0.9999, 0.9999};
 
-void init_pair_crtn_tables(){
+// void init_pair_crtn_tables(){
 
-    //new r edges init
-    lu_table_pair_lower_r_bounds[5] = 0.899;
-    lu_table_pair_lower_r_bounds[4] = 0.899; // 0.005;
-    lu_table_pair_lower_r_bounds[3] = 0.899; // 0.001;
-    lu_table_pair_lower_r_bounds[2] = 0.899; // 0.003;
-    lu_table_pair_lower_r_bounds[1] = 0.899; 
-    lu_table_pair_lower_r_bounds[0] = 0.899;
+//     //new r edges init
+//     lu_table_pair_lower_r_bounds[5] = 0.899;
+//     lu_table_pair_lower_r_bounds[4] = 0.899; // 0.005;
+//     lu_table_pair_lower_r_bounds[3] = 0.899; // 0.001;
+//     lu_table_pair_lower_r_bounds[2] = 0.899; // 0.003;
+//     lu_table_pair_lower_r_bounds[1] = 0.899; 
+//     lu_table_pair_lower_r_bounds[0] = 0.899;
 
-    lu_table_pair_upper_r_bounds[5] = 0.9999;
-    lu_table_pair_upper_r_bounds[4] = 0.9999;
-    lu_table_pair_upper_r_bounds[3] = 0.9999;
-    lu_table_pair_upper_r_bounds[2] = 0.9999;
-    lu_table_pair_upper_r_bounds[1] = 0.9999;
-    lu_table_pair_upper_r_bounds[0] = 0.9999;
+//     lu_table_pair_upper_r_bounds[5] = 0.9999;
+//     lu_table_pair_upper_r_bounds[4] = 0.9999;
+//     lu_table_pair_upper_r_bounds[3] = 0.9999;
+//     lu_table_pair_upper_r_bounds[2] = 0.9999;
+//     lu_table_pair_upper_r_bounds[1] = 0.9999;
+//     lu_table_pair_upper_r_bounds[0] = 0.9999;
 
-}
+// }
 
 
 #endif

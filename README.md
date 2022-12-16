@@ -1,6 +1,8 @@
 In order to use SFQEDtoolkit into your Montecarlo or PIC code just follow the steps listed hereunder. SFQEDtoolkit can be used by both cpp and fortran codes, thus the instructions below contain between brackets the programming language which they refer to. 
 
-1.  Copy the folders `coefficients`, `src_SFQEDtoolkit` (required for **cpp** and **fortran**) and `src_fortran_wrapper` (only for **fortran**), pasting them to the directory where your main code is.
+0. Before using SFQEDtoolkit you are required to export the environment variable `SFQED_TOOLKIT_USER` specifying the path to the directory where the `coefficients` folder, boundled with SFQEDtoolkit, can be found.  
+
+1. Copy the folders `coefficients`, `src_SFQEDtoolkit` (required for **cpp** and **fortran**) and `src_fortran_wrapper` (only for **fortran**), pasting them to the directory where your main code is.
 
 2. Change your code using the features of the toolkit. The library is thought to be used only through the functions that are made available in the `SFQEDtoolkit_Interface.hpp` header file (for **cpp**) or in the `SFQEDtoolkit_Interface.f90` source file (for **fortran**). However you are completely free to bypass this "self-imposed restriction" and use the library as you please. Examples of its usage are shown inside the `example_cpp` (**cpp**) or `example_fortran` (**fortran**) folder provided with the library (so please go have a look!).
 

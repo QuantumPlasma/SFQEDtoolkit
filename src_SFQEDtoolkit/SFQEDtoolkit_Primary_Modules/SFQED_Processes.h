@@ -40,39 +40,19 @@
 #ifndef SFQED_PROCS
 #define SFQED_PROCS
 
-#include "Chebyshev_User_1D.h"
-#include "Chebyshev_User_2D.h"
-#include "BLCFA_Object.h"
-
 #include <cmath>
 
-// #include "SFQED_Functions.h"
-
-//upper bounds of the \chi parameter in each interval
-const double bound_chi_1st = 2.0,
-        bound_chi_2nd = 20.0,
-        bound_chi_3rd = 80.0,
-        bound_chi_4th = 600.0,
-        bound_chi_5th = 2000.0;
-
-const double
-        bound_kappa_0th = 0.3,
-        bound_kappa_1st = 2.0,
-        bound_kappa_2nd = 20.0,
-        bound_kappa_3rd = 80.0,
-        bound_kappa_4th = 600.0,
-        bound_kappa_5th = 2000.0;
-
-const double pigreek = 3.141592653589793238462643383279503;
-
-// //the rates lookup tables are defined in the cpp file
-// extern Chebyshev_User_1D look_up_table_pair_prd_rt[6], look_up_table_phtn_mx_rt[5];
-
+//for the moment we keep the SFQED_Processes and the BLCFA_Object
+// classes intertwined by forcing the user to compile both (since 
+// the 2 classes have friend methods). In the future we would like 
+// to have a new class, derived from SFQED_Processes, implementing
+// the BLCFA mechanisms. This would require a change of the fortran
+// and c++ interfaces.
 
 struct SFQED_Processes{
 private:
         /*********************/
-        /* GENEAL VARIABLES */
+        /* GENERAL VARIABLES */
         /*********************/
         //reference length and angular frequency
         double Lambda, omega_r;
@@ -88,85 +68,33 @@ private:
                 coef_rate_Wrad,
                 coef_rate_Wpair;
 
-        double norm_Compton_time,
-                norm_Compton_time_2;
+        double norm_Compton_time;
 
-        double one_over_dt,
-                one_over_dt2;
-
-
-        /*********************************/
-        /* LCFA subsection lookup tables */
-        /*********************************/
-        //photon emission rate
-        Chebyshev_User_1D look_up_table_phtn_mx_rt[5];
-        //photon partial emission rate (used in the exponential tale asymptotic solution)
-        Chebyshev_User_2D look_up_table_phtn_prtl_rt[5];
-        //photon energy in w values
-        Chebyshev_User_2D look_up_table_phtn_momw[5];
-        //photon energy in 1/w values
-        Chebyshev_User_2D look_up_table_1_over_w[5];
-        //1D coefficient projection of the previous 2D coefficients
-        //(used in the exponential tale asymptotic solution)
-        Chebyshev_User_1D look_up_table_phtn_1_o_w_proj[5];
-
-        /**********************************/
-        /* BLCFA subsection lookup tables */
-        /**********************************/
-        //photon differential cross section (used in the BLCFA mechanism)
-        Chebyshev_User_2D look_up_table_phtn_diff_crss_sctn[5];
-
-        /**********************************/
-        /* PAIRS subsection lookup tables */
-        /**********************************/
-        //pair production rate
-        Chebyshev_User_1D look_up_table_pair_prd_rt[6];
-        //pair's electron energy in v values
-        //(coefficients of the inverse function W[k,v] - rW[k,0] = 0.)
-        Chebyshev_User_2D look_up_table_pair_v_nrgs[6];
-        //pair's electron energy in v values for the intermediate region of v
-        Chebyshev_User_2D look_up_table_pair_v_nrgs_high[6];
-        //1D projections of the above brent inverse 2D coeffs upon the corresponding r high limit value
-        //(used in the exponential tale asymptotic solution)
-        Chebyshev_User_1D look_up_table_pair_v_nrgs_proj[6];
-        //pair production partial rate 
-        //(used in the exponential tale asymptotic solution)
-        Chebyshev_User_2D look_up_table_pair_prtl_rt[6];
-
-
-        /***************************/
-        /* PHOTON EMISSION SECTION */
-        /***************************/    
-
-        //auxiliary inner function
-        //it computes the w-value energy of the emitted photon
-        double SFQED_LCFA_phtn_nrg_aux(const double&, const double&, const int&) const;
-        
-        /***************************/
-        /* PAIR PRODUCTION SECTION */
-        /***************************/
-
-        //pair production auxiliary function
-        double SFQED_PAIR_emitted_electron_energy_aux(const int &, const double &, const double &) const;
-
-public:
+public:          
 
         SFQED_Processes(){
-                //do nothing
+                //do nothing since you have to explicitly
+                // call for the setters of the simulation
+                // parameters
         }
 
-        /********************************************/
-        /* coefficients initializers and finalizers */
-        /********************************************/
-        //photon
-        void SFQED_init_PHTN_emission(std::string);
 
-        void SFQED_finalize_PHTN_emission();
+        /*******************************/
+        /* COEFFICIENTS GETTER SECTION */
+        /*******************************/
 
-        //pairs
-        void SFQED_init_PAIR_creation(std::string);
+        double get_phtn_rate_coefficient(){
+                return coef_rate_Wrad;
+        }
 
-        void SFQED_finalize_PAIR_creation();
+        double get_pair_rate_coefficient(){
+                return coef_rate_Wpair;
+        }
+
+        double get_normalized_compton_time(){
+                return norm_Compton_time;
+        }
+
 
         /**********************************/
         /* SIMULATION INITIALIZER SECTION */
@@ -265,125 +193,6 @@ public:
                 return ComptonDivLambda * sqrt(arg);
         }
 
-
-        /***************************/
-        /* PHOTON EMISSION SECTION */
-        /***************************/
-        
-        /*******************/
-        /* LCFA subsection */
-        /*******************/
-
-        //the function below returns the rate of photon emission for an electron
-        //having  a certain chi and gamma (gamma is the relativistic factor of 
-        //the electron, but it can also be interpreted as its energy normalized in 
-        //units of m_e c^2)
-        inline double __attribute__((always_inline)) SFQED_PHTN_emission_rate(const double &gamma, const double &chi) const {
-        
-                //coefficient for the rate of emission
-                //multiply by \tilde{W_rad} to get the rate of emission
-                double coefW_rad = coef_rate_Wrad * chi / gamma;
-
-
-                int lookup_index;
-
-                if(chi <= bound_chi_1st){
-                        lookup_index = 4;
-                }else if(chi <= bound_chi_2nd){
-                        lookup_index = 3;
-                }else if(chi <= bound_chi_3rd){
-                        lookup_index = 2;
-                }else if(chi <= bound_chi_4th){
-                        lookup_index = 1;
-                }else{
-                        lookup_index = 0;
-                }
-
-                
-                return coefW_rad * (look_up_table_phtn_mx_rt[lookup_index]).evaluate(chi);
-        }
-
-        double SFQED_LCFA_emitted_photon_energy(const double&, const double&, const double&) const;
-
-        //this function will be moved outside in the next versions
-        void SFQED_collinear_momentum(const double&, const double[3], double[3]);
-
-        /********************/
-        /* BLCFA subsection */
-        /********************/
-
-        //define friend functions
-        friend bool BLCFA_Object::SFQED_BLCFA_update_entities_quantities(const SFQED_Processes&, const double* const, const double* const, double*, double*, double&, double&);
-
-        friend double BLCFA_Object::SFQED_BLCFA_find_energy_threshold(const SFQED_Processes&, const double* const, const double* const, const double&, const double&) const;
-
-        double SFQED_BLCFA_emitted_photon_energy(const double&, const double&, const double&, const double&, const double&) const;
-
-
-        /***************************/
-        /* PAIR PRODUCTION SECTION */
-        /***************************/
-
-        inline double __attribute__((always_inline)) SFQED_PAIR_creation_rate(const double &gamma, const double &chi) const {
-    
-                //coefficient for the rate of emission
-                //multiply by \tilde{W_rad} to get the rate of emission
-                double coefW_pair = coef_rate_Wpair / gamma;
-
-
-                int lookup_index;
-
-                if(chi <= bound_kappa_0th){
-                        // lookup_index = 5;
-                        return coefW_pair * //asympt_pair_emission_rate_low_k(chi);
-                                        (27. * pigreek * chi)/(16. * sqrt(2.)) * exp(-(8/(3 * chi))) * (1. - 11./64.*chi + 7585./73728.*chi*chi);
-                }else if(chi <= bound_kappa_1st){
-                        lookup_index = 4;
-                }else if(chi <= bound_kappa_2nd){
-                        lookup_index = 3;
-                }else if(chi <= bound_kappa_3rd){
-                        lookup_index = 2;
-                }else if(chi <= bound_kappa_4th){
-                        lookup_index = 1;
-                }else{
-                        lookup_index = 0;
-                }                   
-                
-                return coefW_pair * (look_up_table_pair_prd_rt[lookup_index]).evaluate(chi);//
-        }
-
-        inline double __attribute__((always_inline)) SFQED_PAIR_creation_rate_fast(const double &gamma, const double &chi) const {
-    
-                //coefficient for the rate of emission
-                //multiply by \tilde{W_rad} to get the rate of emission
-                double coefW_pair = coef_rate_Wpair / gamma;
-                
-                
-                int lookup_index;
-
-                if(chi <= bound_kappa_0th){
-                        lookup_index = 5;
-                }else if(chi <= bound_kappa_1st){
-                        lookup_index = 4;
-                }else if(chi <= bound_kappa_2nd){
-                        lookup_index = 3;
-                }else if(chi <= bound_kappa_3rd){
-                        lookup_index = 2;
-                }else if(chi <= bound_kappa_4th){
-                        lookup_index = 1;
-                }else{
-                        lookup_index = 0;
-                }
-
-                
-                return coefW_pair * (look_up_table_pair_prd_rt[lookup_index]).evaluate(chi);//
-        }
-
-        double SFQED_PAIR_created_electron_energy(const double&, const double&, const double&) const;
-
-        double SFQED_PAIR_created_electron_energy_fast(const double&, const double&, const double&) const;
-
-       
 };
 
 #endif

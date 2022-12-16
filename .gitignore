@@ -2,9 +2,9 @@ build/*
 build_push/*
 build_accuracy/*
 build_spectrum/*
-pusher_tester
-accuracy_tester
-spectrum_tester
+pusher_tester*
+accuracy_tester*
+spectrum_tester*
 .*.swp
 *.lst
 *.d
@@ -38,3 +38,7 @@ example_fortran/src_SFQEDtoolkit/*
 example_fortran/src_fortran_wrapper
 example_fortran/src_fortran_wrapper/*
 fortran_tester
+makefile
+Work_In_Progress
+Test_Modules
+

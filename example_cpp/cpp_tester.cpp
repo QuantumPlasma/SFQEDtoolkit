@@ -76,6 +76,7 @@ int main(int argc, char** argv) {
         double pushed_momentum[2][3];
         double Lorentz_F_t_der[2][3];
         double Lorentz_F_tt_der[2][3];
+        double delta_blcfa[2];
         double LCFA_threshold;
         bool keep_going_blcfa;
 
@@ -87,7 +88,7 @@ int main(int argc, char** argv) {
         time_step = 0.1;
         rnd = 2.1432683788011112e-01;
         rnd2 = 4.6667110607838297e-01;
-        wave_length = 0.8e-6;
+        wave_length = 0.8e-6; //1e-6; //
         reference_length = wave_length / (2. * PI);
         w_r = c / reference_length;
         Enorm = electron_mass*w_r*c/electron_charge;
@@ -123,6 +124,10 @@ int main(int argc, char** argv) {
         // toolkit_init = SFQED_INIT_ALL_ref_freq(w_r, time_step);
         std::cout << "SFQEDtoolkit initialization = " << toolkit_init << "\n";
 
+        // std::cout << "photon emission time: " << (1. / (SFQED_INV_COMPTON_rate(1526.4757363249616, 1.0) * 1883651567308853.2)) << '\n'; //
+        // std::cout << "pair decay time: " << (1. / (SFQED_BREIT_WHEELER_rate(8242.968976154792, 20.0) * 1883651567308853.2)) << "\n"; //
+
+
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //! LCFA synchrophoton emission !
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -151,7 +156,7 @@ int main(int argc, char** argv) {
                 std::cout << "#particle=" << part_num << ", gamma=" << gamma << ", chi=" << chi << " (" << expected_chi << ")\n";
                 
                 //actual SFQED routines
-                emission_rate = SFQED_INV_COMPTON_rate(gamma, chi);
+                emission_rate = SFQED_INV_COMPTON_rate(gamma, chi) * w_r;
                 std::cout << "Emission rate = " << emission_rate << '\n';
 
                 if (emission_rate * time_step >= rnd_zero) {
@@ -183,6 +188,10 @@ int main(int argc, char** argv) {
         //!!!!!!!!!!!!!!!!!!! 
         
         std::cout << "\nPAIRS SECTION:" << "\n";
+
+        // SFQED_BREIT_WHEELER_rate(1000, 20);
+
+        // std::cout << "***********************\n";
 
         for(part_num = 0; part_num < 2; part_num++){
                 //compute chi and gamma
@@ -253,8 +262,7 @@ int main(int argc, char** argv) {
         pushed_momentum[0][1] =  0.0000000000000000e+00;
         pushed_momentum[0][2] = -1.9570512547779021e+04;
         //update blcfa obj
-        keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity[0], pushed_momentum[0], momentum[0], Lorentz_F_t_der[0], 
-                                                Lorentz_F_tt_der[0], gamma, chi);
+        keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity[0], pushed_momentum[0], momentum[0], delta_blcfa[0], gamma, chi);
 
         //old momentum
         momentum[1][0] = -1.7718145323355337e+01;
@@ -265,8 +273,7 @@ int main(int argc, char** argv) {
         pushed_momentum[1][1] =  0.0000000000000000e+00;
         pushed_momentum[1][2] = -1.9570509504165970e+04;
         //update blcfa obj
-        keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity[1], pushed_momentum[1], momentum[1], Lorentz_F_t_der[1], 
-                                                Lorentz_F_tt_der[1], gamma, chi);
+        keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity[1], pushed_momentum[1], momentum[1], delta_blcfa[1], gamma, chi);
 
         ///////// STEP 2 /////////
 
@@ -279,8 +286,7 @@ int main(int argc, char** argv) {
         pushed_momentum[0][1] = 0.0000000000000000e+00;
         pushed_momentum[0][2] = -1.9570511821892545e+04;
         //update blcfa obj
-        keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity[0], pushed_momentum[0], momentum[0], Lorentz_F_t_der[0], 
-                                                Lorentz_F_tt_der[0], gamma, chi);
+        keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity[0], pushed_momentum[0], momentum[0], delta_blcfa[0], gamma, chi);
 
         //old momentum
         momentum[1][0] = -1.6542717780968854e+01;
@@ -291,8 +297,7 @@ int main(int argc, char** argv) {
         pushed_momentum[1][1] =  0.0000000000000000e+00;
         pushed_momentum[1][2] = -1.9570510254460005e+04;
         //update blcfa obj
-        keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity[1], pushed_momentum[1], momentum[1], Lorentz_F_t_der[1], 
-                                                Lorentz_F_tt_der[1], gamma, chi);
+        keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity[1], pushed_momentum[1], momentum[1], delta_blcfa[1], gamma, chi);
 
         ///////// STEP 3 /////////
         //in this last step we do not update the blcfa objects,
@@ -330,48 +335,43 @@ int main(int argc, char** argv) {
                 // the fields and forces on the particle. The determination of these quantities,
                 // which should be performed in this same loop has been here omitted, and replaced
                 // with the 3 preliminary operations above
-                keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity[part_num], pushed_momentum[part_num], momentum[part_num], Lorentz_F_t_der[part_num], 
-                                                Lorentz_F_tt_der[part_num], gamma, chi);
+                keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity[part_num], pushed_momentum[part_num], momentum[part_num],
+                                                                delta_blcfa[part_num], gamma, chi);
 
                 std::cout << "#particle = " << part_num << '\n';
                 std::cout << "chi = " << chi << '\n';
                 std::cout << "gamma = " << gamma << '\n';
-                std::cout << "first derivative = " << Lorentz_F_t_der[part_num][0] << ' ' << Lorentz_F_t_der[part_num][1] << ' ' << Lorentz_F_t_der[part_num][2] << '\n';
-                std::cout << "second derivative = " << Lorentz_F_tt_der[part_num][0] << ' ' << Lorentz_F_tt_der[part_num][1] << ' ' << Lorentz_F_tt_der[part_num][2] << '\n';
+                // std::cout << "first derivative = " << Lorentz_F_t_der[part_num][0] << ' ' << Lorentz_F_t_der[part_num][1] << ' ' << Lorentz_F_t_der[part_num][2] << '\n';
+                // std::cout << "second derivative = " << Lorentz_F_tt_der[part_num][0] << ' ' << Lorentz_F_tt_der[part_num][1] << ' ' << Lorentz_F_tt_der[part_num][2] << '\n';
 
-                if (keep_going_blcfa) {
+                emission_rate = SFQED_INV_COMPTON_rate(gamma, chi);
+                std::cout << "Emission rate = " << emission_rate << '\n';
 
-                        emission_rate = SFQED_INV_COMPTON_rate(gamma, chi);
-                        std::cout << "Emission rate = " << emission_rate << '\n';
+                if (keep_going_blcfa && emission_rate * time_step >= rnd_zero) {
+                        
+                        LCFA_threshold = SFQED_BLCFA_INV_COMPTON_PHOTON_threshold(blcfa_entity[part_num], delta_blcfa[part_num], gamma, chi);
+                        std::cout << "LCFA threshold = " << LCFA_threshold << '\n';
 
-                        if (emission_rate * time_step >= rnd_zero) {
+                        phtn_energy = SFQED_BLCFA_INV_COMPTON_PHOTON_energy(LCFA_threshold, gamma, chi, rnd, rnd2);
+                        std::cout << "Emitted photon energy = " << phtn_energy << '\n';
 
-                                LCFA_threshold = SFQED_BLCFA_INV_COMPTON_PHOTON_threshold(blcfa_entity[part_num], Lorentz_F_t_der[part_num], Lorentz_F_tt_der[part_num],
-                                                                                                gamma, chi);
-                                std::cout << "LCFA threshold = " << LCFA_threshold << '\n';
+                        //now you should check if phtn_energy > 0. In that case the emission occurs, otherwise
+                        // nothing happens
 
-                                phtn_energy = SFQED_BLCFA_INV_COMPTON_PHOTON_energy(LCFA_threshold, gamma, chi, rnd, rnd2);
-                                std::cout << "Emitted photon energy = " << phtn_energy << '\n';
+                        //compute new particle's momentum
+                        SFQED_build_collinear_momentum(phtn_energy, pushed_momentum[part_num], product_momenta[part_num]);
 
-                                //now you should check if phtn_energy > 0. In that case the emission occurs, otherwise
-                                // nothing happens
-
-                                //compute new particle's momentum
-                                SFQED_build_collinear_momentum(phtn_energy, pushed_momentum[part_num], product_momenta[part_num]);
-
-                                //output momenta for checking
-                                tmp_parent = sqrt(scalar_prod(pushed_momentum[part_num],pushed_momentum[part_num]));
-                                tmp_child = sqrt(scalar_prod(product_momenta[part_num],product_momenta[part_num]));
-                                std::cout << "Parent momentum = " 
-                                                << pushed_momentum[part_num][0] << ' ' << pushed_momentum[part_num][1] << ' ' << pushed_momentum[part_num][2] << '\n'
-                                        << "Parent direction = "
-                                                << pushed_momentum[part_num][0] / tmp_parent << ' ' << pushed_momentum[part_num][1] / tmp_parent << ' ' << pushed_momentum[part_num][2] / tmp_parent << '\n'
-                                        << "Child momentum = "
-                                                << product_momenta[part_num][0] << ' ' << product_momenta[part_num][1] << ' ' << product_momenta[part_num][2] << '\n'
-                                        << "Child direction = "
-                                                << product_momenta[part_num][0] / tmp_child << ' ' << product_momenta[part_num][1] / tmp_child << ' ' << product_momenta[part_num][2] / tmp_child << '\n';
-
-                        }
+                        //output momenta for checking
+                        tmp_parent = sqrt(scalar_prod(pushed_momentum[part_num],pushed_momentum[part_num]));
+                        tmp_child = sqrt(scalar_prod(product_momenta[part_num],product_momenta[part_num]));
+                        std::cout << "Parent momentum = " 
+                                        << pushed_momentum[part_num][0] << ' ' << pushed_momentum[part_num][1] << ' ' << pushed_momentum[part_num][2] << '\n'
+                                << "Parent direction = "
+                                        << pushed_momentum[part_num][0] / tmp_parent << ' ' << pushed_momentum[part_num][1] / tmp_parent << ' ' << pushed_momentum[part_num][2] / tmp_parent << '\n'
+                                << "Child momentum = "
+                                        << product_momenta[part_num][0] << ' ' << product_momenta[part_num][1] << ' ' << product_momenta[part_num][2] << '\n'
+                                << "Child direction = "
+                                        << product_momenta[part_num][0] / tmp_child << ' ' << product_momenta[part_num][1] / tmp_child << ' ' << product_momenta[part_num][2] / tmp_child << '\n';
                 }
 
                 std::cout << '\n';

@@ -70,6 +70,7 @@ PROGRAM test
    REAL(numreal64), DIMENSION(1:2,1:3) :: pushed_momentum
    REAL(numreal64), DIMENSION(1:2,1:3) :: Lorentz_F_t_der
    REAL(numreal64), DIMENSION(1:2,1:3) :: Lorentz_F_tt_der
+   REAL(numreal64), DIMENSION(1:2) :: delta_blcfa
    REAL(numreal64) :: LCFA_threshold
    LOGICAL :: keep_going_blcfa
 
@@ -243,8 +244,8 @@ PROGRAM test
    pushed_momentum(1,2) =  0.0000000000000000e+00_numreal64
    pushed_momentum(1,3) = -1.9570512547779021e+04_numreal64
    !update blcfa obj
-   keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(1), pushed_momentum(1,1:3), momentum(1,1:3), Lorentz_F_t_der(1,1:3), &
-                              Lorentz_F_tt_der(1,1:3), gamma, chi)
+   keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(1), pushed_momentum(1,1:3), momentum(1,1:3), &
+                              delta_blcfa(1), gamma, chi)
 
    !old momentum
    momentum(2,1) = -1.7718145323355337e+01_numreal64
@@ -255,8 +256,8 @@ PROGRAM test
    pushed_momentum(2,2) =  0.0000000000000000e+00_numreal64
    pushed_momentum(2,3) = -1.9570509504165970e+04_numreal64
    !update blcfa obj
-   keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(2), pushed_momentum(2,1:3), momentum(2,1:3), Lorentz_F_t_der(2,1:3), &
-                                                   Lorentz_F_tt_der(2,1:3), gamma, chi);
+   keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(2), pushed_momentum(2,1:3), momentum(2,1:3), &
+                                                   delta_blcfa(2), gamma, chi);
 
    !///////// STEP 2 /////////
    
@@ -269,8 +270,8 @@ PROGRAM test
    pushed_momentum(1,2) = 0.0000000000000000e+00_numreal64
    pushed_momentum(1,3) = -1.9570511821892545e+04_numreal64
    !update blcfa obj
-   keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(1), pushed_momentum(1,1:3), momentum(1,1:3), Lorentz_F_t_der(1,1:3), &
-                              Lorentz_F_tt_der(1,1:3), gamma, chi)
+   keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(1), pushed_momentum(1,1:3), momentum(1,1:3), &
+                              delta_blcfa(1), gamma, chi)
 
    !old momentum
    momentum(2,1) = -1.6542717780968854e+01_numreal64
@@ -281,8 +282,8 @@ PROGRAM test
    pushed_momentum(2,2) =  0.0000000000000000e+00_numreal64
    pushed_momentum(2,3) = -1.9570510254460005e+04_numreal64
    !update blcfa obj
-   keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(2), pushed_momentum(2,1:3), momentum(2,1:3), Lorentz_F_t_der(2,1:3), &
-                                                   Lorentz_F_tt_der(2,1:3), gamma, chi);
+   keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(2), pushed_momentum(2,1:3), momentum(2,1:3), &
+                                                   delta_blcfa(2), gamma, chi);
 
    !///////// STEP 3 /////////
    
@@ -319,46 +320,42 @@ PROGRAM test
       ! which should be performed in this same loop has been here omitted, and replaced
       ! with the 3 preliminary operations above
       keep_going_blcfa = SFQED_BLCFA_OBJECT_update(blcfa_entity(part_num), pushed_momentum(part_num,1:3), momentum(part_num,1:3), &
-                                             Lorentz_F_t_der(part_num,1:3), Lorentz_F_tt_der(part_num,1:3), gamma, chi)
+                                             delta_blcfa(part_num), gamma, chi)
 
 
       print *, '#particle = ', part_num
       print *, 'chi = ', chi
       print *, 'gamma = ', gamma
-      print *, 'first derivative = ', Lorentz_F_t_der(part_num,1), Lorentz_F_t_der(part_num,2), Lorentz_F_t_der(part_num,3)
-      print *, 'second derivative = ', Lorentz_F_tt_der(part_num,1), Lorentz_F_tt_der(part_num,2), Lorentz_F_tt_der(part_num,3)
+      ! print *, 'first derivative = ', Lorentz_F_t_der(part_num,1), Lorentz_F_t_der(part_num,2), Lorentz_F_t_der(part_num,3)
+      ! print *, 'second derivative = ', Lorentz_F_tt_der(part_num,1), Lorentz_F_tt_der(part_num,2), Lorentz_F_tt_der(part_num,3)
 
-      IF (keep_going_blcfa) THEN
+      emission_rate = SFQED_INV_COMPTON_rate(gamma, chi)
+      PRINT *, 'Emission rate = ', emission_rate
 
-         emission_rate = SFQED_INV_COMPTON_rate(gamma, chi)
-         PRINT *, 'Emission rate = ', emission_rate
+      IF (keep_going_blcfa .AND. emission_rate * time_step >= rnd_zero) THEN
 
-         IF (emission_rate * time_step >= rnd_zero) THEN
+         LCFA_threshold = SFQED_BLCFA_INV_COMPTON_PHOTON_threshold(blcfa_entity(part_num), delta_blcfa(part_num), &
+                                       gamma, chi)
+         print *, 'LCFA threshold = ', LCFA_threshold
 
-            LCFA_threshold = SFQED_BLCFA_INV_COMPTON_PHOTON_threshold(blcfa_entity(part_num), Lorentz_F_t_der(part_num,1:3), &
-                                          Lorentz_F_tt_der(part_num,1:3), gamma, chi)
-            print *, 'LCFA threshold = ', LCFA_threshold
+         phtn_energy = SFQED_BLCFA_INV_COMPTON_PHOTON_energy(LCFA_threshold, gamma, chi, rnd, rnd2)
+         PRINT *, 'Emitted photon energy = ', phtn_energy
 
-            phtn_energy = SFQED_BLCFA_INV_COMPTON_PHOTON_energy(LCFA_threshold, gamma, chi, rnd, rnd2)
-            PRINT *, 'Emitted photon energy = ', phtn_energy
+         !now you should check if phtn_energy > 0. In that case the emission occurs, otherwise
+         ! nothing happens
 
-            !now you should check if phtn_energy > 0. In that case the emission occurs, otherwise
-            ! nothing happens
+         !compute new particle's momentum
+         call SFQED_build_collinear_momentum(phtn_energy, pushed_momentum(part_num,1:3), product_momenta(part_num,1:3));
 
-            !compute new particle's momentum
-            call SFQED_build_collinear_momentum(phtn_energy, pushed_momentum(part_num,1:3), product_momenta(part_num,1:3));
-
-            !output momenta for checking
-            tmp_parent = sqrt(scalar_prod(pushed_momentum(part_num,1:3),pushed_momentum(part_num,1:3)));
-            tmp_child = sqrt(scalar_prod(product_momenta(part_num,1:3),product_momenta(part_num,1:3)));
-            print *, 'Parent momentum = ', pushed_momentum(part_num,1), pushed_momentum(part_num,2), pushed_momentum(part_num,3)
-            print *, 'Parent direction = ', pushed_momentum(part_num,1) / tmp_parent, pushed_momentum(part_num,2) / tmp_parent, &
-                                             pushed_momentum(part_num,3) / tmp_parent
-            print *, 'Child momentum = ', product_momenta(part_num,1), product_momenta(part_num,2), product_momenta(part_num,3)
-            print *, 'Child direction = ', product_momenta(part_num,1) / tmp_child, product_momenta(part_num,2) / tmp_child, &
-                                             product_momenta(part_num,3) / tmp_child
-
-         END IF
+         !output momenta for checking
+         tmp_parent = sqrt(scalar_prod(pushed_momentum(part_num,1:3),pushed_momentum(part_num,1:3)));
+         tmp_child = sqrt(scalar_prod(product_momenta(part_num,1:3),product_momenta(part_num,1:3)));
+         print *, 'Parent momentum = ', pushed_momentum(part_num,1), pushed_momentum(part_num,2), pushed_momentum(part_num,3)
+         print *, 'Parent direction = ', pushed_momentum(part_num,1) / tmp_parent, pushed_momentum(part_num,2) / tmp_parent, &
+                                          pushed_momentum(part_num,3) / tmp_parent
+         print *, 'Child momentum = ', product_momenta(part_num,1), product_momenta(part_num,2), product_momenta(part_num,3)
+         print *, 'Child direction = ', product_momenta(part_num,1) / tmp_child, product_momenta(part_num,2) / tmp_child, &
+                                          product_momenta(part_num,3) / tmp_child
 
       END IF
 
