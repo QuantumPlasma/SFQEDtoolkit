@@ -74,6 +74,8 @@ PROGRAM test
    REAL(numreal64) :: LCFA_threshold
    LOGICAL :: keep_going_blcfa
 
+   ! CHARACTER(:), ALLOCATABLE :: log_message
+
    print *, 'Starting Fortran TEST of SFQEDtoolkit!'
 
    !///////////////////
@@ -116,6 +118,7 @@ PROGRAM test
    toolkit_init = SFQED_INIT_ALL_ref_len(reference_length, time_step)
    ! toolkit_init = SFQED_INIT_ALL_ref_freq(w_r, time_step)
    PRINT *, 'SFQEDtoolkit initialization = ', toolkit_init
+   ! PRINT *, log_message
 
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    ! LCFA synchrophoton emission !

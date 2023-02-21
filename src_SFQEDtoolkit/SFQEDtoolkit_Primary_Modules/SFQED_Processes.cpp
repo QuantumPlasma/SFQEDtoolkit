@@ -137,3 +137,18 @@ void SFQED_Processes::SFQED_set_all_to_one(){
     coef_rate_Wpair = 1;
 
 }
+
+
+/***************************/
+/* GENERIC ROUTINE SECTION */
+/***************************/
+void SFQED_collinear_momentum(const double &gamma_out, const double p_in[3], double p_out[3]){
+    
+    double v = sqrt( (gamma_out*gamma_out - 1.) / (p_in[0]*p_in[0] + p_in[1]*p_in[1] + p_in[2]*p_in[2]) );
+
+    p_out[0] = v*p_in[0];
+    p_out[1] = v*p_in[1];
+    p_out[2] = v*p_in[2];
+
+    return;
+}

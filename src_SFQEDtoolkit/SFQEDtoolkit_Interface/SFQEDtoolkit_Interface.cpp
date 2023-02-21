@@ -1,8 +1,48 @@
+/***********************************************************************
+    Copyright (c) 2000-2021,
+    QuantumPlasma team, Max Planck Institut fur Kernphysik
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    * Redistributions of source code must retain the above copyright
+        notice, this list of conditions and the following disclaimer.  
+
+    * Redistributions in binary form must reproduce the above
+        copyright notice, this list of conditions and the following
+        disclaimer in the documentation and/or other materials provided
+        with the distribution.  
+
+    * Neither the name of the copyright holder nor the names of its
+        contributors may be used to endorse or promote products derived
+        from this software without specific prior written permission.
+
+    * The software using and/or implementing this library must include
+        a citation to [] in the official documentation.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+    FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+    COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+    INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+    SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+    HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+    STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+    OF THE POSSIBILITY OF SUCH DAMAGE.
+*************************************************************************/
+
 #include "SFQEDtoolkit_Interface.hpp"
 #include "SFQED_Processes.h"
 #include "BLCFA_Object.h"
 #include "Breit_Wheeler_Pair_Production.h"
 #include "Nonlinear_Inverse_Compton_Scattering.h"
+
+#include "SFQEDtoolkit_BaseInterface_Functions.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -37,31 +77,125 @@ void SFQED_INIT_PROCS(){
 /* SIMULATION INITIALIZER SECTION */
 /**********************************/
 
+//files to check to load the phtn emission coefficients
+const int phtn_file_names_size = 20;
+const char *phtn_file_names[20] = {
+        //photon emission rate
+        "phtn_rate/phtn_emission_rate_0-2.txt",
+        "phtn_rate/phtn_emission_rate_2-20.txt",
+        "phtn_rate/phtn_emission_rate_20-80.txt",
+        "phtn_rate/phtn_emission_rate_80-600.txt",
+        "phtn_rate/phtn_emission_rate_600-2000.txt",
+        //photon partial emission rate
+        "phtn_prtl_rate/phtn_partial_rate_0-2.txt",
+        "phtn_prtl_rate/phtn_partial_rate_2-20.txt",
+        "phtn_prtl_rate/phtn_partial_rate_20-80.txt",
+        "phtn_prtl_rate/phtn_partial_rate_80-600.txt",
+        "phtn_prtl_rate/phtn_partial_rate_600-2000.txt",
+        //photon energy in w
+        "w/phtn_w_nrg_0-2.txt",
+        "w/phtn_w_nrg_2-20.txt",
+        "w/phtn_w_nrg_20-80.txt",
+        "w/phtn_w_nrg_80-600.txt",
+        "w/phtn_w_nrg_600-2000.txt",
+        //photon energy in 1/w
+        "1_over_w/phtn_1_over_w_nrg_0-2.txt",
+        "1_over_w/phtn_1_over_w_nrg_2-20.txt",
+        "1_over_w/phtn_1_over_w_nrg_20-80.txt",
+        "1_over_w/phtn_1_over_w_nrg_80-600.txt",
+        "1_over_w/phtn_1_over_w_nrg_600-2000.txt"
+};
+
+//files to check to load the pair production coefficients
+const int pair_file_names_size = 23;
+const char *pair_file_names[23] = {
+        //pair creation rate
+        "pair_rate/pair_production_rate_024-04.txt",
+        "pair_rate/pair_production_rate_0-2.txt",
+        "pair_rate/pair_production_rate_2-20.txt",
+        "pair_rate/pair_production_rate_20-80.txt",
+        "pair_rate/pair_production_rate_80-600.txt",
+        "pair_rate/pair_production_rate_600-2000.txt",
+        //pair creation partial rate
+        "pair_prtl_rate/pair_partial_rate_0-2.txt",
+        "pair_prtl_rate/pair_partial_rate_2-20.txt",
+        "pair_prtl_rate/pair_partial_rate_20-80.txt",
+        "pair_prtl_rate/pair_partial_rate_80-600.txt",
+        "pair_prtl_rate/pair_partial_rate_600-2000.txt",
+        //photon energy in v
+        "v/pair_nrgs_v_001-03.txt",
+        "v/pair_nrgs_v_0-2.txt",
+        "v/pair_nrgs_v_2-20.txt",
+        "v/pair_nrgs_v_20-80.txt",
+        "v/pair_nrgs_v_80-600.txt",
+        "v/pair_nrgs_v_600-2000.txt",
+        //photon energy in v high part
+        "v/pair_nrgs_v_high_001-03.txt",
+        "v/pair_nrgs_v_high_0-2.txt",
+        "v/pair_nrgs_v_high_2-20.txt",
+        "v/pair_nrgs_v_high_20-80.txt",
+        "v/pair_nrgs_v_high_80-600.txt",
+        "v/pair_nrgs_v_high_600-2000.txt"
+};
+
+const int blcfa_file_names_size = 5;
+const char *blcfa_file_names[5] = {
+        "dP_over_dt_dw/phtn_diff_crss_sctn_0-2.txt",
+        "dP_over_dt_dw/phtn_diff_crss_sctn_2-20.txt",
+        "dP_over_dt_dw/phtn_diff_crss_sctn_20-80.txt",
+        "dP_over_dt_dw/phtn_diff_crss_sctn_80-600.txt",
+        "dP_over_dt_dw/phtn_diff_crss_sctn_600-2000.txt"
+};
+
+
+
 /****  COMPLETE SETTERS AND FINALIZERS  ****/
 
-//remember to check the presence of the files you want to read!!!
-
+// the log_message argument will be reinitialized inside the function
 bool SFQED_INIT_ALL_ref_len(const double& ref_len, const double& ts){
         //initialization of the pointers
         procs = new SFQED_Processes();
         bw_pp = new Breit_Wheeler_Pair_Production();
         nics = new Nonlinear_Inverse_Compton_Scattering();
 
-        //old//old way with environment variable
-        //retrieve the path to coefficients
-        const char *variable_name = "SFQED_TOOLKIT_USER"; // use string literals to initialize a const pointer to char
-        const char * val = std::getenv(variable_name);
-        if ( val == nullptr ) { // invalid to assign nullptr to std::string
-                std::cout << "Environment variable " << variable_name
-                        << "not found! Not able to load the coefficients.\n";
-                // return false;
-        }
-        std::string str_path = std::string(val) + std::string("/coefficients/");
-        std::cout << "Loading SFQED coefficients from " << str_path << "\n";
+        /////////////////////////////////////////////////////////////
+        // //old//old way with environment variable
+        // //retrieve the path to coefficients
+        // const char *variable_name = "SFQED_TOOLKIT_USER"; // use string literals to initialize a const pointer to char
+        // const char * val = std::getenv(variable_name);
+        // if ( val == nullptr ) { // invalid to assign nullptr to std::string
+        //         std::cout << "Environment variable " << variable_name
+        //                 << "not found! Not able to load the coefficients.\n";
+        //         // return false;
+        // }
+        // std::string str_path = std::string(val) + std::string("/coefficients/");
+        // std::cout << "Loading SFQED coefficients from " << str_path << "\n";
 
-        // //new way (the coefficients folder must be copied to where the executable is launched)
-        // std::cout << "Loading SFQED coefficients from root directory\n";
-        // std::string str_path("./coefficients/");
+        // // //new way (the coefficients folder must be copied to where the executable is launched)
+        // // std::cout << "Loading SFQED coefficients from root directory\n";
+        // // std::string str_path("./coefficients/");
+        /////////////////////////////////////////////////////////////
+
+        //retireve path to coefficients
+        char *log_message;
+        std::string message_to_add;
+        std::string str_path = find_path(message_to_add);
+
+        //check the existence of the coefficients' files
+        if( !(file_checker(str_path, phtn_file_names, phtn_file_names_size, message_to_add)
+                && file_checker(str_path, pair_file_names, pair_file_names_size, message_to_add)
+                && file_checker(str_path, blcfa_file_names, blcfa_file_names_size, message_to_add)) ){
+                
+                log_message = new char[message_to_add.length() + 1];
+                strcpy(log_message, message_to_add.c_str());
+                std::cout << log_message;
+                return false;
+        }
+
+        //copy the message to the newly created
+        //[keep this part for when the log message will be passed outside]
+        // log_message = new char[message_to_add.length() + 1];
+        // strcpy(log_message, message_to_add.c_str());
         
         //load coefficients
         bw_pp->SFQED_init_PAIR_creation(str_path);
@@ -87,21 +221,44 @@ bool SFQED_INIT_ALL_ref_freq(const double& ref_freq, const double& ts){
         bw_pp = new Breit_Wheeler_Pair_Production();
         nics = new Nonlinear_Inverse_Compton_Scattering();
         
-        //old way with environment variable
-        //retrieve the path to coefficients
-        const char *variable_name = "SFQED_TOOLKIT_USER"; // use string literals to initialize a const pointer to char
-        const char * val = std::getenv(variable_name);
-        if ( val == nullptr ) { // invalid to assign nullptr to std::string
-                std::cout << "Environment variable " << variable_name
-                        << "not found! Not able to load the coefficients.\n";
-                // return false;
-        }
-        std::string str_path = std::string(val) + std::string("/coefficients/");
-        std::cout << "Loading SFQED coefficients from " << str_path << "\n";
+        //////////////////////////////////////////////////////////////////
+        // //old way with environment variable
+        // //retrieve the path to coefficients
+        // const char *variable_name = "SFQED_TOOLKIT_USER"; // use string literals to initialize a const pointer to char
+        // const char * val = std::getenv(variable_name);
+        // if ( val == nullptr ) { // invalid to assign nullptr to std::string
+        //         std::cout << "Environment variable " << variable_name
+        //                 << "not found! Not able to load the coefficients.\n";
+        //         // return false;
+        // }
+        // std::string str_path = std::string(val) + std::string("/coefficients/");
+        // std::cout << "Loading SFQED coefficients from " << str_path << "\n";
 
-        // //new way (copy coefficients folder to where the executable is launched)
-        // std::cout << "Loading SFQED coefficients from root directory\n";
-        // std::string str_path("./coefficients/");
+        // // //new way (copy coefficients folder to where the executable is launched)
+        // // std::cout << "Loading SFQED coefficients from root directory\n";
+        // // std::string str_path("./coefficients/");
+        ///////////////////////////////////////////////////////////////
+        
+        //retireve path to coefficients
+        char *log_message;
+        std::string message_to_add;
+        std::string str_path = find_path(message_to_add);
+
+        //check the existence of the coefficients' files
+        if( !(file_checker(str_path, phtn_file_names, phtn_file_names_size, message_to_add)
+                && file_checker(str_path, pair_file_names, pair_file_names_size, message_to_add)
+                && file_checker(str_path, blcfa_file_names, blcfa_file_names_size, message_to_add)) ){
+                
+                log_message = new char[message_to_add.length() + 1];
+                strcpy(log_message, message_to_add.c_str());
+                std::cout << log_message;
+                return false;
+        }
+
+        //copy the message to the newly created
+        //[keep this part for when the log message will be passed outside]
+        // log_message = new char[message_to_add.length() + 1];
+        // strcpy(log_message, message_to_add.c_str());
         
         //load coefficients
         bw_pp->SFQED_init_PAIR_creation(str_path);
@@ -126,22 +283,45 @@ void SFQED_INIT_ALL_debug(){
         procs = new SFQED_Processes();
         bw_pp = new Breit_Wheeler_Pair_Production();
         nics = new Nonlinear_Inverse_Compton_Scattering();
-        
-        //old way with environment variable
-        //retrieve the path to coefficients
-        const char *variable_name = "SFQED_TOOLKIT_USER"; // use string literals to initialize a const pointer to char
-        const char * val = std::getenv(variable_name);
-        if ( val == nullptr ) { // invalid to assign nullptr to std::string
-                std::cout << "Environment variable " << variable_name
-                        << "not found! Not able to load the coefficients.\n";
-                // return false;
-        }
-        std::string str_path = std::string(val) + std::string("/coefficients/");
-        std::cout << "Loading SFQED coefficients from " << str_path << "\n";
 
-        // //new way (copy coefficients folder to where the executable is launched)
-        // std::cout << "Loading SFQED coefficients from root directory\n";
-        // std::string str_path("./coefficients/");
+        //////////////////////////////////////////////////////////////////// 
+        // //old way with environment variable
+        // //retrieve the path to coefficients
+        // const char *variable_name = "SFQED_TOOLKIT_USER"; // use string literals to initialize a const pointer to char
+        // const char * val = std::getenv(variable_name);
+        // if ( val == nullptr ) { // invalid to assign nullptr to std::string
+        //         std::cout << "Environment variable " << variable_name
+        //                 << "not found! Not able to load the coefficients.\n";
+        //         // return false;
+        // }
+        // std::string str_path = std::string(val) + std::string("/coefficients/");
+        // std::cout << "Loading SFQED coefficients from " << str_path << "\n";
+
+        // // //new way (copy coefficients folder to where the executable is launched)
+        // // std::cout << "Loading SFQED coefficients from root directory\n";
+        // // std::string str_path("./coefficients/");
+        ////////////////////////////////////////////////////////////////////
+
+        //retireve path to coefficients
+        char *log_message;
+        std::string message_to_add;
+        std::string str_path = find_path(message_to_add);
+
+        //check the existence of the coefficients' files
+        if( !(file_checker(str_path, phtn_file_names, phtn_file_names_size, message_to_add)
+                && file_checker(str_path, pair_file_names, pair_file_names_size, message_to_add)
+                && file_checker(str_path, blcfa_file_names, blcfa_file_names_size, message_to_add)) ){
+                
+                log_message = new char[message_to_add.length() + 1];
+                strcpy(log_message, message_to_add.c_str());
+                std::cout << log_message;
+                return;
+        }
+
+        //copy the message to the newly created
+        //[keep this part for when the log message will be passed outside]
+        // log_message = new char[message_to_add.length() + 1];
+        // strcpy(log_message, message_to_add.c_str());
         
         //load coefficients
         bw_pp->SFQED_init_PAIR_creation(str_path);
@@ -203,38 +383,38 @@ void SFQED_set_sim_tstep(const double& ts){
 /*****************************************************/
 /* OBSOLETE coefficients initializers and finalizers */
 /*****************************************************/
-/* PHOTON */
-void SFQED_init_INV_COMPTON(const char* const path){
-        std::string str_path(path);
-        nics->SFQED_init_PHTN_emission(str_path);
-}
+// /* PHOTON */
+// void SFQED_init_INV_COMPTON(const char* const path){
+//         std::string str_path(path);
+//         nics->SFQED_init_PHTN_emission(str_path);
+// }
 
-//obsolete functions: the nics pointer is not deleted!!!
-void SFQED_finalize_INV_COMPTON(){
-        nics->SFQED_finalize_PHTN_emission();
-}
+// //obsolete functions: the nics pointer is not deleted!!!
+// void SFQED_finalize_INV_COMPTON(){
+//         nics->SFQED_finalize_PHTN_emission();
+// }
 
-/* PHOTON BLCFA */
-void SFQED_init_INV_COMPTON_BLCFA(const char* const path){
-        std::string str_path(path);
-        nics->SFQED_init_PHTN_emission_BLCFA(str_path);
-}
+// /* PHOTON BLCFA */
+// void SFQED_init_INV_COMPTON_BLCFA(const char* const path){
+//         std::string str_path(path);
+//         nics->SFQED_init_PHTN_emission_BLCFA(str_path);
+// }
 
-//obsolete functions: the nics pointer is not deleted!!!
-void SFQED_finalize_INV_COMPTON_BLCFA(){
-        nics->SFQED_finalize_PHTN_emission_BLCFA();
-}
+// //obsolete functions: the nics pointer is not deleted!!!
+// void SFQED_finalize_INV_COMPTON_BLCFA(){
+//         nics->SFQED_finalize_PHTN_emission_BLCFA();
+// }
 
-/* PAIRS */
-void SFQED_init_BREIT_WHEELER(const char* const path){
-        std::string str_path(path);
-        bw_pp->SFQED_init_PAIR_creation(str_path);
-}
+// /* PAIRS */
+// void SFQED_init_BREIT_WHEELER(const char* const path){
+//         std::string str_path(path);
+//         bw_pp->SFQED_init_PAIR_creation(str_path);
+// }
 
-//obsolete functions: the bw_pp pointer is not deleted!!!
-void SFQED_finalize_BREIT_WHEELER(){
-        bw_pp->SFQED_finalize_PAIR_creation();
-}
+// //obsolete functions: the bw_pp pointer is not deleted!!!
+// void SFQED_finalize_BREIT_WHEELER(){
+//         bw_pp->SFQED_finalize_PAIR_creation();
+// }
 
 /*********************************/
 /* QUANTUM PARAMETER CALCULATION */
@@ -320,9 +500,6 @@ double SFQED_BLCFA_INV_COMPTON_PHOTON_energy(const double& LCFA_limit,
 
         return nics->SFQED_BLCFA_emitted_photon_energy(LCFA_limit, gamma, chi, rnd, rnd2);
 }
-
-
-
 
 //debug (this functions could be deleted)*********************
 void SFQED_BLCFA_printALL(BLCFA_Object* entity){

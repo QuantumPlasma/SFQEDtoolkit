@@ -120,9 +120,11 @@ int main(int argc, char** argv) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         
         // init SFQEDtoolkit by providing the reference length and the timestep of the simulation
+        // char *log_message;
         toolkit_init = SFQED_INIT_ALL_ref_len(reference_length, time_step);
         // toolkit_init = SFQED_INIT_ALL_ref_freq(w_r, time_step);
         std::cout << "SFQEDtoolkit initialization = " << toolkit_init << "\n";
+        // std::cout << log_message;
 
         // std::cout << "photon emission time: " << (1. / (SFQED_INV_COMPTON_rate(1526.4757363249616, 1.0) * 1883651567308853.2)) << '\n'; //
         // std::cout << "pair decay time: " << (1. / (SFQED_BREIT_WHEELER_rate(8242.968976154792, 20.0) * 1883651567308853.2)) << "\n"; //

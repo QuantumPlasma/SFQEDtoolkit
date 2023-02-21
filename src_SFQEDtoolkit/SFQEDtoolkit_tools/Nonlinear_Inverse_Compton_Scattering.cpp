@@ -616,18 +616,3 @@ void Nonlinear_Inverse_Compton_Scattering::SFQED_finalize_PHTN_emission_BLCFA(){
     delete[] look_up_table_phtn_diff_crss_sctn[1].last_coeffs;
     delete[] look_up_table_phtn_diff_crss_sctn[0].last_coeffs;
 }
-
-
-/***************************/
-/* GENERIC ROUTINE SECTION */
-/***************************/
-void SFQED_collinear_momentum(const double &gamma_out, const double p_in[3], double p_out[3]){
-    
-    double v = sqrt( (gamma_out*gamma_out - 1.) / (p_in[0]*p_in[0] + p_in[1]*p_in[1] + p_in[2]*p_in[2]) );
-
-    p_out[0] = v*p_in[0];
-    p_out[1] = v*p_in[1];
-    p_out[2] = v*p_in[2];
-
-    return;
-}

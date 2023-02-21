@@ -136,9 +136,4 @@ public:
 
 };
 
-/***************************/
-/* GENERIC ROUTINE SECTION */
-/***************************/
-void SFQED_collinear_momentum(const double&, const double[3], double[3]);
-
 #endif

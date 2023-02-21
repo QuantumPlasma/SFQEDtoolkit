@@ -2,9 +2,11 @@ build/*
 build_push/*
 build_accuracy/*
 build_spectrum/*
+build_adv_accuracy/*
 pusher_tester*
 accuracy_tester*
 spectrum_tester*
+advanced_accuracy_tester*
 .*.swp
 *.lst
 *.d
@@ -41,4 +43,12 @@ fortran_tester
 makefile
 Work_In_Progress
 Test_Modules
-
+coefficients/angular_tools
+coefficients/g-2_over_2
+coefficients/pair_prtl_rate_adv
+coefficients/pair_prtl_rate_low
+coefficients/pair_prtl_rate_polarization
+coefficients/pair_rate_polarization
+coefficients/phtn_prtl_rate_low
+coefficients/phtn_prtl_rate_spin
+coefficients/phtn_rate_spin

@@ -22,11 +22,16 @@ MODULE SFQEDtoolkit_Interface
       
       !!!!!  COMPLETE SETTERS AND FINALIZERS  !!!!!
 
+      ! transforming a C array of char into a fortran on it is not trivial at all! Look
+      ! https://stackoverflow.com/questions/41247242/c-and-fortran-interoperability-for-strings
+      ! for inspiration
+
       FUNCTION SFQED_INIT_ALL_ref_len(ref_len, ts) RESULT(state) BIND(C, NAME="SFQED_INIT_ALL_ref_len")
         IMPORT :: C_DOUBLE, C_BOOL
         LOGICAL(C_BOOL) :: state
         REAL(C_DOUBLE), INTENT(IN) :: ref_len
         REAL(C_DOUBLE), INTENT(IN) :: ts
+        ! CHARACTER(:), ALLOCATABLE, INTENT(OUT) :: log_message
       END FUNCTION SFQED_INIT_ALL_ref_len
 
       FUNCTION SFQED_INIT_ALL_ref_freq(ref_freq, ts) RESULT(state) BIND(C, NAME="SFQED_INIT_ALL_ref_freq")
@@ -34,7 +39,13 @@ MODULE SFQEDtoolkit_Interface
         LOGICAL(C_BOOL) :: state
         REAL(C_DOUBLE), INTENT(IN) :: ref_freq
         REAL(C_DOUBLE), INTENT(IN) :: ts
+        ! CHARACTER(:), ALLOCATABLE, INTENT(OUT) :: log_message
       END FUNCTION SFQED_INIT_ALL_ref_freq
+
+      SUBROUTINE SFQED_INIT_ALL_debug() BIND(C, NAME="SFQED_INIT_ALL_debug")
+        ! IMPORT :: C_CHAR
+        ! CHARACTER(:), ALLOCATABLE, INTENT(OUT) :: log_message
+      END SUBROUTINE SFQED_INIT_ALL_debug
 
       SUBROUTINE SFQED_FINALIZE_ALL() BIND(C, NAME="SFQED_FINALIZE_ALL")
       END SUBROUTINE SFQED_FINALIZE_ALL
