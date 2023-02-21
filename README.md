@@ -15,7 +15,7 @@ Attribution
 
 SFQEDtoolkit is a *scientific project*. If you **present and/or publish** scientific results that used SFQEDtoolkit, we ask you to set a **reference** to show your support. At present, this can be achieved by inquiring
 
-- [REFERENCE.md](https://raw.githubusercontent.com/QuantumPlasma/SFQEDtoolkit/tree/master/docs/reference.md)
+- [REFERENCE.md](https://raw.githubusercontent.com/QuantumPlasma/SFQEDtoolkit/master/docs/reference.md)
 
 or by simply adding
 
