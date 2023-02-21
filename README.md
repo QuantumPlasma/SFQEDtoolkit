@@ -1,7 +1,7 @@
 SFQEDtoolkit: a high-performance library for the accurate modeling of strong-field QED processes in PIC and Monte Carlo codes
 =============================================================================================================================
 
-[![SFQEDtoolkit Release](docs/logoSFQEDtoolkit.png)]
+![SFQEDtoolkit Release](docs/logotoolkit.pdf)
 
 Introduction
 ------------
