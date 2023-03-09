@@ -86,7 +86,7 @@ bool file_checker(std::string common_path, const char *phtn_file_names[], const 
         const char *path_to_check = path_to_check_string.c_str();
         
         if( stat(path_to_check, &info) != 0 || (info.st_mode & S_IFDIR) ){
-            message = message + "File " + std::string(phtn_file_names[i]) + " not found!\n";
+            message = message + "File " + path_to_check_string + " not found!\n";
             returner = false;
         }
 
