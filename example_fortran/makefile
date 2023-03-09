@@ -5,6 +5,7 @@ CXX = mpic++
 
 FORTRANC = mpif90
 
+#this flag is very important to compile fortran with the c interoperability!!!
 LDFLAGS = -lstdc++ #-lgsl -lgslcblas -lm
 CPPFLAGS = -std=c++11
 NOUNDERSCORE = -fno-underscoring

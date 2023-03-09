@@ -483,12 +483,36 @@ bool SFQED_BLCFA_OBJECT_update(BLCFA_Object* entity,
 }
 
 
+bool SFQED_BLCFA_OBJECT_update_DEBUG(BLCFA_Object* entity,
+                                                const double* const pushed_momentum,
+                                                const double* const momentum,
+                                                double* F,
+                                                double* d_F,
+                                                double* dd_F,
+                                                double& delta,
+                                                double& part_gamma,
+                                                double& part_chi){
+                                                        
+        return entity->SFQED_BLCFA_update_entities_quantities_DEBUG(pushed_momentum, momentum,
+                                                F, d_F, dd_F,
+                                                delta, part_gamma, part_chi);
+}
+
+
 double SFQED_BLCFA_INV_COMPTON_PHOTON_threshold(const BLCFA_Object* const entity,
                                                         const double& delta,
                                                         const double& part_gamma,
                                                         const double& part_chi){
 
         return entity->SFQED_BLCFA_find_energy_threshold(delta, part_gamma, part_chi);
+}
+
+
+double SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_2(const double& tau,
+                                                        const double& part_gamma,
+                                                        const double& part_chi){
+
+        return procs->SFQED_BLCFA_find_energy_threshold(tau, part_gamma, part_chi);
 }
 
 
@@ -500,6 +524,17 @@ double SFQED_BLCFA_INV_COMPTON_PHOTON_energy(const double& LCFA_limit,
 
         return nics->SFQED_BLCFA_emitted_photon_energy(LCFA_limit, gamma, chi, rnd, rnd2);
 }
+
+
+double SFQED_BLCFA_INV_COMPTON_PHOTON_energy_2(const double& LCFA_limit,
+                                                        const double& gamma_photon,
+                                                        const double& gamma, 
+                                                        const double& chi, 
+                                                        const double& rnd2){
+
+        return nics->SFQED_BLCFA_emitted_photon_energy_2(LCFA_limit, gamma_photon, gamma, chi, rnd2);
+}
+
 
 //debug (this functions could be deleted)*********************
 void SFQED_BLCFA_printALL(BLCFA_Object* entity){

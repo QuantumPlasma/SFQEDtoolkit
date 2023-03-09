@@ -138,6 +138,15 @@ public:
                                                 double& part_gamma,
                                                 double& part_chi);
 
+    bool SFQED_BLCFA_update_entities_quantities_DEBUG(const double* const pushed_momentum,
+                                                const double* const momentum,
+                                                double* F,
+                                                double* d_F,
+                                                double* dd_F,
+                                                double& delta,
+                                                double& part_gamma,
+                                                double& part_chi);
+
     //The main purpose of this method is to compute the energy threshold
     //below which the LCFA ceases to be valid. It needs the 
     double SFQED_BLCFA_find_energy_threshold(const double& delta,

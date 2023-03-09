@@ -70,24 +70,24 @@ MODULE SFQEDtoolkit_Interface
         REAL(C_DOUBLE), INTENT(IN) :: ts
       END SUBROUTINE SFQED_set_sim_tstep
 
-      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      ! COEFFICIENT INITIALIZERS AND FINALIZERS !
-      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      SUBROUTINE SFQED_init_INV_COMPTON(path) BIND(C, NAME="SFQED_init_INV_COMPTON")
-        IMPORT :: C_CHAR
-        CHARACTER(C_CHAR), DIMENSION(*), INTENT(IN) :: path
-      END SUBROUTINE SFQED_init_INV_COMPTON
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      ! COEFFICIENT INITIALIZERS AND FINALIZERS (OBSOLETE)! 
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      ! SUBROUTINE SFQED_init_INV_COMPTON(path) BIND(C, NAME="SFQED_init_INV_COMPTON")
+      !   IMPORT :: C_CHAR
+      !   CHARACTER(C_CHAR), DIMENSION(*), INTENT(IN) :: path
+      ! END SUBROUTINE SFQED_init_INV_COMPTON
 
-      SUBROUTINE SFQED_finalize_INV_COMPTON() BIND(C, NAME="SFQED_finalize_INV_COMPTON")
-      END SUBROUTINE SFQED_finalize_INV_COMPTON
+      ! SUBROUTINE SFQED_finalize_INV_COMPTON() BIND(C, NAME="SFQED_finalize_INV_COMPTON")
+      ! END SUBROUTINE SFQED_finalize_INV_COMPTON
 
-      SUBROUTINE SFQED_init_BREIT_WHEELER(path) BIND(C, NAME="SFQED_init_BREIT_WHEELER")
-        IMPORT :: C_CHAR
-        CHARACTER(C_CHAR), DIMENSION(*), INTENT(IN) :: path
-      END SUBROUTINE SFQED_init_BREIT_WHEELER
+      ! SUBROUTINE SFQED_init_BREIT_WHEELER(path) BIND(C, NAME="SFQED_init_BREIT_WHEELER")
+      !   IMPORT :: C_CHAR
+      !   CHARACTER(C_CHAR), DIMENSION(*), INTENT(IN) :: path
+      ! END SUBROUTINE SFQED_init_BREIT_WHEELER
 
-      SUBROUTINE SFQED_finalize_BREIT_WHEELER() BIND(C, NAME="SFQED_finalize_BREIT_WHEELER")
-      END SUBROUTINE SFQED_finalize_BREIT_WHEELER
+      ! SUBROUTINE SFQED_finalize_BREIT_WHEELER() BIND(C, NAME="SFQED_finalize_BREIT_WHEELER")
+      ! END SUBROUTINE SFQED_finalize_BREIT_WHEELER
 
 
       !*********************************!
@@ -180,6 +180,17 @@ MODULE SFQEDtoolkit_Interface
         REAL(C_DOUBLE), INTENT(IN) :: part_chi
       end function SFQED_BLCFA_INV_COMPTON_PHOTON_threshold
 
+      function SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_2(tau, &
+        part_gamma, part_chi) result(thresh) bind(C,name="SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_2")
+        import C_PTR, C_DOUBLE
+        REAL(C_DOUBLE) :: thresh
+        ! REAL(C_DOUBLE), DIMENSION(3), INTENT(IN) :: Lorentz_F_t_der
+        ! REAL(C_DOUBLE), DIMENSION(3), INTENT(IN) :: Lorentz_F_tt_der
+        REAL(C_DOUBLE), INTENT(IN) :: tau
+        REAL(C_DOUBLE), INTENT(IN) :: part_gamma
+        REAL(C_DOUBLE), INTENT(IN) :: part_chi
+      end function SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_2
+
       function SFQED_BLCFA_INV_COMPTON_PHOTON_energy(LCFA_limit, gamma, chi, rnd, rnd2) &
         result(energy) bind(C,name="SFQED_BLCFA_INV_COMPTON_PHOTON_energy")
         import C_DOUBLE
@@ -190,6 +201,17 @@ MODULE SFQEDtoolkit_Interface
         REAL(C_DOUBLE), INTENT(IN) :: rnd
         REAL(C_DOUBLE), INTENT(IN) :: rnd2
       end function SFQED_BLCFA_INV_COMPTON_PHOTON_energy
+
+      function SFQED_BLCFA_INV_COMPTON_PHOTON_energy_2(LCFA_limit, gamma_photon, gamma, chi, rnd2) &
+        result(energy) bind(C,name="SFQED_BLCFA_INV_COMPTON_PHOTON_energy_2")
+        import C_DOUBLE
+        REAL(C_DOUBLE) :: energy
+        REAL(C_DOUBLE), INTENT(IN) :: LCFA_limit
+        REAL(C_DOUBLE), INTENT(IN) :: gamma_photon
+        REAL(C_DOUBLE), INTENT(IN) :: gamma
+        REAL(C_DOUBLE), INTENT(IN) :: chi
+        REAL(C_DOUBLE), INTENT(IN) :: rnd2
+      end function SFQED_BLCFA_INV_COMPTON_PHOTON_energy_2
 
       !!!!!DEBUG!!!!!
       SUBROUTINE SFQED_BLCFA_get_F_old(entity, F_old) bind(C,name="SFQED_BLCFA_get_F_old")

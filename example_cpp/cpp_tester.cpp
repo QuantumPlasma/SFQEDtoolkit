@@ -158,7 +158,7 @@ int main(int argc, char** argv) {
                 std::cout << "#particle=" << part_num << ", gamma=" << gamma << ", chi=" << chi << " (" << expected_chi << ")\n";
                 
                 //actual SFQED routines
-                emission_rate = SFQED_INV_COMPTON_rate(gamma, chi) * w_r;
+                emission_rate = SFQED_INV_COMPTON_rate(gamma, chi);
                 std::cout << "Emission rate = " << emission_rate << '\n';
 
                 if (emission_rate * time_step >= rnd_zero) {

@@ -608,6 +608,78 @@ double Nonlinear_Inverse_Compton_Scattering::SFQED_BLCFA_emitted_photon_energy(c
 }
 
 
+//this function does not internally compute the photon energy 
+//but it expects it to be passed from outside (second argument)
+double Nonlinear_Inverse_Compton_Scattering::SFQED_BLCFA_emitted_photon_energy_2(const double& LCFA_limit,
+                                                            const double& gamma_photon,
+                                                            const double& gamma, 
+                                                            const double& chi, 
+                                                            const double& rnd2) const{
+
+    int lookup_index;
+
+    if(chi <= bound_chi_1st){
+        lookup_index = 4;
+    }else if(chi <= bound_chi_2nd){
+        lookup_index = 3;
+    }else if(chi <= bound_chi_3rd){
+        lookup_index = 2;
+    }else if(chi <= bound_chi_4th){
+        lookup_index = 1;
+    }else{
+        lookup_index = 0;
+    }
+    
+    //transform the threshold energy into a w value
+    double LCFA_limit_w  = cbrt(LCFA_limit / (1.5 * chi * (gamma - LCFA_limit)));
+
+    //in case the phtn nrg threshold is zero or very close to the particle nrg
+    //or it is above the upper bound of the approximated domain
+    //we don't want the emission to occur 
+    if(LCFA_limit == 0. || LCFA_limit > 0.75 * gamma || LCFA_limit_w > (lu_table_upper_w_bounds[lookup_index])){
+        return 0.;
+    }
+
+    //transform the photon energy you found into a w value
+    double emitted_phtn_LCFA_nrg_w = cbrt(gamma_photon / (1.5 * chi * (gamma - gamma_photon))),
+            diff_probability,
+            diff_prob_LCFA,
+            rs_dw_over_depsgamma;
+    
+    //remember that the assignement operator return the value
+    //being assigned
+
+
+    //BLCFA section (it starts with a comparison)
+    if(emitted_phtn_LCFA_nrg_w < LCFA_limit_w){
+        
+
+        //compute the threshold value
+        rs_dw_over_depsgamma = (1. + 1.5 * chi * LCFA_limit_w * LCFA_limit_w * LCFA_limit_w) / LCFA_limit_w;
+        diff_prob_LCFA = (look_up_table_phtn_diff_crss_sctn[lookup_index]).evaluate(chi, LCFA_limit_w) * rs_dw_over_depsgamma * rs_dw_over_depsgamma;
+
+        //compute the differential probability associated to the LCFA supposed phtn nrg
+        //(pay attention not to overwrite the w value energy)
+        rs_dw_over_depsgamma = (1. + 1.5 * chi * emitted_phtn_LCFA_nrg_w * emitted_phtn_LCFA_nrg_w * emitted_phtn_LCFA_nrg_w) / emitted_phtn_LCFA_nrg_w;
+        diff_probability = (look_up_table_phtn_diff_crss_sctn[lookup_index]).evaluate(chi, emitted_phtn_LCFA_nrg_w) * rs_dw_over_depsgamma * rs_dw_over_depsgamma;
+
+        //now I use the rejection sampling method (employing rnd2) to determine if I have
+        //to keep or reject the just occurred emission
+        if(diff_probability * rnd2 > diff_prob_LCFA){
+            return 0.;
+        }
+
+    }
+
+    //convert to a proper photon energy!
+    emitted_phtn_LCFA_nrg_w = 3.0 * chi * emitted_phtn_LCFA_nrg_w * emitted_phtn_LCFA_nrg_w * emitted_phtn_LCFA_nrg_w;
+    emitted_phtn_LCFA_nrg_w = gamma * emitted_phtn_LCFA_nrg_w / (2.0 + emitted_phtn_LCFA_nrg_w);
+
+    return emitted_phtn_LCFA_nrg_w;
+    ///////////////////////////////////////////////
+}
+
+
 void Nonlinear_Inverse_Compton_Scattering::SFQED_finalize_PHTN_emission_BLCFA(){
     //purge diff crss sctn
     delete[] look_up_table_phtn_diff_crss_sctn[4].last_coeffs;

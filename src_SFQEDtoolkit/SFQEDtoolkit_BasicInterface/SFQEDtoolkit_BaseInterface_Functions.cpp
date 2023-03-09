@@ -67,7 +67,7 @@ std::string find_path(std::string &message){
     //build the final path to the coefficients
     std::string str_path = std::string(val) + std::string("/coefficients/");
 
-    message = message + "Loading SFQED coefficients from " + str_path + ".\n";
+    message = message + "Loading SFQED coefficients from " + str_path + "\n";
 
     return str_path;
 }
@@ -81,7 +81,9 @@ bool file_checker(std::string common_path, const char *phtn_file_names[], const 
 
     for(int i = 0; i < entry_num; i++){
 
-        const char *path_to_check = (std::string(common_path) + std::string(phtn_file_names[i])).c_str();
+        std::string path_to_check_string = common_path + std::string(phtn_file_names[i]);
+
+        const char *path_to_check = path_to_check_string.c_str();
         
         if( stat(path_to_check, &info) != 0 || (info.st_mode & S_IFDIR) ){
             message = message + "File " + std::string(phtn_file_names[i]) + " not found!\n";

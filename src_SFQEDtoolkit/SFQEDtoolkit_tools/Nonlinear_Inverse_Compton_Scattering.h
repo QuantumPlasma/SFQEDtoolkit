@@ -134,6 +134,12 @@ public:
                                                                 const double& rnd, 
                                                                 const double& rnd2) const;
 
+    double SFQED_BLCFA_emitted_photon_energy_2(const double& LCFA_limit,
+                                                            const double& gamma_photon,
+                                                            const double& gamma, 
+                                                            const double& chi, 
+                                                            const double& rnd2) const;
+
 };
 
 #endif

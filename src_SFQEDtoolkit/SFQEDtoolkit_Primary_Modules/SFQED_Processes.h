@@ -193,6 +193,14 @@ public:
                 return ComptonDivLambda * sqrt(arg);
         }
 
+        //this function offers the possibility to return the BLCFA threshold
+        //without resorting to the BLCFA_Object [be aware that by bypassing the
+        //BLCFA_Object circuit you are also skipping all the heuristic constrols made
+        //there]
+        double SFQED_BLCFA_find_energy_threshold(const double& tau,
+                                                        const double& part_gamma,
+                                                        const double& part_chi) const;
+
 };
 
 /***************************/

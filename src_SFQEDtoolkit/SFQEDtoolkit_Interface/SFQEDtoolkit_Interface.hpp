@@ -142,6 +142,9 @@ extern "C" {
                                                                 const double& part_gamma,
                                                                 const double& part_chi);
 
+        double SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_2(const double& tau,
+                                                                const double& part_gamma,
+                                                                const double& part_chi);
 
         double SFQED_BLCFA_INV_COMPTON_PHOTON_energy(const double& LCFA_limit,
                                                                 const double& gamma, 
@@ -149,7 +152,23 @@ extern "C" {
                                                                 const double& rnd, 
                                                                 const double& rnd2);
 
+        double SFQED_BLCFA_INV_COMPTON_PHOTON_energy_2(const double& LCFA_limit,
+                                                                const double& gamma_photon,
+                                                                const double& gamma, 
+                                                                const double& chi, 
+                                                                const double& rnd2);
+
         //debug
+        bool SFQED_BLCFA_OBJECT_update_DEBUG(BLCFA_Object* entity,
+                                                const double* const pushed_momentum,
+                                                const double* const momentum,
+                                                double* F,
+                                                double* d_F,
+                                                double* dd_F,
+                                                double& delta,
+                                                double& part_gamma,
+                                                double& part_chi);
+
         void SFQED_BLCFA_printALL(BLCFA_Object* entity);
 
         void SFQED_BLCFA_get_F_old(BLCFA_Object* entity, double* F_old);
