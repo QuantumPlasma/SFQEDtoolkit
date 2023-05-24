@@ -3,10 +3,14 @@ build_push/*
 build_accuracy/*
 build_spectrum/*
 build_adv_accuracy/*
+build*
 pusher_tester*
 accuracy_tester*
 spectrum_tester*
+angular_pusher_tester*
 advanced_accuracy_tester*
+param_finder*
+cos_angle_tester*
 .*.swp
 *.lst
 *.d

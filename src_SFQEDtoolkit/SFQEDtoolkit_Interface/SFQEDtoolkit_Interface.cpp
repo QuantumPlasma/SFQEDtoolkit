@@ -93,17 +93,17 @@ const char *phtn_file_names[20] = {
         "phtn_prtl_rate/phtn_partial_rate_80-600.txt",
         "phtn_prtl_rate/phtn_partial_rate_600-2000.txt",
         //photon energy in w
-        "w/phtn_w_nrg_0-2.txt",
-        "w/phtn_w_nrg_2-20.txt",
-        "w/phtn_w_nrg_20-80.txt",
-        "w/phtn_w_nrg_80-600.txt",
-        "w/phtn_w_nrg_600-2000.txt",
+        "phtn_emission_nrgs/phtn_w_nrg_0-2.txt",
+        "phtn_emission_nrgs/phtn_w_nrg_2-20.txt",
+        "phtn_emission_nrgs/phtn_w_nrg_20-80.txt",
+        "phtn_emission_nrgs/phtn_w_nrg_80-600.txt",
+        "phtn_emission_nrgs/phtn_w_nrg_600-2000.txt",
         //photon energy in 1/w
-        "1_over_w/phtn_1_over_w_nrg_0-2.txt",
-        "1_over_w/phtn_1_over_w_nrg_2-20.txt",
-        "1_over_w/phtn_1_over_w_nrg_20-80.txt",
-        "1_over_w/phtn_1_over_w_nrg_80-600.txt",
-        "1_over_w/phtn_1_over_w_nrg_600-2000.txt"
+        "phtn_emission_high_nrgs/phtn_1_over_w_nrg_0-2.txt",
+        "phtn_emission_high_nrgs/phtn_1_over_w_nrg_2-20.txt",
+        "phtn_emission_high_nrgs/phtn_1_over_w_nrg_20-80.txt",
+        "phtn_emission_high_nrgs/phtn_1_over_w_nrg_80-600.txt",
+        "phtn_emission_high_nrgs/phtn_1_over_w_nrg_600-2000.txt"
 };
 
 //files to check to load the pair production coefficients
@@ -123,19 +123,19 @@ const char *pair_file_names[23] = {
         "pair_prtl_rate/pair_partial_rate_80-600.txt",
         "pair_prtl_rate/pair_partial_rate_600-2000.txt",
         //photon energy in v
-        "v/pair_nrgs_v_001-03.txt",
-        "v/pair_nrgs_v_0-2.txt",
-        "v/pair_nrgs_v_2-20.txt",
-        "v/pair_nrgs_v_20-80.txt",
-        "v/pair_nrgs_v_80-600.txt",
-        "v/pair_nrgs_v_600-2000.txt",
+        "pair_prod_nrgs/pair_nrgs_v_001-03.txt",
+        "pair_prod_nrgs/pair_nrgs_v_0-2.txt",
+        "pair_prod_nrgs/pair_nrgs_v_2-20.txt",
+        "pair_prod_nrgs/pair_nrgs_v_20-80.txt",
+        "pair_prod_nrgs/pair_nrgs_v_80-600.txt",
+        "pair_prod_nrgs/pair_nrgs_v_600-2000.txt",
         //photon energy in v high part
-        "v/pair_nrgs_v_high_001-03.txt",
-        "v/pair_nrgs_v_high_0-2.txt",
-        "v/pair_nrgs_v_high_2-20.txt",
-        "v/pair_nrgs_v_high_20-80.txt",
-        "v/pair_nrgs_v_high_80-600.txt",
-        "v/pair_nrgs_v_high_600-2000.txt"
+        "pair_prod_nrgs/pair_nrgs_v_high_001-03.txt",
+        "pair_prod_nrgs/pair_nrgs_v_high_0-2.txt",
+        "pair_prod_nrgs/pair_nrgs_v_high_2-20.txt",
+        "pair_prod_nrgs/pair_nrgs_v_high_20-80.txt",
+        "pair_prod_nrgs/pair_nrgs_v_high_80-600.txt",
+        "pair_prod_nrgs/pair_nrgs_v_high_600-2000.txt"
 };
 
 const int blcfa_file_names_size = 5;
@@ -482,6 +482,19 @@ bool SFQED_BLCFA_OBJECT_update(BLCFA_Object* entity,
                                                 delta, part_gamma, part_chi);
 }
 
+bool SFQED_BLCFA_OBJECT_update_raw(const double* const pushed_momentum,
+                                                const double* const momentum,
+                                                double* const Lorentz_F_Old,
+                                                double* const Delta_Lorentz_F_Old,
+                                                bool& just_created,
+                                                double& delta,
+                                                double& part_gamma,
+                                                double& part_chi){
+
+        return SFQED_BLCFA_update_quantities_raw(pushed_momentum, momentum,
+                                                Lorentz_F_Old, Delta_Lorentz_F_Old, just_created,
+                                                delta, part_gamma, part_chi);
+}
 
 bool SFQED_BLCFA_OBJECT_update_DEBUG(BLCFA_Object* entity,
                                                 const double* const pushed_momentum,
@@ -515,6 +528,15 @@ double SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_2(const double& tau,
         return procs->SFQED_BLCFA_find_energy_threshold(tau, part_gamma, part_chi);
 }
 
+
+double SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_raw(const double* const Lorentz_F,
+                                                                const double& delta,
+                                                                const double& part_gamma,
+                                                                const double& part_chi){
+
+        return SFQED_BLCFA_find_energy_threshold_raw(Lorentz_F, delta, part_gamma, part_chi);
+}
+                                                
 
 double SFQED_BLCFA_INV_COMPTON_PHOTON_energy(const double& LCFA_limit,
                                                         const double& gamma, 

@@ -136,6 +136,14 @@ extern "C" {
                                                         double& part_gamma,
                                                         double& part_chi);
 
+        bool SFQED_BLCFA_OBJECT_update_raw(const double* const pushed_momentum,
+                                                const double* const momentum,
+                                                double* const Lorentz_F_Old,
+                                                double* const Delta_Lorentz_F_Old,
+                                                bool& just_created,
+                                                double& delta,
+                                                double& part_gamma,
+                                                double& part_chi);
 
         double SFQED_BLCFA_INV_COMPTON_PHOTON_threshold(const BLCFA_Object* const entity,
                                                                 const double& delta,
@@ -143,6 +151,11 @@ extern "C" {
                                                                 const double& part_chi);
 
         double SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_2(const double& tau,
+                                                                const double& part_gamma,
+                                                                const double& part_chi);
+
+        double SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_raw(const double* const Lorentz_F,
+                                                                const double& delta,
                                                                 const double& part_gamma,
                                                                 const double& part_chi);
 

@@ -114,31 +114,31 @@ void Nonlinear_Inverse_Compton_Scattering::SFQED_init_PHTN_emission(std::string 
 
 
     //photon energy in w
-    emission_name = path_to_coeffs + "w/phtn_w_nrg_0-2.txt";
+    emission_name = path_to_coeffs + "phtn_emission_nrgs/phtn_w_nrg_0-2.txt";
     in_file.open(emission_name.c_str());
     look_up_table_phtn_momw[4] = Chebyshev_User_2D::init_from_txt_file(in_file);
     in_file.close();
     in_file.clear();
 
-    emission_name = path_to_coeffs + "w/phtn_w_nrg_2-20.txt";
+    emission_name = path_to_coeffs + "phtn_emission_nrgs/phtn_w_nrg_2-20.txt";
     in_file.open(emission_name.c_str());
     look_up_table_phtn_momw[3] = Chebyshev_User_2D::init_from_txt_file(in_file);
     in_file.close();
     in_file.clear();
 
-    emission_name = path_to_coeffs + "w/phtn_w_nrg_20-80.txt";
+    emission_name = path_to_coeffs + "phtn_emission_nrgs/phtn_w_nrg_20-80.txt";
     in_file.open(emission_name.c_str());
     look_up_table_phtn_momw[2] = Chebyshev_User_2D::init_from_txt_file(in_file);
     in_file.close();
     in_file.clear();
 
-    emission_name = path_to_coeffs + "w/phtn_w_nrg_80-600.txt";
+    emission_name = path_to_coeffs + "phtn_emission_nrgs/phtn_w_nrg_80-600.txt";
     in_file.open(emission_name.c_str());
     look_up_table_phtn_momw[1] = Chebyshev_User_2D::init_from_txt_file(in_file);
     in_file.close();
     in_file.clear();
 
-    emission_name = path_to_coeffs + "w/phtn_w_nrg_600-2000.txt";
+    emission_name = path_to_coeffs + "phtn_emission_nrgs/phtn_w_nrg_600-2000.txt";
     in_file.open(emission_name.c_str());
     look_up_table_phtn_momw[0] = Chebyshev_User_2D::init_from_txt_file(in_file);
     in_file.close();
@@ -146,7 +146,7 @@ void Nonlinear_Inverse_Compton_Scattering::SFQED_init_PHTN_emission(std::string 
 
     
     //photon energy in 1/w
-    emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_0-2.txt";
+    emission_name = path_to_coeffs + "phtn_emission_high_nrgs/phtn_1_over_w_nrg_0-2.txt";
     // emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_0-2_plus.txt";
     // emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_0-2_extended.txt";
     in_file.open(emission_name.c_str());
@@ -154,7 +154,7 @@ void Nonlinear_Inverse_Compton_Scattering::SFQED_init_PHTN_emission(std::string 
     in_file.close();
     in_file.clear();
 
-    emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_2-20.txt";
+    emission_name = path_to_coeffs + "phtn_emission_high_nrgs/phtn_1_over_w_nrg_2-20.txt";
     // emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_2-20_plus.txt";
     // emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_2-20_extended.txt";
     in_file.open(emission_name.c_str());
@@ -162,7 +162,7 @@ void Nonlinear_Inverse_Compton_Scattering::SFQED_init_PHTN_emission(std::string 
     in_file.close();
     in_file.clear();
 
-    emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_20-80.txt";
+    emission_name = path_to_coeffs + "phtn_emission_high_nrgs/phtn_1_over_w_nrg_20-80.txt";
     // emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_20-80_plus.txt";
     // emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_20-80_extended.txt";
     in_file.open(emission_name.c_str());
@@ -170,7 +170,7 @@ void Nonlinear_Inverse_Compton_Scattering::SFQED_init_PHTN_emission(std::string 
     in_file.close();
     in_file.clear();
 
-    emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_80-600.txt";
+    emission_name = path_to_coeffs + "phtn_emission_high_nrgs/phtn_1_over_w_nrg_80-600.txt";
     // emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_80-600_plus.txt";
     // emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_80-600_extended.txt";
     in_file.open(emission_name.c_str());
@@ -178,7 +178,7 @@ void Nonlinear_Inverse_Compton_Scattering::SFQED_init_PHTN_emission(std::string 
     in_file.close();
     in_file.clear();
 
-    emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_600-2000.txt";
+    emission_name = path_to_coeffs + "phtn_emission_high_nrgs/phtn_1_over_w_nrg_600-2000.txt";
     // emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_600-2000_plus.txt";
     // emission_name = path_to_coeffs + "1_over_w/phtn_1_over_w_nrg_600-2000_extended.txt";
     in_file.open(emission_name.c_str());

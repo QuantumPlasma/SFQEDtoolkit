@@ -167,6 +167,20 @@ MODULE SFQEDtoolkit_Interface
         REAL(C_DOUBLE), INTENT(INOUT) :: part_gamma
         REAL(C_DOUBLE), INTENT(INOUT) :: part_chi
       end function SFQED_BLCFA_OBJECT_update
+
+      function SFQED_BLCFA_OBJECT_update_raw(pushed_momentum, momentum, Lorentz_F_old, Delta_Lorentz_F_old, &
+        just_created, delta, part_gamma, part_chi) result(goon) bind(C,name="SFQED_BLCFA_OBJECT_update_raw")
+        import C_PTR, C_DOUBLE, C_BOOL
+        LOGICAL(C_BOOL) :: goon
+        REAL(C_DOUBLE), DIMENSION(3), INTENT(IN) :: pushed_momentum
+        REAL(C_DOUBLE), DIMENSION(3), INTENT(IN) :: momentum
+        REAL(C_DOUBLE), DIMENSION(3), INTENT(INOUT) :: Lorentz_F_old
+        REAL(C_DOUBLE), DIMENSION(3), INTENT(INOUT) :: Delta_Lorentz_F_old
+        LOGICAL(C_BOOL), INTENT(INOUT) :: just_created
+        REAL(C_DOUBLE), INTENT(INOUT) :: delta
+        REAL(C_DOUBLE), INTENT(INOUT) :: part_gamma
+        REAL(C_DOUBLE), INTENT(INOUT) :: part_chi
+      end function SFQED_BLCFA_OBJECT_update_raw
       
       function SFQED_BLCFA_INV_COMPTON_PHOTON_threshold(entity, delta, &
         part_gamma, part_chi) result(thresh) bind(C,name="SFQED_BLCFA_INV_COMPTON_PHOTON_threshold")
@@ -190,6 +204,16 @@ MODULE SFQEDtoolkit_Interface
         REAL(C_DOUBLE), INTENT(IN) :: part_gamma
         REAL(C_DOUBLE), INTENT(IN) :: part_chi
       end function SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_2
+
+      function SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_raw(Lorentz_F, delta, &
+        part_gamma, part_chi) result(thresh) bind(C,name="SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_raw")
+        import C_PTR, C_DOUBLE
+        REAL(C_DOUBLE) :: thresh
+        REAL(C_DOUBLE), DIMENSION(3), INTENT(IN) :: Lorentz_F
+        REAL(C_DOUBLE), INTENT(IN) :: delta
+        REAL(C_DOUBLE), INTENT(IN) :: part_gamma
+        REAL(C_DOUBLE), INTENT(IN) :: part_chi
+      end function SFQED_BLCFA_INV_COMPTON_PHOTON_threshold_raw
 
       function SFQED_BLCFA_INV_COMPTON_PHOTON_energy(LCFA_limit, gamma, chi, rnd, rnd2) &
         result(energy) bind(C,name="SFQED_BLCFA_INV_COMPTON_PHOTON_energy")

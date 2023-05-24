@@ -49,11 +49,6 @@
 class BLCFA_Object{
 private:
 
-    //declaration of static member variables
-    //(remember you need to also define them outside)
-    // the definition of the static variables has been put inside the SFQED_Processes source file
-    static double one_over_dt, one_over_dt2, norm_Compton_time_2;
-
 protected:
 
     // be careful: the following pointer should store the perpendicular
@@ -72,6 +67,11 @@ protected:
     // double optical_depth_ref, optical_depth;
 
 public:
+
+    //declaration of static member variables
+    //(remember you need to also define them outside)
+    // the definition of the static variables has been put inside the SFQED_Processes source file
+    static double one_over_dt, one_over_dt2, norm_Compton_time_2;
 
     //useful for debug
     // void* get_F(){
@@ -148,7 +148,9 @@ public:
                                                 double& part_chi);
 
     //The main purpose of this method is to compute the energy threshold
-    //below which the LCFA ceases to be valid. It needs the 
+    //below which the LCFA ceases to be valid. It needs the delta variable,
+    // gamma and chi parameter computed through the function 
+    // SFQED_BLCFA_update_entities_quantities
     double SFQED_BLCFA_find_energy_threshold(const double& delta,
                                                 const double& part_gamma, 
                                                 const double& part_chi) const;
@@ -171,5 +173,38 @@ public:
     }
 
 };
+
+//////////////////////////////////////////
+// FUNCTIONS TO BYPASS THE BLCFA_OBJECT //
+//////////////////////////////////////////
+
+//This function offers the possibility to update the Force and
+// the difference of the force experienced by the particles at previous timestep
+// without resorting to the BLCFA_Object. Be aware that by bypassing the
+// BLCFA_Object circuit you are in charge of defining all the variables you need,
+// that is two double precision vectors, playing the role of the Force and 
+// difference of the force at the previous timestep, and a boolean carrying
+// the info about the applicability of the BLCFA method. IMPORTANT: these 3 
+// variables, after being used, will be updated with new values everytime
+// this function is called. As a byproduct, also the delta variable (which is needed
+// to compute the LCFA validity threshold(), the gamma and the chi parameter
+// are computed. Its return value is used to infer whether a particle can emit a photon or not.
+bool SFQED_BLCFA_update_quantities_raw(const double* const pushed_momentum,
+                                                const double* const momentum,
+                                                double* const Lorentz_F_Old,
+                                                double* const Delta_Lorentz_F_Old,
+                                                bool& just_created,
+                                                double& delta,
+                                                double& part_gamma,
+                                                double& part_chi);
+
+//This method returns the energy threshold below which the LCFA ceases to be valid.
+// It needs the Lorentz force that's being experienced by the particle, the delta
+// variable, the gamma (Lorentz factor) and chi parameter. All these quantities are
+// computed through the update function SFQED_BLCFA_update_quantities_raw.
+double SFQED_BLCFA_find_energy_threshold_raw(const double* const Lorentz_F,
+                                                const double& delta,
+                                                const double& part_gamma,
+                                                const double& part_chi);
 
 #endif

@@ -1,0 +1,25 @@
+Coefficient folder
+------------------
+
+This folder contains the Chebyshev coefficients needed by SFQEDtoolkit.
+
+The coefficients of *one-variable* functions are collected in text files where the first row is an integer reporting the total number of coefficients present in the file, while the second and third row contain floating point numbers reporting the minimum and maximum, respectively, of the interval over which the Chebyshev polynomials approximate the corresponding function. From the fourth row on the Chebyshev coefficients are written row by row. See section 4.5 of the [paper](https://arxiv.org/abs/2301.07684) for further details.
+
+The coefficients of *two-variable* functions are collected in text files where the first and fourth rows are integers reporting the number of columns and rows of the matrix of coefficients, respectively. The second and third (fifth and sixth) rows contain the floating point numbers corresponding to the minimum and maximum of the interval of the first (second) variable in which the Chebyshev polynomials approximate the two-variable function. Starting from the seventh row of the file the Chebyshev coefficients are written row by row following a row-major order.
+
+
+Below a description of the folder content:
+
+- `phtn_rate`: the files contained in this sub-folder store the Chebyshev coefficients describing the nonlinear Compton scattering photon emission rate. The function being approximated is given in Eq. (4.6) of the [paper](https://arxiv.org/abs/2301.07684), which depends only on *one parameter*, namely, the quantum non-linearity parameter *chi* of the emitting electron. See section 4.1 of the [manuscript](https://arxiv.org/abs/2301.07684) for further details.
+
+- `pair_rate`: the files contained in this sub-folder store the Chebyshev coefficients describing the nonlinear Breit-Wheeler electron positron pair production rate. The function being approximated is given in Eq. (4.9) of the [paper](https://arxiv.org/abs/2301.07684). As above, this function depends only on *one parameter*, namely, the quantum non-linearity parameter *chi* of the decaying photon. See section 4.2 of the [manuscript](https://arxiv.org/abs/2301.07684) for further details.
+
+- `phtn_emission_nrgs` and `phtn_emission_high_nrgs`: these sub-folders contain the files with the Chebyshev coefficients that are used to determine the energy of emitted photons. `phtn_emission_nrgs` stores the Chebyshev coefficients needed to approximate the *two-parameter* function defined in Eq. (4.17) of the [paper](https://arxiv.org/abs/2301.07684) in the interval of the random number *r* going from r<sub>min</sub> to r<sub>inv</sub>. `phtn_emission_high_nrgs` stores the Chebyshev coefficients needed to approximate the *reciprocal* of the function defined in Eq. (4.17) of the [paper](https://arxiv.org/abs/2301.07684) in the interval of the random number *r* going from r<sub>min</sub> to r<sub>inv</sub>. In both these sets of files the *two-parameter* functions depend on the quantum non-linearity parameter *chi* of the emitting electron and on the uniformly distributed random number *r*. See section 4.2 of the [manuscript](https://arxiv.org/abs/2301.07684) for further details.
+
+- `phtn_prtl_rate`: this folder contains the files with the Chebyshev coefficients that are necessary to represent the *two-parameter* function in Eq. (4.16) of the [paper](https://arxiv.org/abs/2301.07684). The first parameter is *w*, which is a rescaled photon energy and is the upper bound of integration of the function in Eq. (4.16), while the second parameter is the electron quantum non-linearity parameter *chi*. This function is needed to determine the emitted photon energy when the random number *r* exceeds r<sub>max</sub>. Details are given in section 4.3 of the [paper](https://arxiv.org/abs/2301.07684).
+
+- `pair_prod_nrgs`: this sub-folder contains the files with the Chebyshev coefficients that are used to determine the energy of the electron and positron produced in a Breit-Wheeler photon decay. The *two-parameter* function defined in Eq. (4.25) of the [paper](https://arxiv.org/abs/2301.07684) is approximated, which depends on the quantum non-linearity parameter *chi* of the decaying photon and on the uniformly distributed random number *r*. See section 4.4 of the [manuscript](https://arxiv.org/abs/2301.07684) for further details.
+
+- `pair_prtl_rate`: this sub-folder contains the Chebyshev coeffients of the the *two-parameter* function in Eq. (4.26) of the [paper](https://arxiv.org/abs/2301.07684). This function is needed to determine the electron and positron energy when the random number *r* approaches 1. Details are given in section 4.4 of the [paper](https://arxiv.org/abs/2301.07684).
+
+- `dP_over_dt_dw`: this sub-folder contains the Chebyshev coefficients that are used to approximate the function d^2W_{pe} / dtdw in Eq. (5.11) of the [paper](https://arxiv.org/abs/2301.07684). These coefficients are needed for the beyond LCFA (BLCFA) method presented in section 5 of the [paper](https://arxiv.org/abs/2301.07684).
