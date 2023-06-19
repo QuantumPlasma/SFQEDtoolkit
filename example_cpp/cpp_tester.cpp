@@ -57,6 +57,8 @@ int main(int argc, char** argv) {
         double emission_rate, phtn_energy;
         // pair production
         double production_rate, electron_energy;
+        // pair production test 
+        double test_photon_gamma, test_photon_chi, test_rnd_a;
         // values used for theoretical inspections
         double expected_chi;
         
@@ -234,6 +236,30 @@ int main(int argc, char** argv) {
                 std::cout << '\n';
       
         }
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // ! PAIR production tail energy test !
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        test_photon_gamma = 7005.28814066400;
+        test_photon_chi = 2.01058647068427;
+        test_rnd_a = 0.999964362779027;
+
+        std::cout << "Test (1) for pair production for a photon having gamma = " << test_photon_gamma 
+                << ", chi = " << test_photon_chi << ", rnd = " << test_rnd_a << std::endl;
+
+        electron_energy = SFQED_BREIT_WHEELER_ELECTRON_energy(test_photon_gamma, test_photon_chi, test_rnd_a);
+        std::cout << "The pairs electron has been produced with gamma_e = " << electron_energy << std::endl;
+
+        test_photon_gamma = 2360.84725023355;
+        test_photon_chi = 2.00350708546021;
+        test_rnd_a = 0.999959490565055;
+
+        std::cout << "Test (2) for pair production for a photon having gamma = " << test_photon_gamma 
+                << ", chi = " << test_photon_chi << ", rnd = " << test_rnd_a << std::endl;
+
+        electron_energy = SFQED_BREIT_WHEELER_ELECTRON_energy(test_photon_gamma, test_photon_chi, test_rnd_a);
+        std::cout << "The pairs electron has been produced with gamma_e = " << electron_energy << std::endl;
 
         //!!!!!!!!!!!!!!!!!!!!!!!
         //! BLCFA synchrophoton !

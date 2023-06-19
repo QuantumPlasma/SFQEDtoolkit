@@ -38,6 +38,7 @@
 
 #include "Breit_Wheeler_Pair_Production.h"
 
+// #include <iostream>
 
 /***************************************/
 /* PAIR PRODUCTION function definition */
@@ -297,7 +298,7 @@ double Breit_Wheeler_Pair_Production::SFQED_PAIR_emitted_electron_energy_aux(con
                                 + (chi < bound_kappa_0th_rate)
                                 + (chi >= bound_kappa_0th_nrgs) * (chi < bound_kappa_intermediate_rate);
 
-        // std::cout << "8\n";
+        // std::cout << "8: " << lookup_index << " " << lookup_index_rate << std::endl;
 
         //compute the rate of pair emission
         //introducing a new branching (we are allowed to do this,
@@ -308,29 +309,43 @@ double Breit_Wheeler_Pair_Production::SFQED_PAIR_emitted_electron_energy_aux(con
                             
         double rnd_tildeWrad = rescaled_rnd * tildeWrad;
 
-        // std::cout << "9\n";
+        // std::cout << "9: " << tildeWrad << std::endl;
 
-        // std::cout << "10\n";
+        // std::cout << "10: " << rnd_tildeWrad << std::endl;
 
         //compute the pivot at which the exponential approximation will be applied
         double v0 = (look_up_table_pair_v_nrgs_proj[lookup_index]).evaluate(chi);
         v = 8.0 / (3.0 * chi * (1.0 - v0*v0));
 
-        // std::cout << "11\n";
+        // std::cout << "11: " << v0 << std::endl;
 
-        // std::cout << "12\n";
+        // std::cout << "12: " << v << std::endl;
 
         //integrate the pair creation differential probability
-        //from the just computed pivot up to 1
+        //from v = 0.0 up to the just computed pivot
         double tail_integral = (look_up_table_pair_prtl_rt[lookup_index]).evaluate(chi, v0);
 
-        // std::cout << "13\n";
+        // std::cout << "13: " << tail_integral << std::endl;
 
-        //now invert the exponential approximation and extract the v
-        v = v - log((tildeWrad - rnd_tildeWrad) / (tildeWrad - tail_integral));
+        //now invert the exponential approximation and extract the v to be returned
+        // [IMPORTANT: at this stage it is very important to prevent the argument
+        //  of the log to be negative. This contingency is very likely to manifest,
+        //  especially in this section of the if construct where the random number
+        //  is very close to 1.
+        //  Indeed you have to consider that:
+        //  i) the probability of photon emission and / or pair production (stored in
+        //  tildeWrad) saturates to a certain value;
+        //  ii) the toolkit is correct up to the 0.1%;
+        //  iii) the chebyshev polynomials oscillate around the actual function.]
+
+        v = v - log( std::abs( (tildeWrad - rnd_tildeWrad) / (tildeWrad - tail_integral) ) );
+
+        // std::cout << "13.5: " << v << std::endl;
+
         v = sqrt(1.0 - 8.0 / (3.0 * chi * v));
 
-        // std::cout << "14\n";
+        // std::cout << "14: " << v << std::endl;
+
     }
 
     return v;
@@ -362,6 +377,8 @@ double Breit_Wheeler_Pair_Production::SFQED_PAIR_created_electron_energy(const d
     double sgn = -2. * std::signbit(rescaled_rnd) + 1.;
     //extract the absolute value
     rescaled_rnd *= sgn;
+
+    // std::cout << "debug log: " << lookup_index << " " << rescaled_rnd << " " << sgn << std::endl;
 
     //v to return
     double v = SFQED_PAIR_emitted_electron_energy_aux(lookup_index, chi, rescaled_rnd);

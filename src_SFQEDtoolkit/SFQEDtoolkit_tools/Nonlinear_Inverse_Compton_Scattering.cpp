@@ -318,6 +318,15 @@ double Nonlinear_Inverse_Compton_Scattering::SFQED_LCFA_phtn_nrg_aux(const doubl
         //std::cout << "9\n" << std::flush;
 
         //be careful to when v is null
+        // [IMPORTANT: at this stage it is very important to prevent the argument
+        //  of the log to be negative. This contingency is very likely to manifest,
+        //  especially in this section of the if construct where the random number
+        //  is very close to 1.
+        //  Indeed you have to consider that:
+        //  i) the probability of photon emission and / or pair production (stored in
+        //  tildeWrad) saturates to a certain value;
+        //  ii) the toolkit is correct up to the 0.1%;
+        //  iii) the chebyshev polynomials oscillate around the actual function.]
         v = std::abs((tildeWrad - rnd_tildeWrad) / (tildeWrad - g_of_w_chi));
                 
         //this is v

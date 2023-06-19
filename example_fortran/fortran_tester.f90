@@ -51,6 +51,8 @@ PROGRAM test
    REAl(numreal64) :: emission_rate, phtn_energy
    !pair production
    REAl(numreal64) :: production_rate, electron_energy
+   !pair production test
+   REAl(numreal64) :: test_photon_gamma, test_photon_chi, test_rnd_a
    ! values used for theoretical inspections
    REAl(numreal64) :: expected_chi
    
@@ -218,10 +220,34 @@ PROGRAM test
 
    end do
 
+   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   ! PAIR production tail energy test !
+   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   
+   test_photon_gamma = 7005.28814066400_numreal64
+   test_photon_chi = 2.01058647068427_numreal64
+   test_rnd_a = 0.999964362779027_numreal64
+
+   PRINT *, 'Test (1) for pair production for a photon having gamma = ', test_photon_gamma, &
+            ', chi = ', test_photon_chi, ', rnd = ', test_rnd_a
+   electron_energy = SFQED_BREIT_WHEELER_ELECTRON_energy(test_photon_gamma, test_photon_chi, test_rnd_a)
+   PRINT *, 'The pairs electron has been produced with gamma_e = ', electron_energy
+
+   test_photon_gamma = 2360.84725023355_numreal64
+   test_photon_chi = 2.00350708546021_numreal64
+   test_rnd_a = 0.999959490565055_numreal64
+
+   PRINT *, 'Test (2) for pair production for a photon having gamma = ', test_photon_gamma, &
+            ', chi = ', test_photon_chi, ', rnd = ', test_rnd_a
+   electron_energy = SFQED_BREIT_WHEELER_ELECTRON_energy(test_photon_gamma, test_photon_chi, test_rnd_a)
+   PRINT *, 'The pairs electron has been produced with gamma_e = ', electron_energy
+   
+
    !!!!!!!!!!!!!!!!!!!!!!!
    ! BLCFA synchrophoton !
    !!!!!!!!!!!!!!!!!!!!!!!
-
+   
+          
    ! set BLCFA quantities
    blcfa_entity(1) = SFQED_CREATE_BLCFA_OBJECT()
    blcfa_entity(2) = SFQED_CREATE_BLCFA_OBJECT()
