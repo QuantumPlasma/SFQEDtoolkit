@@ -9,6 +9,7 @@ accuracy_tester*
 spectrum_tester*
 angular_pusher_tester*
 advanced_accuracy_tester*
+eight_tester
 param_finder*
 cos_angle_tester*
 .*.swp
@@ -56,3 +57,4 @@ coefficients/pair_rate_polarization
 coefficients/phtn_prtl_rate_low
 coefficients/phtn_prtl_rate_spin
 coefficients/phtn_rate_spin
+*pusher_tester*
