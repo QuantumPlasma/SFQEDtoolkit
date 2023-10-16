@@ -19,7 +19,7 @@ SFQEDtoolkit is a *scientific project*. If you **present and/or publish** scient
 
 or by simply adding
 
-"S. Montefiori, M. Tamburini, arXiv:2301.07684, 2023"
+"S. Montefiori, M. Tamburini, Computer Physics Communications 292, 108855 (2023)"
 
 to the references' list of your work. Thank you for your understanding and support!
 
